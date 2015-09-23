@@ -1,2 +1,2 @@
 # EasyMLPlatform
-a easy machine learning platform
+an easy machine learning platform
