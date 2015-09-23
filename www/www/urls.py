@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import patterns, include, url
+from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
@@ -22,8 +23,11 @@ urlpatterns = patterns('',
     # url(r'^$', 'mysite.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'www.views.first_page'),
+    url(r'^admin/', include(admin.site.urls))
+    ,url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_ROOT})
+    ,url(r'^$', 'www.views.first_page')
+    ,url(r'^index/(\w+)/$', 'www.views.index',name = 'index')
+    ,url(r'^index/$', 'www.views.index',name = 'index')
 )
 
 # urlpatterns = [

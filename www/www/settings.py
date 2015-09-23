@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'www',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -83,7 +85,7 @@ WSGI_APPLICATION = 'www.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mlplatform',
         'USER': 'root',
         'PASSWORD': '80868086',
