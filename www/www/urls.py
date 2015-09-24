@@ -25,7 +25,7 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls))
     ,url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_ROOT})
-    ,url(r'^$', 'www.views.first_page')
+    ,url(r'^$', 'www.views.index')
     ,url(r'^index/(\w+)/$', 'www.views.index',name = 'index')
     ,url(r'^index/$', 'www.views.index',name = 'index')
 )

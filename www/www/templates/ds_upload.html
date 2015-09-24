@@ -1,0 +1,8 @@
+{% include 'header.html' %}
+<h1 class="header text-danger">Upload Your Dataset!</h1>
+<form method='post'>
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" value="OK">
+</form>
+{% include 'footer.html' %}

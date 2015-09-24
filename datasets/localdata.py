@@ -19,8 +19,9 @@ def readCSV(path,hasHead):
 	pass
 def readXML(path,hasHead):
 	pass
-def readXLS(path):
+def readXLS(path,hasHead):
 	pass
-
+def readTXT(path):
+	pass
 if __name__ == '__main__':
 	print readString(open("1.txt","r").read(),True,mapper=lambda x:int(x[0]))
