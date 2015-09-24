@@ -1,8 +1,13 @@
 {% include 'header.html' %}
 <h1 class="header text-danger">Upload Your Dataset!</h1>
-<form method='post'>
+<form method='post' enctype="multipart/form-data" action="{% url 'index' 'dataset_upload' %}" style="position:absolute;width:50%;">
 	{% csrf_token %}
-	{{ form }}
-	<input type="submit" value="OK">
+	<p><label for="name">Dataset Name</label>
+		<input type="text" name="name" class="form-control" ng-model="formData.name" ng-minlength=1 ng-maxlength=20 required></input>
+	</p>
+	<p><label for="datasetfile">Dataset Name</label>
+	<input name="datasetfile" type="file">
+	</p>
+	<input type="submit" class="btn btn-success btn-lg btn-block" value="OK">
 </form>
 {% include 'footer.html' %}
