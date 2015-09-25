@@ -1,7 +1,7 @@
 # EasyMLPlatform
 an easy machine learning platform
 ### Install
-Dependencies:
+#### Dependencies:
 1. Python 2.7
 2. Django 1.9
 3. MySQLdb
