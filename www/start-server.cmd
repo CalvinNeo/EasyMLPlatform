@@ -1,2 +1,5 @@
+:start
 @python manage.py runserver 8090
-@pause
+@echo restart serever(Y/N)?
+@set /p op=
+@if op == "Y" goto start

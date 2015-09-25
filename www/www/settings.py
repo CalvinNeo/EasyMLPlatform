@@ -132,3 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = ''
+
+# DEFAULT_FILE_STORAGE = "www.storage.FileStorage"
