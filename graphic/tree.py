@@ -23,9 +23,11 @@ class Tree:
 		branch_dict = root[current_node]
 		maxdepth, thisdepth, thisleafcount = 0,0,0
 		for current_node in branch_dict.keys():
+			print current_node,type(branch_dict[current_node]).__name__ 
 			if type(branch_dict[current_node]).__name__ == 'dict':
-				thisdepth, thisleafcount = self.get_depth_leafcount(branch_dict[current_node])
-				thisdepth += 1
+				temp = self.get_depth_leafcount(branch_dict[current_node])
+				thisdepth += temp[0]
+				thisleafcount +=  temp[1]
 			else:
 				thisdepth = 1
 				thisleafcount += 1
@@ -57,7 +59,7 @@ class Tree:
 				self.xOff += 1.0 / self.leafcount
 				self.plotNode(branch_dict[current_node], (self.xOff, self.yOff), cntrPt, self.leafNode)
 				self.plotMidText((self.xOff, self.yOff), cntrPt, str(current_node))
-			self.yOff += 1.0 / self.depth
+		self.yOff += 1.0 / self.depth
 	def createPlot(self):
 		fig = plt.figure(1, facecolor = 'white')
 		fig.clf()
@@ -68,6 +70,12 @@ class Tree:
 		plt.show()
 if __name__ == '__main__':
 	tr = Tree()
-	tr.load({'age above 30':{0:'no',1:'yes'}})
-	tr.createPlot()
+	# aa = '{"no surfacing":{"0":"no","1":{"flippers":{"0":"no","1":"yes"}}}}'
+	# tr.load(json.loads(aa))
+	aa = {"aged":{"0":"no","1":{"male":{"0":"no","1":"yes"}}}}
+	print dict(aa)
+	# aa = {"no surfacing":{0:"no",1:{"flippers":{0:"no",1:"yes"}}}}
+	# print dict(aa)
+	tr.load(aa)
 	print tr.leafcount,tr.depth
+	tr.createPlot()

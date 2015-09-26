@@ -6,10 +6,11 @@ an easy machine learning platform
 2. Django 1.9
 3. MySQLdb
 4. mysql-python
-### Run
-Start Server
-> /www/start-sever
-Run locally
-> 
 
+### Run
+
+#### Start Server
+> /www/start-sever
+
+#### Run locally
 
