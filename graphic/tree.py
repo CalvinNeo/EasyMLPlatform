@@ -26,8 +26,8 @@ class Tree:
 			print current_node,type(branch_dict[current_node]).__name__ 
 			if type(branch_dict[current_node]).__name__ == 'dict':
 				temp = self.get_depth_leafcount(branch_dict[current_node])
-				thisdepth += temp[0]
-				thisleafcount +=  temp[1]
+				thisdepth = 1 + temp[0]
+				thisleafcount += temp[1]
 			else:
 				thisdepth = 1
 				thisleafcount += 1
