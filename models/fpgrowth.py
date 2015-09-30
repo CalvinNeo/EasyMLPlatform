@@ -1,4 +1,6 @@
 # encoding: utf-8
+import sys
+sys.path.append('..')
 
 """
 A Python implementation of the FP-growth algorithm.
