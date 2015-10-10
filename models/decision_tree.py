@@ -58,6 +58,14 @@ class DecisionTree:
                 best_gain = infomation_gain
                 best_featureid = i
         return best_featureid
+    def MajorityCount(self, classfeatures):
+        classcount = {}
+        for vote in classfeatures:
+            if vote not in classcount.keys():
+                classcount[vote] = 0
+            classcount[vote] += 1
+        sortedclasscount = sorted(classcount.iteritems(), key = operator.itemgetter(1), reverse = True)
+        return sortedclasscount[0][0]
     def CreateTree(self, datasetitems):
         classfeatures = [item[self.classfeatureindex] for item in datasetitems]
         if len(classfeatures) == 0:
@@ -66,8 +74,9 @@ class DecisionTree:
         elif classfeatures.count(classfeatures[0]) == len(classfeatures):
             #all items share same class
             return classfeatures[0]
-        if len(datasetitems) == 1:
-            pass
+        if len(datasetitems[0]) == 1:
+            #if only one feature left, choose which value of this feature is in major
+            return self.MajorityCount(classfeatures)
         bestfeature = self.BestFeature(datasetitems)
 
 if __name__ == '__main__':
