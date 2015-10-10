@@ -5,7 +5,7 @@ class LocalData:
     def __init__(self):
         self.head = []
         self.items = []
-    def readString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", mapper = None, getValue=True):
+    def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", mapper = None, getValue=True):
         records = data.split(record_delim)
         if hasHead:
             self.head = records[0].split(attr_delim)
@@ -32,16 +32,16 @@ class LocalData:
                     self.head = range(len(data_col))
                     hasHead = True
                 self.items.append(map(mapper,data_col,range(len(data_col)),self.head))
-    def readCSV(self, path, hasHead):
+    def ReadCSV(self, path, hasHead):
         pass
-    def readXML(self, path, hasHead):
+    def ReadXML(self, path, hasHead):
         pass
-    def readXLS(self, path, hasHead):
+    def ReadXLS(self, path, hasHead):
         pass
-    def readTXT(self, path, hasHead):
+    def ReadTXT(self, path, hasHead):
         pass
 
-    def saveCSV(self, path, saveHead = True):
+    def SaveCSV(self, path, saveHead = True):
         with open(path, 'wb') as csvfile:
             spamwriter = csv.writer(csvfile, dialect='excel')
             if saveHead:
@@ -50,7 +50,7 @@ class LocalData:
                 spamwriter.writerow(x)
 if __name__ == '__main__':
     ld = LocalData()
-    ld.readString(open("1.txt","r").read(),True,mapper=lambda data,colindex,head:int(data))
-    ld.saveCSV("k.csv")
+    ld.ReadString(open("1.txt","r").read(),True,mapper=lambda data,colindex,head:int(data))
+    ld.SaveCSV("k.csv")
     print ld.head
     print ld.items
