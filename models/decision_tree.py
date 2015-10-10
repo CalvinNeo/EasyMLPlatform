@@ -25,23 +25,23 @@ class DecisionTree:
             p = float(feature_count[key]) / len(items)
             shentr -= p * math.log(p, 2)
         return shentr
-    def SplitDataset(self, classfeatureindex):
+    def SplitDataset(self, datasetitems, classfeatureindex):
         '''
             Use classfeatureindex to split dataset
             Return:
             {feature_value:[datasets_divided_by_this_feature]}
         '''
-        mainfeatures = {} #
-        for item in self.dataset.items:
-            current_feature = item[classfeatureindex]
-            if current_feature not in mainfeatures.keys():
-                mainfeatures[current_feature] = []
-            mainfeatures[current_feature].append(item[:classfeatureindex]+item[classfeatureindex+1:])
+        featurevalues = {} #
+        for item in datasetitems:
+            feature_value = item[classfeatureindex]
+            if feature_value not in featurevalues.keys():
+                featurevalues[feature_value] = []
+            featurevalues[feature_value].append(item[:classfeatureindex]+item[classfeatureindex+1:])
         shentr = 0.0
-        for feature in mainfeatures.keys():
-            conditional_entropy = len(mainfeatures[feature]) / float(len(self.dataset.items)) * self.ShannonEntropy(mainfeatures[feature])
+        for feature in featurevalues.keys():
+            conditional_entropy = len(featurevalues[feature]) / float(len(datasetitems)) * self.ShannonEntropy(featurevalues[feature])
             shentr += conditional_entropy
-        return feature, shentr
+        return featurevalues, shentr
     def BestFeature(self, datasetitems):
         '''
             return the feature best split the dataset
@@ -52,13 +52,18 @@ class DecisionTree:
         best_gain = 0.0 #g is infomation gain
         best_featureid = 0
         for i in xrange(len(datasetitems[0])):
-            feature, new_entropy = self.SplitDataset(i)
+            feature, new_entropy = self.SplitDataset(datasetitems, i)
             infomation_gain = new_entropy - origin_entropy
             if infomation_gain > best_gain:
                 best_gain = infomation_gain
                 best_featureid = i
         return best_featureid
     def MajorityCount(self, classfeatures):
+        '''
+            get the major value of one feature
+            e.g feature A has values 1,1,1,1,0,0 in 6 items
+            MajorityCount return 1
+        '''
         classcount = {}
         for vote in classfeatures:
             if vote not in classcount.keys():
@@ -66,7 +71,7 @@ class DecisionTree:
             classcount[vote] += 1
         sortedclasscount = sorted(classcount.iteritems(), key = operator.itemgetter(1), reverse = True)
         return sortedclasscount[0][0]
-    def CreateTree(self, datasetitems):
+    def CreateTree(self, datasetitems, head):
         classfeatures = [item[self.classfeatureindex] for item in datasetitems]
         if len(classfeatures) == 0:
             #empty dataset
@@ -78,7 +83,16 @@ class DecisionTree:
             #if only one feature left, choose which value of this feature is in major
             return self.MajorityCount(classfeatures)
         bestfeature = self.BestFeature(datasetitems)
-
+        mytree = {head[bestfeature]:{}}
+        featurevalues, shentr = self.SplitDataset(datasetitems, bestfeature)
+        for value in featurevalues.keys():
+            mytree[head[bestfeature]][value] = self.CreateTree(featurevalues[value], head[0:bestfeature]+head[bestfeature+1:])
+        return mytree
+        #e.g. feature A is the best split feature and it has value True and False (represented by classfeaturevalue)
+        # classfeaturevalues = set([item[bestfeature] for item in dataset])
+        # for value in classfeaturevalues
+        #     self.SplitDataset()
+        #     mytree[head[bestfeature]][value] = self.CreateTree(newdataset, head[0:bestfeature]+head[bestfeature+1:])
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):
         # return {
@@ -95,4 +109,5 @@ if __name__ == '__main__':
     ld = datasets.localdata.LocalData()
     ld.ReadString(open("dat_cls.txt","r").read(),True,mapper=my_mapper)
     dt = DecisionTree(ld,0)
-    print dt.BestFeature(dt.dataset.items)
+    print dt.CreateTree(dt.dataset.items, dt.dataset.head)
+    # print dt.BestFeature(dt.dataset.items)
