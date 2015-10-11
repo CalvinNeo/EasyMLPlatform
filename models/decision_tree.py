@@ -27,6 +27,7 @@ class DecisionTree:
         return shentr
     def SplitDataset(self, datasetitems, classfeatureindex):
         '''
+            e.g. feature A is the best split feature and it has value True and False (represented by classfeaturevalue)
             Use classfeatureindex to split dataset
             Return:
             {feature_value:[datasets_divided_by_this_feature]}
@@ -72,6 +73,9 @@ class DecisionTree:
         sortedclasscount = sorted(classcount.iteritems(), key = operator.itemgetter(1), reverse = True)
         return sortedclasscount[0][0]
     def CreateTree(self, datasetitems, head):
+        '''
+            
+        '''
         classfeatures = [item[self.classfeatureindex] for item in datasetitems]
         if len(classfeatures) == 0:
             #empty dataset
@@ -86,13 +90,8 @@ class DecisionTree:
         mytree = {head[bestfeature]:{}}
         featurevalues, shentr = self.SplitDataset(datasetitems, bestfeature)
         for value in featurevalues.keys():
-            mytree[head[bestfeature]][value] = self.CreateTree(featurevalues[value], head[0:bestfeature]+head[bestfeature+1:])
+            mytree[head[bestfeature]][value] = self.CreateTree(featurevalues[value], head[:bestfeature]+head[bestfeature+1:])
         return mytree
-        #e.g. feature A is the best split feature and it has value True and False (represented by classfeaturevalue)
-        # classfeaturevalues = set([item[bestfeature] for item in dataset])
-        # for value in classfeaturevalues
-        #     self.SplitDataset()
-        #     mytree[head[bestfeature]][value] = self.CreateTree(newdataset, head[0:bestfeature]+head[bestfeature+1:])
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):
         # return {
@@ -108,6 +107,6 @@ if __name__ == '__main__':
             return str(data)
     ld = datasets.localdata.LocalData()
     ld.ReadString(open("dat_cls.txt","r").read(),True,mapper=my_mapper)
-    dt = DecisionTree(ld,0)
+    dt = DecisionTree(ld,-1)
     print dt.CreateTree(dt.dataset.items, dt.dataset.head)
     # print dt.BestFeature(dt.dataset.items)

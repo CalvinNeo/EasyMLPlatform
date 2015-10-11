@@ -1,4 +1,4 @@
-water,foot,fish
+water,foot,isfish
 1,1,'yes'
 1,1,'yes'
 1,0,'no'

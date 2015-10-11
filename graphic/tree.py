@@ -73,6 +73,7 @@ if __name__ == '__main__':
 	# aa = '{"no surfacing":{"0":"no","1":{"flippers":{"0":"no","1":"yes"}}}}'
 	# tr.load(json.loads(aa))
 	aa = {"aged":{"0":"no","1":{"male":{"0":"no","1":"yes"}}}}
+	aa = {'water': {0: 1, 1: {'foot': {0: "'no'", 1: "'yes'"}}}}
 	print dict(aa)
 	# aa = {"no surfacing":{0:"no",1:{"flippers":{0:"no",1:"yes"}}}}
 	# print dict(aa)
