@@ -83,9 +83,11 @@ class DecisionTree:
             classcount[vote] += 1
         sortedclasscount = sorted(classcount.iteritems(), key = operator.itemgetter(1), reverse = True)
         return sortedclasscount[0][0]
-    def CreateTree(self, datasetitems, head):
+    def CreateTree(self, datasetitems, headindex):
         '''
             build recursive decision tree
+            datasetitems self.dataset.items
+            headindex range(len(self.dataset.head)) avoid charset problems
         '''
         classfeatures = [item[self.classfeatureindex] for item in datasetitems]
         if len(classfeatures) == 0:
@@ -98,20 +100,22 @@ class DecisionTree:
             #if only one feature left, choose which value of this feature is in major
             return self.MajorityCount(classfeatures)
         bestfeature = self.BestFeature(datasetitems)
-        mytree = {head[bestfeature]:{}}
+        mytree = {headindex[bestfeature]:{}}
         featurevalues, shentr = self.SplitDataset(datasetitems, bestfeature)
         for value in featurevalues.keys():
-            mytree[head[bestfeature]][value] = self.CreateTree(featurevalues[value], head[:bestfeature]+head[bestfeature+1:])
+            mytree[headindex[bestfeature]][value] = self.CreateTree(featurevalues[value], headindex[:bestfeature]+headindex[bestfeature+1:])
         return mytree
     def BuildTree(self):
-        self.tree = self.CreateTree(dt.dataset.items, dt.dataset.head)
+        self.tree = self.CreateTree(self.dataset.items, range(len(self.dataset.head)))
         return self.tree
     def Classify(self, test):
+        '''
+            predict new samples with trained tree
+        '''
         tree = self.tree
         while True:
-            featurehead = tree.keys()[0]
-            branch_dict = tree[featurehead]
-            featureindex = self.dataset.head.index(featurehead)
+            featureindex = tree.keys()[0]
+            branch_dict = tree[featureindex]
             for key in branch_dict.keys():
                 if test[featureindex] == key:
                     if type(branch_dict[key]).__name__ == 'dict':
@@ -144,5 +148,5 @@ if __name__ == '__main__':
     ld.ReadString(open("dat_cls.txt","r").read(),True,mapper=my_mapper)
     dt = DecisionTree(ld,-1)
     print dt.BuildTree()
-
+    print dt.Classify([1,1])
     # print dt.BestFeature(dt.dataset.items)

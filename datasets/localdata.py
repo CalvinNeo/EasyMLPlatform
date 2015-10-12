@@ -6,6 +6,9 @@ class LocalData:
         self.head = []
         self.items = []
     def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", mapper = None, getValue=True):
+        '''
+            generate head 1,2,3... if there are no heads
+        '''
         records = data.split(record_delim)
         if hasHead:
             self.head = records[0].split(attr_delim)
