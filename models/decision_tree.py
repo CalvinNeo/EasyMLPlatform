@@ -5,11 +5,18 @@ sys.path.append('..')
 import math
 import datasets.localdata
 import operator
+import json
+import pickle
 
 class DecisionTree:
     def __init__(self, dataset, classfeatureindex = -1):
+        '''
+            dataset: (datasets.localdata) 
+            classfeatureindex: index of the column which defines the feature in dataset 
+        '''
         self.dataset = dataset
-        self.classfeatureindex = classfeatureindex #index of the column which defines the feature in dataset
+        self.classfeatureindex = classfeatureindex
+        self.tree = {}
     def ShannonEntropy(self, items = None):
         feature_count = {}
         if items == None:
@@ -37,7 +44,11 @@ class DecisionTree:
             feature_value = item[classfeatureindex]
             if feature_value not in featurevalues.keys():
                 featurevalues[feature_value] = []
-            featurevalues[feature_value].append(item[:classfeatureindex]+item[classfeatureindex+1:])
+            #这里必须要有0:和:-1,考虑到classfeatureindex=-1时,classfeatureindex+1=0
+            newitem = item[:]
+            del newitem[classfeatureindex]
+            featurevalues[feature_value].append(newitem)
+            # featurevalues[feature_value].append(item[0:classfeatureindex]+item[classfeatureindex+1:])
         shentr = 0.0
         for feature in featurevalues.keys():
             conditional_entropy = len(featurevalues[feature]) / float(len(datasetitems)) * self.ShannonEntropy(featurevalues[feature])
@@ -74,7 +85,7 @@ class DecisionTree:
         return sortedclasscount[0][0]
     def CreateTree(self, datasetitems, head):
         '''
-            
+            build recursive decision tree
         '''
         classfeatures = [item[self.classfeatureindex] for item in datasetitems]
         if len(classfeatures) == 0:
@@ -92,6 +103,30 @@ class DecisionTree:
         for value in featurevalues.keys():
             mytree[head[bestfeature]][value] = self.CreateTree(featurevalues[value], head[:bestfeature]+head[bestfeature+1:])
         return mytree
+    def BuildTree(self):
+        self.tree = self.CreateTree(dt.dataset.items, dt.dataset.head)
+        return self.tree
+    def Classify(self, test):
+        tree = self.tree
+        while True:
+            featurehead = tree.keys()[0]
+            branch_dict = tree[featurehead]
+            featureindex = self.dataset.head.index(featurehead)
+            for key in branch_dict.keys():
+                if test[featureindex] == key:
+                    if type(branch_dict[key]).__name__ == 'dict':
+                        tree = branch_dict[key]
+                        break #jump out of for-loop, compare the next feature
+                    else:
+                        return branch_dict[key]
+
+    def DumpTree(self, filename):
+        fw = open(filename, 'w')
+        pickle.dump(self.tree, fw)
+        fw.close()
+    def LoadTree(self, filename):
+        fr = open(filename)
+        return pickle.load(filename)
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):
         # return {
@@ -108,5 +143,6 @@ if __name__ == '__main__':
     ld = datasets.localdata.LocalData()
     ld.ReadString(open("dat_cls.txt","r").read(),True,mapper=my_mapper)
     dt = DecisionTree(ld,-1)
-    print dt.CreateTree(dt.dataset.items, dt.dataset.head)
+    print dt.BuildTree()
+
     # print dt.BestFeature(dt.dataset.items)

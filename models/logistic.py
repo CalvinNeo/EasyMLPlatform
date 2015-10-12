@@ -16,7 +16,9 @@ class LogisticRegression:
         self.classfeatureindex = classfeatureindex #index of the column which defines the feature in dataset
         self.sigmoid = lambda x: 1 / (1 + math.e ** (-x))
     def Regress(self):
-        data = np.matrix(self.dataset.items)
+        data = np.matrix([item[:self.classfeatureindex] + item[self.classfeatureindex+1:] if self.classfeatureindex > -1 else item[:len(item)-1] for item in self.dataset.items])
+        classfeatures = np.matrix([item[self.classfeatureindex] for item in self.dataset.items]).T
+        print classfeatures
     def GradAscent(self):
         pass
 if __name__ == '__main__':
@@ -26,7 +28,10 @@ if __name__ == '__main__':
         elif head == 'foot':
             return int(data)
         else:
-            return str(data)
+            if data == 'yes':
+                return 1
+            else:
+                return 0
     ld = datasets.localdata.LocalData()
     ld.ReadString(open("dat_cls.txt","r").read(),True,mapper=my_mapper)
     dt = LogisticRegression(ld,-1)
