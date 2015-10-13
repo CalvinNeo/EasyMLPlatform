@@ -1,5 +1,5 @@
 # EasyMLPlatform
-an easy machine learning platform
+an easy distributed machine learning platform
 ### Install
 #### Dependencies:
 1. Python 2.7
@@ -12,5 +12,9 @@ an easy machine learning platform
 #### Start Server
 > /www/start-sever
 
-#### Run locally
+#### Run Locally
+> Run Each .py file
+
+#### Deploy Distributed Machine Learning System
+
 
