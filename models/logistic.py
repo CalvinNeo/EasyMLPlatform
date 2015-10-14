@@ -17,7 +17,7 @@ class LogisticRegression:
     def __init__(self, dataset, classfeatureindex = -1, alpha = 0.01, maxiter = 500):
         self.dataset = dataset
         self.classfeatureindex = classfeatureindex #index of the column which defines the feature in dataset
-        self.sigmoid = lambda input_n:np.vectorize(lambda n:(1+math.e**(-n))**(-1))(input_n)
+        self.sigmoid = lambda input_n:np.vectorize(lambda n: 1.0/(1.0+math.e**(-n)) )(input_n)
         self.alpha = alpha
         self.maxiter = maxiter
         self.weights = np.ones((len(self.dataset.head)-1,1))
@@ -32,6 +32,7 @@ class LogisticRegression:
             self.weights += self.alpha * np.dot(data.T, e)
     def Classify(self, test):
         p = np.matrix(test)
+        print np.dot(p, self.weights)
         return 1 if self.sigmoid(np.dot(p, self.weights)) > 0.5 else 0
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):
@@ -41,14 +42,16 @@ if __name__ == '__main__':
             return int(data)
         else:
             if data == 'yes':
-                return 1
+                return 1.0
             else:
-                return 0
-    ld = datasets.localdata.LocalData()
-    ld.ReadString(open("dat_cls.txt","r").read(),True,mapper=my_mapper)
-    dt = LogisticRegression(ld,-1)
+                return 0.0
+    ld = datasets.localdata.LocalData(datamapper = my_mapper)
+    ld.ReadString(open("dat_cls.txt","r").read(),True)
+    dt = LogisticRegression(ld, -1, maxiter = 100, alpha = 0.01)
     dt.Regress()
-    print dt.Classify([1,1])
-    print dt.Classify([0,1])
-    print dt.Classify([1,0])
-    print dt.Classify([0,0])
+    print dt.dataset.items
+    print "[1,1]", dt.Classify([1.0,1.0])
+    print "[0,1]", dt.Classify([0.0,1.0])
+    print "[1,0]", dt.Classify([1.0,0.0])
+    print "[0,0]", dt.Classify([0.0,0.0])
+    print "weight",dt.weights

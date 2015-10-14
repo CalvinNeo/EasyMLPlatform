@@ -2,10 +2,11 @@
 import csv
 from optparse import OptionParser
 class LocalData:
-    def __init__(self):
+    def __init__(self, datamapper):
         self.head = []
         self.items = []
-    def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", mapper = None, getValue=True):
+        self.datamapper = datamapper
+    def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", getValue=True):
         '''
             generate head 1,2,3... if there are no heads
         '''
@@ -34,7 +35,7 @@ class LocalData:
                 if not hasHead: #if no head set head as 0,1,2,3,4,5,6...
                     self.head = range(len(data_col))
                     hasHead = True
-                self.items.append(map(mapper,data_col,range(len(data_col)),self.head))
+                self.items.append(map(self.datamapper,data_col,range(len(data_col)),self.head))
     def ReadCSV(self, path, hasHead):
         pass
     def ReadXML(self, path, hasHead):
@@ -52,8 +53,8 @@ class LocalData:
             for x in self.items:
                 spamwriter.writerow(x)
 if __name__ == '__main__':
-    ld = LocalData()
-    ld.ReadString(open("1.txt","r").read(),True,mapper=lambda data,colindex,head:int(data))
+    ld = LocalData(datamapper = lambda data,colindex,head:int(data))
+    ld.ReadString(open("1.txt","r").read(),True)
     ld.SaveCSV("k.csv")
     print ld.head
     print ld.items

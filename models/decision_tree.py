@@ -144,8 +144,8 @@ if __name__ == '__main__':
             return int(data)
         else:
             return str(data)
-    ld = datasets.localdata.LocalData()
-    ld.ReadString(open("dat_cls.txt","r").read(),True,mapper=my_mapper)
+    ld = datasets.localdata.LocalData(datamapper=my_mapper)
+    ld.ReadString(open("dat_cls.txt","r").read(),True)
     dt = DecisionTree(ld,-1)
     print dt.BuildTree()
     print dt.Classify([1,1])
