@@ -20,7 +20,7 @@ class DataGraph:
         self.dataset = dataset
         self.classfeatureindex = classfeatureindex #index of the column which defines the feature in dataset
         self.datamapper = datamapper
-        self.judgeScale()
+        self.JudgeScale()
         self.fig = plt.figure()
     def JudgeScale(self):
         '''
@@ -33,6 +33,17 @@ class DataGraph:
                 self.coorbound[index] = (min(columns),max(columns))
     def DrawData(self, dimX, dimY = -1):
         ax = self.fig.add_subplot(111)
+        xcord1 = []; ycord1 = []; xcord2 = []; ycord2 = []
+        for item in self.dataset.items:
+            print item,item[dimX],item[dimY]
+            if item[dimY] > 0.5:
+                xcord1.append(item[dimX]); ycord1.append(item[dimY])
+            else:
+                xcord2.append(item[dimX]); ycord2.append(item[dimY])
+        ax.scatter(xcord1, ycord1, s = 30, c = 'red', marker = 's')
+        ax.scatter(xcord2, ycord2, s = 30, c = 'green')
+        plt.xlabel('X'); plt.ylabel('Y')
+        plt.show()
 if __name__ == '__main__':
     # dst_path = '../models'
     # ext_name = '*'
@@ -57,4 +68,5 @@ if __name__ == '__main__':
     ld = datasets.localdata.LocalData(datamapper=my_mapper)
     ld.ReadString(open("../models/dat_cls.txt","r").read(),True)
     dg = DataGraph(ld, -1)
+    dg.DrawData(0,1)
     print "bound",dg.coorbound    

@@ -1,5 +1,3 @@
-{% include 'header.html' %}
-<h1 class="header text-danger">Upload Your Dataset!</h1>
 <form method='post' enctype="multipart/form-data" action="{% url 'index' 'dataset_upload' %}" style="position:absolute;width:50%;">
 	{% csrf_token %}
 	<p><label for="name">Dataset Name</label>
@@ -10,4 +8,3 @@
 	</p>
 	<input type="submit" class="btn btn-success btn-lg btn-block" value="OK">
 </form>
-{% include 'footer.html' %}
