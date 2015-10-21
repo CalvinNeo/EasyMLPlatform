@@ -41,3 +41,15 @@ def ManhattanDist(vec1, vec2):
     '''
     pass
 
+if __name__ == '__main__':
+    i = 5
+    while i > 1:
+        print i
+        i-=1
+    else:
+        print "haha"
+    print '-------------'
+    while False:
+        print "False"
+    else:
+        print True

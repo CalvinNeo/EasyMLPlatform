@@ -15,9 +15,9 @@ import MySQLdb
 #     db.close()
 #     return render_to_response('list.html', {'names': names})
 
-def index(request,operation = ""):
+def index(request, operation = "", *args, **kwargs):
     try:
-        return {'dataset': render(request,"ds_list.html")
+        return {'dataset': render(request,"dataset.html",Dataset.GetDatasets())
          ,'model': render(request,"404.html",{'title':'Not Completed'})
          ,'apply': render(request,"404.html",{'title':'Not Completed'})
          ,'accessment': render(request,"404.html",{'title':'Not Completed'})

@@ -1,3 +1,15 @@
-{% include 'header.html' %}
+<table class="table table-striped">
+<thead>
+<tr>
+	<td>Name</td><td>Type</td><td>Head</td>
+</tr>
+</thead>
+<tbody>
+{% for dataset in datasets %}
+	<tr>
+		<td>{{dataset.name}}</td><td>{{dataset.filetype}}</td><td>{{dataset.head}}</td>
+	</tr>
+{% endfor%}
 
-{% include 'footer.html' %}
+</tbody>
+</table>
