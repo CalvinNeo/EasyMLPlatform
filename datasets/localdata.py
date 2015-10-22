@@ -1,6 +1,11 @@
 #coding:utf8
+import sys
+sys.path.append('..')
+
 import csv
 from optparse import OptionParser
+import operator
+
 class LocalData:
     def __init__(self, datamapper):
         self.head = []
@@ -52,9 +57,50 @@ class LocalData:
                 spamwriter.writerow(self.head)
             for x in self.items:
                 spamwriter.writerow(x)
+    def doprint(self,x):
+        print x
+    def ReduceByKey(self, keyindex, lmda):
+        g = self.GroupByKey(keyindex)
+        print "-----------------"
+        '''
+            map(lambda key:reduce(, g[key]), g)
+        '''
+        return map(lambda key:reduce(, g[key]), g)
+    def Map(self, lmda):
+        return map(lmda, self.items)
+    def GroupByKey(self, keyindex, removekey=False):
+        groups = {}
+        for item in self.items:
+            value = item[keyindex]
+            if value not in groups.keys():
+                if removekey:
+                    groups[value] = [item[0:keyindex] + item[keyindex+1:] if keyindex > -1 else item[:len(item)-1]]
+                else:
+                    groups[value] = [item]
+            else:
+                if removekey:
+                    groups[value].append(item[0:keyindex] + item[keyindex+1:] if keyindex > -1 else item[:len(item)-1])
+                else:
+                    groups[value].append(item)
+        return groups
+    def SortByKey(self, keyindex, comparelmda):
+        g = self.GroupByKey(keyindex)
+        return sorted(g, cmp=comparelmda)
+    def Count(self, lmda):
+        '''
+            Assertion:
+            lmda must be True/False lambda function, return True if such condition should be counted, False otherwise
+        '''
+        return reduce(operator.add, map(lambda x:1 if lmda(x)==True else 0, self.items))
 if __name__ == '__main__':
     ld = LocalData(datamapper = lambda data,colindex,head:int(data))
     ld.ReadString(open("1.txt","r").read(),True)
     ld.SaveCSV("k.csv")
     print ld.head
     print ld.items
+    print ld.GroupByKey(0)
+    print ld.GroupByKey(0,True)
+    print ld.Count(lambda x:x[0]==1)    
+    print ld.ReduceByKey(0, lambda x,y:sum(x)+sum(y))
+
+
