@@ -57,18 +57,19 @@ class LocalData:
                 spamwriter.writerow(self.head)
             for x in self.items:
                 spamwriter.writerow(x)
-    def doprint(self,x):
-        print x
     def ReduceByKey(self, keyindex, lmda):
         g = self.GroupByKey(keyindex)
-        print "-----------------"
         '''
-            map(lambda key:reduce(, g[key]), g)
+            map(lambda key:g[key], g) --value(maybe a list) to each key
+            map(lambda key:g[key], g) --reduce for each in value
         '''
-        return map(lambda key:reduce(, g[key]), g)
+        return map(lambda key:reduce(lmda, g[key]), g)
     def Map(self, lmda):
         return map(lmda, self.items)
     def GroupByKey(self, keyindex, removekey=False):
+        '''
+            split dataset into a dictionary classified by keys
+        '''
         groups = {}
         for item in self.items:
             value = item[keyindex]
@@ -101,6 +102,6 @@ if __name__ == '__main__':
     print ld.GroupByKey(0)
     print ld.GroupByKey(0,True)
     print ld.Count(lambda x:x[0]==1)    
-    print ld.ReduceByKey(0, lambda x,y:sum(x)+sum(y))
+    print ld.ReduceByKey(0, lambda x,y:x+y) #join list
 
 
