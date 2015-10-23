@@ -3,7 +3,8 @@ import sys
 sys.path.append('..')
 
 import math
-import datasets.localdata
+import datasets
+from datasets.localdata import *
 import operator
 import json
 import pickle
@@ -18,19 +19,10 @@ class DecisionTree:
         self.classfeatureindex = classfeatureindex
         self.tree = {}
     def ShannonEntropy(self, items = None):
-        feature_count = {}
         if items == None:
             items = self.dataset.items
-        for item in items:
-            current_feature = item[self.classfeatureindex]
-            if current_feature not in feature_count.keys():
-                feature_count[current_feature] = 1
-            else:
-                feature_count[current_feature] += 1
-        shentr = 0.0
-        for key in feature_count:
-            p = float(feature_count[key]) / len(items)
-            shentr -= p * math.log(p, 2)
+        feature_count = ReduceByKeyAsDict(items, self.classfeatureindex, lambda (key,value):(key,len(value)), True)
+        shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value):float(value)/len(items),feature_count.iteritems()),0)
         return shentr
     def SplitDataset(self, datasetitems, classfeatureindex):
         '''
@@ -149,4 +141,5 @@ if __name__ == '__main__':
     dt = DecisionTree(ld,-1)
     print dt.BuildTree()
     print dt.Classify([1,1])
+    print dt.Classify([0,0])
     # print dt.BestFeature(dt.dataset.items)
