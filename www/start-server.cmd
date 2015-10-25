@@ -3,4 +3,5 @@
 @echo server start at port 8090
 @echo restart serever(Y/N)?
 @set /p op=
-@if op == "Y" or op == "y" goto start
+@if op == "Y" goto start
+@if op == "y" goto start

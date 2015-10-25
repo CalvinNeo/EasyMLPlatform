@@ -8,6 +8,14 @@
 {% for dataset in datasets %}
 	<tr>
 		<td>{{dataset.name}}</td><td>{{dataset.filetype}}</td><td>{{dataset.head}}</td>
+		{% if select %}
+			<td>选择</td>
+		{% endif %}
+		{% if operation %}
+			<td><a href="javascript:void(0)" onclick="showDataset({{dataset.id}})">查看</a></td>
+			<td>删除</td>
+			<td>下载</td>
+		{% endif %}
 	</tr>
 {% endfor%}
 

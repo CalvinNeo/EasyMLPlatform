@@ -14,15 +14,22 @@ import MySQLdb
 #     names = [row[0] for row in cursor.fetchall()]
 #     db.close()
 #     return render_to_response('list.html', {'names': names})
-
+def api(request, operation = "", *args, **kwargs):
+    pass
 def index(request, operation = "", *args, **kwargs):
+    print operation
     try:
-        return {'dataset': render(request,"dataset.html",Dataset.GetDatasets())
+        return {'dataset': render(request,"dataset.html",{
+            'datasets':Dataset.GetDatasets(),
+            'select':False,'operation':True })
          ,'model': render(request,"404.html",{'title':'Not Completed'})
          ,'apply': render(request,"404.html",{'title':'Not Completed'})
          ,'accessment': render(request,"404.html",{'title':'Not Completed'})
+         #Partial
+         ,'dataset_view':render(request,"ds_view.html",{'dataset':Dataset.ViewDataset(datasetindex=kwargs.get('datasetindex'))})
         }[operation]
     except KeyError:
+        #form action
         if operation == "dataset_upload":
             if request.method == "POST":
                 form = UploadDatasetForm(request.POST,request.FILES)
@@ -41,5 +48,10 @@ def index(request, operation = "", *args, **kwargs):
             else:
                 form = UploadDatasetForm()
                 return render(request,"ds_upload.html",{'form':form})
+        elif operation == "model_upload":
+            if request.method == "POST":
+                pass
+            else:
+                pass
         else:
             return render(request,"404.html",{'title':'Page Not Found'})

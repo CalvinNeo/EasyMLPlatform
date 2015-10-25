@@ -3,8 +3,7 @@ import sys
 sys.path.append('..')
 
 import math
-import datasets
-from datasets.localdata import *
+import datasets.localdata
 import operator
 import json
 import pickle
@@ -19,20 +18,42 @@ class DecisionTree:
         self.classfeatureindex = classfeatureindex
         self.tree = {}
     def ShannonEntropy(self, items = None):
+        feature_count = {}
         if items == None:
             items = self.dataset.items
-        feature_count = ReduceByKeyAsDict(items, self.classfeatureindex, lambda (key,value):(key,len(value)), True)
-        shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value):float(value)/len(items),feature_count.iteritems()),0)
+        for item in items:
+            current_feature = item[self.classfeatureindex]
+            if current_feature not in feature_count.keys():
+                feature_count[current_feature] = 1
+            else:
+                feature_count[current_feature] += 1
+        shentr = 0.0
+        for key in feature_count:
+            p = float(feature_count[key]) / len(items)
+            shentr -= p * math.log(p, 2)
         return shentr
-    def SplitDataset(self, items, classfeatureindex):
+    def SplitDataset(self, datasetitems, classfeatureindex):
         '''
             e.g. feature A is the best split feature and it has value True and False (represented by classfeaturevalue)
             Use classfeatureindex to split dataset
             Return:
             {feature_value:[datasets_divided_by_this_feature]}
         '''
-        featurevalues = GroupByKey(items, classfeatureindex, True)
-        shentr = reduce(operator.add, map(lambda (key,value):len(value)/float(len(items))*self.ShannonEntropy(value),featurevalues.iteritems()),0)
+        featurevalues = {} #
+        for item in datasetitems:
+            feature_value = item[classfeatureindex]
+            if feature_value not in featurevalues.keys():
+                featurevalues[feature_value] = []
+            #这里必须要有0:和:-1,考虑到classfeatureindex=-1时,classfeatureindex+1=0
+            newitem = item[:]
+            del newitem[classfeatureindex]
+            featurevalues[feature_value].append(newitem)
+            # featurevalues[feature_value].append(item[0:classfeatureindex]+item[classfeatureindex+1:])
+        print featurevalues
+        shentr = 0.0
+        for feature in featurevalues.keys():
+            conditional_entropy = len(featurevalues[feature]) / float(len(datasetitems)) * self.ShannonEntropy(featurevalues[feature])
+            shentr += conditional_entropy
         return featurevalues, shentr
     def BestFeature(self, datasetitems):
         '''
@@ -52,19 +73,22 @@ class DecisionTree:
         return best_featureid
     def MajorityCount(self, classfeatures):
         '''
-            TEST: USE DATA LIKE:
-            yes;no;no;no;(only one class column)
             get the major value of one feature
             e.g feature A has values 1,1,1,1,0,0 in 6 items
             MajorityCount return 1
         '''
-        return sorted(Counts(classfeatures).iteritems(), key = operator.itemgetter(1), reverse = True)[0][0]
+        classcount = {}
+        for vote in classfeatures:
+            if vote not in classcount.keys():
+                classcount[vote] = 0
+            classcount[vote] += 1
+        sortedclasscount = sorted(classcount.iteritems(), key = operator.itemgetter(1), reverse = True)
+        return sortedclasscount[0][0]
     def CreateTree(self, datasetitems, headindex):
         '''
             build recursive decision tree
-            datasetitems part of self.dataset.items
+            datasetitems self.dataset.items
             headindex range(len(self.dataset.head)) avoid charset problems
-            classfeatures is a list of class-feature values in each item
         '''
         classfeatures = [item[self.classfeatureindex] for item in datasetitems]
         if len(classfeatures) == 0:
@@ -74,7 +98,7 @@ class DecisionTree:
             #all items share same class
             return classfeatures[0]
         if len(datasetitems[0]) == 1:
-            #if only left classfeature column, choose which value of this feature is in major
+            #if only one feature left, choose which value of this feature is in major
             return self.MajorityCount(classfeatures)
         bestfeature = self.BestFeature(datasetitems)
         mytree = {headindex[bestfeature]:{}}
@@ -125,6 +149,5 @@ if __name__ == '__main__':
     ld.ReadString(open("dat_cls.txt","r").read(),True)
     dt = DecisionTree(ld,-1)
     print dt.BuildTree()
-    # print dt.Classify([1,1])
-    # print dt.Classify([0,0])
+    print dt.Classify([1,1])
     # print dt.BestFeature(dt.dataset.items)

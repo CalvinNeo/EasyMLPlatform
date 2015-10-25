@@ -25,9 +25,22 @@ class Dataset(models.Model):
     @staticmethod
     def GetDatasets(pageindex=0, max_item=10):
         l = len(Dataset.objects.all())
-        a =  {'datasets':Dataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]}
-        print l,a['datasets']
-        return a
+        return Dataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
+    @staticmethod
+    def ViewDataset(datasetindex=None):
+        if datasetindex != None:
+            if 0 <= datasetindex < l:
+                return Dataset.objects.all()[datasetindex]
+        return None
 
-def SaveDataset():
-    pass
+class MLModel(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=20)
+    type = models.CharField(max_length=10) 
+    path = models.FileField(upload_to = lambda instance, filename:settings.MEDIA_ROOT + 'upload/dataset/' + random_file_name(filename))
+
+    class Meta:
+        db_table = 'models'
+
+    def __unicode__(self):
+        return "#{}: ({}) {} @ {}".format(self.id,self.filetype,self.name,self.path)

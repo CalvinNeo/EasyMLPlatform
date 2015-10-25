@@ -4,6 +4,13 @@
 	<div class="col-md-5">
 		{% include 'ds_list.html' %}
 	</div>
+	<div class="col-md-7">
+		<iframe frameborder=0 scrolling=auto id="datasetviewframe"></iframe>
+	</div>
 </div>
-
+<script>
+	function showDataset(datasetindex){
+		$("#datasetviewframe").attr("src","/index/dataset_view?datasetindex="+datasetindex)
+	}
+</script>
 {% include 'footer.html' %}
