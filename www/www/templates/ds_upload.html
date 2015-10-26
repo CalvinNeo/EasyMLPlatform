@@ -1,10 +1,21 @@
+{% include 'header.html' %}
 <form method='post' enctype="multipart/form-data" action="{% url 'index' 'dataset_upload' %}" style="position:absolute;width:50%;">
 	{% csrf_token %}
 	<p><label for="name">Dataset Name</label>
 		<input type="text" name="name" class="form-control" ng-model="formData.name" ng-minlength=1 ng-maxlength=20 required></input>
 	</p>
 	<p><label for="datasetfile">Dataset Name</label>
-	<input name="datasetfile" type="file">
+	<input name="datasetfile" type="file" class="form-control">
+	</p>
+	<p><label for="filetype">File Type</label>
+	<input name="filetype" type="text" class="form-control">
+	</p>
+	<p><label for="attr_delim">Attribute Delim</label>
+	<input name="attr_delim" type="text" class="form-control">
+	</p>
+	<p><label for="record_delim">Record Delim</label>
+	<input name="record_delim" type="text" class="form-control">
 	</p>
 	<input type="submit" class="btn btn-success btn-lg btn-block" value="OK">
 </form>
+{% include 'footer.html' %}

@@ -1,4 +1,6 @@
 @echo "press any key to migrate www"
 @pause
-python ../manage.py makemigrations
-python ../manage.py migrate
+python ../www/manage.py makemigrations www
+python ../www/manage.py syncdb www
+
+@pause

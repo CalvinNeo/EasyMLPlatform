@@ -2,17 +2,12 @@
 <thead>
 <tr>
 	<td> </td>
-	{% for  in dataset.head.split(',') %}
-		<td>{{ dataset.head }}</td>
+	{% for col in dataset.head %}
+		<td>{{ col }}</td>
 	{% endfor %}
 </tr>
 </thead>
 <tbody>
-{% for dataset in datasets %}
-	<tr>
-
-	</tr>
-{% endfor %}
 
 </tbody>
 </table>

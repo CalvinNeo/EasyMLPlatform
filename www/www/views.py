@@ -26,7 +26,7 @@ def index(request, operation = "", *args, **kwargs):
          ,'apply': render(request,"404.html",{'title':'Not Completed'})
          ,'accessment': render(request,"404.html",{'title':'Not Completed'})
          #Partial
-         ,'dataset_view':render(request,"ds_view.html",{'dataset':Dataset.ViewDataset(datasetindex=kwargs.get('datasetindex'))})
+         ,'dataset_view':render(request,"ds_view.html",{'dataset':Dataset.ViewDataset(unicodedatasetindex=request.GET.get('datasetindex'))})
         }[operation]
     except KeyError:
         #form action
@@ -34,17 +34,17 @@ def index(request, operation = "", *args, **kwargs):
             if request.method == "POST":
                 form = UploadDatasetForm(request.POST,request.FILES)
                 if form.is_valid():
-                    print str(form.cleaned_data['name'])
-                    print str(form.cleaned_data['datasetfile']).decode('utf8')
                     ds = Dataset()
                     ds.name = str(form.cleaned_data['name'])
                     ds.path = form.cleaned_data['datasetfile']
-                    ds.filetype = 'TXT'
+                    ds.filetype = str(form.cleaned_data['filetype'])
                     ds.head = '1,2,3'
+                    ds.attr_delim = ','
+                    ds.record_delim = '\n'
                     ds.save()
                     return render(request,"success.html",{'title':'upload dataset succeed!','description':str(form.cleaned_data['name'])})
                 else:
-                    return render(request,"error.html",{'title':'invalid dataset','description':''})
+                    return render(request,"error.html",{'title':'invalid dataset','description':str(form.cleaned_data['name']) + " " +str(form.cleaned_data['datasetfile']).decode('utf8')})
             else:
                 form = UploadDatasetForm()
                 return render(request,"ds_upload.html",{'form':form})

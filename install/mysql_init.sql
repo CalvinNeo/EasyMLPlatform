@@ -5,4 +5,6 @@ create table dataset(id int(4) not null primary key auto_increment
 	,path varchar(255)
 	,filetype varchar(10)
 	,head varchar(1023)
+	,attr_delim varchar(3)
+	,record_delim varchar(3)
 )
