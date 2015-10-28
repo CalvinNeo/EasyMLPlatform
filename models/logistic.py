@@ -4,6 +4,7 @@ sys.path.append('..')
 
 import math
 import datasets.localdata
+from datasets.monads import *
 import operator
 import numpy as np
 import sys

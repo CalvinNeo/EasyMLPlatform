@@ -1,21 +1,38 @@
 {% include 'header.html' %}
-<form method='post' enctype="multipart/form-data" action="{% url 'index' 'dataset_upload' %}" style="position:absolute;width:50%;">
+<form method='post' enctype="multipart/form-data" action="{% url 'index' 'dataset_upload' %}" style="position:absolute;width:50%;" ng-controller="uploadDatasetController" name="uploadForm">
 	{% csrf_token %}
-	<p><label for="name">Dataset Name</label>
-		<input type="text" name="name" class="form-control" ng-model="formData.name" ng-minlength=1 ng-maxlength=20 required></input>
-	</p>
-	<p><label for="datasetfile">Dataset Name</label>
-	<input name="datasetfile" type="file" class="form-control">
-	</p>
-	<p><label for="filetype">File Type</label>
-	<input name="filetype" type="text" class="form-control">
-	</p>
-	<p><label for="attr_delim">Attribute Delim</label>
-	<input name="attr_delim" type="text" class="form-control">
-	</p>
-	<p><label for="record_delim">Record Delim</label>
-	<input name="record_delim" type="text" class="form-control">
-	</p>
+
+	<div class="container-fluid" ><div class="col-md-12">
+		<p><label for="name">Name Your Dataset</label>
+			<input type="text" name="name" class="form-control" ng-model="formData.name" ng-minlength=1 ng-maxlength=20 required></input>
+			<div class="error" ng-show="uploadForm.name.$dirty && uploadForm.name.$invalid">
+				<small class="error text-danger" ng-show="uploadForm.name.$error.required"> Name Required </small>
+			</div>
+		</p>
+		<p><label for="datasetfile">Upload Your Dataset File</label>
+		<input name="datasetfile" type="file" class="form-control" accept=".xls,.csv,.txt">
+		</p>
+	</div></div>
+	<div class="container-fluid" >
+		<div class="col-md-4">
+			<label for="hashead">Dataset Header</label>
+			<p><input name="hashead" type="checkbox" class="">Has Head</input></p>
+		</div>
+		<div class="col-md-4">
+			<label for="attr_delim">Attribute Delimeter</label>
+			<input name="attr_delim" type="text" class="form-control">
+		</div>
+		<div class="col-md-4">
+			<label for="record_delim">Record Delimeter</label>
+			<input name="record_delim" type="text" class="form-control">
+		</div>
+	</div>
+	<hr/>
+	<div class="container-fluid" ><div class="col-md-12">
 	<input type="submit" class="btn btn-success btn-lg btn-block" value="OK">
+	</div></div>
 </form>
+<script>
+
+</script>
 {% include 'footer.html' %}

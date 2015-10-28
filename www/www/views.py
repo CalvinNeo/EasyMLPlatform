@@ -26,7 +26,7 @@ def index(request, operation = "", *args, **kwargs):
          ,'apply': render(request,"404.html",{'title':'Not Completed'})
          ,'accessment': render(request,"404.html",{'title':'Not Completed'})
          #Partial
-         ,'dataset_view':render(request,"ds_view.html",{'dataset':Dataset.ViewDataset(unicodedatasetindex=request.GET.get('datasetindex'))})
+         ,'ds_view':render(request,"ds_view.html",{'dataset':Dataset.ViewDataset(unicodedatasetindex=request.GET.get('datasetindex'))})
         }[operation]
     except KeyError:
         #form action
@@ -37,14 +37,17 @@ def index(request, operation = "", *args, **kwargs):
                     ds = Dataset()
                     ds.name = str(form.cleaned_data['name'])
                     ds.path = form.cleaned_data['datasetfile']
-                    ds.filetype = str(form.cleaned_data['filetype'])
-                    ds.head = '1,2,3'
-                    ds.attr_delim = ','
-                    ds.record_delim = '\n'
+                    # ds.filetype = str(form.cleaned_data['filetype'])
+                    if str(form.cleaned_data['hashead']) == "on":
+                        ds.head = ""
+                    else:
+                        ds.head = '1,2,3'
+                    ds.attr_delim = str(form.cleaned_data['attr_delim'])
+                    ds.record_delim = str(form.cleaned_data['record_delim'])
                     ds.save()
-                    return render(request,"success.html",{'title':'upload dataset succeed!','description':str(form.cleaned_data['name'])})
+                    return render(request,"success.html",{'title':'upload dataset succeed!','description':str(form.cleaned_data['name']).decode('utf8')})
                 else:
-                    return render(request,"error.html",{'title':'invalid dataset','description':str(form.cleaned_data['name']) + " " +str(form.cleaned_data['datasetfile']).decode('utf8')})
+                    return render(request,"error.html",{'title':'invalid dataset','description':str(form.cleaned_data['name']).decode('utf8')+" "+form.cleaned_data['datasetfile']})
             else:
                 form = UploadDatasetForm()
                 return render(request,"ds_upload.html",{'form':form})

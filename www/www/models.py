@@ -1,8 +1,11 @@
-#coding:utf8
+# encoding: utf-8
+import sys,os
+sys.path.append('../')
 
 from django.db import models
 from www.utils import random_file_name
 from www import settings
+import datasets
 
 def get_upload_to(instance, filename):
     # paths = { 'I':'images/', 'V':'videos/', 'A':'audio/', 'D':'documents'/ }
@@ -32,13 +35,15 @@ class Dataset(models.Model):
         else:
             return {}
     @staticmethod
-    def ViewDataset(unicodedatasetindex=None):
+    def ViewDataset(unicodedatasetindex=None, maximum_items=100):
         if unicodedatasetindex != None:
             datasetindex = int(unicodedatasetindex)
             if (datasetindex >= 0) and (len(Dataset.objects.all()) >= datasetindex):
-                print "datasetindex",datasetindex
                 dataset = Dataset.objects.get(id = datasetindex)
                 dataset.head = dataset.head.split(dataset.attr_delim)
+                dataset.items = []
+                #open local dataset
+
                 return dataset
         return None
 
