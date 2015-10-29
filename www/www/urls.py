@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     ,url(r'^$', 'www.views.index')
     ,url(r'^index/(\w+)/$', 'www.views.index',name = 'index')
     ,url(r'^index/$', 'www.views.index',name = 'index')
+    # ,static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 )
 
 # urlpatterns = [

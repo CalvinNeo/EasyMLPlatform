@@ -5,12 +5,12 @@ sys.path.append('../')
 from django.db import models
 from www.utils import random_file_name
 from www import settings
-import datasets
+import datasets.localdata
 
 def get_upload_to(instance, filename):
     # paths = { 'I':'images/', 'V':'videos/', 'A':'audio/', 'D':'documents'/ }
     # return settings.MEDIA_ROOT + 'content/' + paths[instance.content_type] + filename
-    return settings.MEDIA_ROOT + 'upload/dataset/' + random_file_name(filename)
+    return settings.MEDIA_ROOT + 'dataset/' + random_file_name(filename)
 
 class Dataset(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -37,14 +37,15 @@ class Dataset(models.Model):
     @staticmethod
     def ViewDataset(unicodedatasetindex=None, maximum_items=100):
         if unicodedatasetindex != None:
+            #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
             datasetindex = int(unicodedatasetindex)
-            if (datasetindex >= 0) and (len(Dataset.objects.all()) >= datasetindex):
-                dataset = Dataset.objects.get(id = datasetindex)
-                dataset.head = dataset.head.split(dataset.attr_delim)
-                dataset.items = []
+            if datasetindex >= 0:
+                datasetfile = Dataset.objects.get(id = datasetindex)
                 #open local dataset
+                lcdt = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data))
+                lcdt.ReadString(open(str(datasetfile.path),"r").read(),hasHead=True, getValue=True)
 
-                return dataset
+                return lcdt
         return None
 
 class MLModel(models.Model):

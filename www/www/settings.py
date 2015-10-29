@@ -134,6 +134,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = ''
+MEDIA_ROOT = 'upload/'
 
 # DEFAULT_FILE_STORAGE = "www.storage.FileStorage"

@@ -41,14 +41,14 @@ class LocalData:
                     self.head = range(len(data_col))
                     hasHead = True
                 self.items.append(map(self.datamapper,data_col,range(len(data_col)),self.head))
-    def ReadCSV(self, path, hasHead):
+    def ReadCSV(self, path, hasHead=False, getValue=True):
+        self.ReadString(open(path, 'r'), hasHead, getValue)
+    def ReadXML(self, path, hasHead=False, getValue=True):
         pass
-    def ReadXML(self, path, hasHead):
+    def ReadXLS(self, path, hasHead=False, getValue=True):
         pass
-    def ReadXLS(self, path, hasHead):
-        pass
-    def ReadTXT(self, path, hasHead):
-        pass
+    def ReadTXT(self, path, hasHead=False, getValue=True):
+        self.ReadString(open(path, 'r'), hasHead, getValue)
 
     def SaveCSV(self, path, saveHead = True):
         with open(path, 'wb') as csvfile:

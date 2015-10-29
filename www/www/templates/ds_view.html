@@ -1,16 +1,23 @@
-<table class="table table-striped">
-<thead>
-<tr>
-	<td> </td>
-	{% for col in dataset.head %}
-		<td>{{ col }}</td>
-	{% endfor %}
-</tr>
-</thead>
-<tbody>
-
-</tbody>
-</table>
+<body ng-controller="bodyController" ng-style="bodystyle">
+	<table class="table table-striped">
+	<thead>
+	<tr>
+		{% for col in dataset.head %}
+			<td>{{ col }}</td>
+		{% endfor %}
+	</tr>
+	</thead>
+	<tbody>
+		{% for item in dataset.items %}
+		<tr>
+			{% for col in item %}
+				<td> {{ col }} </td>
+			{% endfor%}
+		</tr>
+		{% endfor %}
+	</tbody>
+	</table>
+</body>
 <script>
-	// document.getElementsByTagName('head')[0].innerHTML = window.parent.document.getElementsByTagName('head')[0].innerHTML
+	document.getElementsByTagName('head')[0].innerHTML = window.parent.document.getElementsByTagName('head')[0].innerHTML
 </script>

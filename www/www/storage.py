@@ -13,4 +13,4 @@ class FileStorage(FileSystemStorage):
     #重写 _save方法        
     def _save(self, name, content, subclass):
         #调用父类方法
-        return super(FileStorage, self)._save('./upload/' + random_file_name(name), content)
+        return super(FileStorage, self)._save(random_file_name(name), content)

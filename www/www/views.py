@@ -4,8 +4,9 @@ from django.shortcuts import render_to_response
 from django.shortcuts import render
 from www.forms import *
 from www.models import *
-
 import MySQLdb
+
+import datasets.localdata
 
 # def first_page(request):
 #     db = MySQLdb.connect(user='root', db='mlplatform', passwd='80868086', host='localhost')
@@ -37,11 +38,18 @@ def index(request, operation = "", *args, **kwargs):
                     ds = Dataset()
                     ds.name = str(form.cleaned_data['name'])
                     ds.path = form.cleaned_data['datasetfile']
-                    # ds.filetype = str(form.cleaned_data['filetype'])
-                    if str(form.cleaned_data['hashead']) == "on":
-                        ds.head = ""
-                    else:
-                        ds.head = '1,2,3'
+                    ds.filetype = {
+                        'txt':'TXT',
+                        'csv':'CSV',
+                        'xls':'XLS',
+                    }[str(ds.path).split('.')[-1].lower()]
+                    
+
+                    ds.head = ""
+                    # lcdt = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data))
+                    # lcdt.ReadString(open(ds.path,"r").read(),hasHead=(str(form.cleaned_data['hashead'])=="on"), getValue=False)
+                    # ds.head = lcdt.head
+
                     ds.attr_delim = str(form.cleaned_data['attr_delim'])
                     ds.record_delim = str(form.cleaned_data['record_delim'])
                     ds.save()
