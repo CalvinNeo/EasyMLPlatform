@@ -67,6 +67,7 @@ class DecisionTree:
             headindex range(len(self.dataset.head)) avoid charset problems
             classfeatures is a list of class-feature values in each item
         '''
+        wholetree = {}
         classfeatures = [item[self.classfeatureindex] for item in datasetitems]
         if len(classfeatures) == 0:
             #empty dataset
@@ -79,9 +80,14 @@ class DecisionTree:
             return self.MajorityCount(classfeatures)
         bestfeature = self.BestFeature(datasetitems)
         mytree = {headindex[bestfeature]:{}}
+
         featurevalues, shentr = self.SplitDataset(datasetitems, bestfeature)
+        
         for value in featurevalues.keys():
-            mytree[headindex[bestfeature]][value] = self.CreateTree(featurevalues[value], headindex[:bestfeature]+headindex[bestfeature+1:])
+            mytree[headindex[bestfeature]][value] \
+                = self.CreateTree(featurevalues[value], headindex[:bestfeature]+headindex[bestfeature+1:])
+            # datasetitems = featurevalues[value]
+            # headindex = headindex[:bestfeature]+headindex[bestfeature+1:]
         return mytree
     def BuildTree(self):
         self.tree = self.CreateTree(self.dataset.items, range(len(self.dataset.head)))
@@ -126,6 +132,8 @@ if __name__ == '__main__':
     ld.ReadString(open("dat_cls.txt","r").read(),True)
     dt = DecisionTree(ld,-1)
     print dt.BuildTree()
+
+    
     # print dt.Classify([1,1])
     # print dt.Classify([0,0])
     # print dt.BestFeature(dt.dataset.items)

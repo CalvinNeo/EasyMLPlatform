@@ -2,15 +2,37 @@
 
 <div class="container-fluid">
 	<div class="col-md-6">
-		{% include 'ds_list.html' %}
+		<p class="lead"> Dataset List</p>
+		<div>
+			{% include 'ds_list.html' %}
+		</div>
+		<div>
+			<iframe frameborder=0 width="100%" height="100%"  scrolling=auto id="datasetviewframe"></iframe>
+		</div>
 	</div>
 	<div class="col-md-6">
-		<iframe frameborder=0 width="100%" height="100%"  scrolling=auto id="datasetviewframe"></iframe>
+		<p class="lead"> Dataset Upload</p>
+		<div>
+			{% include 'ds_upload.html' %}
+		</div>
+		<div>
+			
+		</div>
 	</div>
 </div>
+
 <script>
 	function showDataset(datasetindex){
 		$("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
+	}
+	function downloadDataset(datasetindex){
+		
+	}
+	function deleteDataset(datasetindex){
+		
+	}
+	function trainDataset(datasetindex){
+		
 	}
 </script>
 {% include 'footer.html' %}

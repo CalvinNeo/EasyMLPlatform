@@ -23,7 +23,8 @@ def index(request, operation = "", *args, **kwargs):
         return {'dataset': render(request,"dataset.html",{
             'datasets':Dataset.GetDatasets(),
             'select':False,'operation':True })
-         ,'model': render(request,"404.html",{'title':'Not Completed'})
+         ,'models': render(request,"trainmodel.html",{
+            })
          ,'apply': render(request,"404.html",{'title':'Not Completed'})
          ,'accessment': render(request,"404.html",{'title':'Not Completed'})
          #Partial
@@ -43,15 +44,10 @@ def index(request, operation = "", *args, **kwargs):
                         'csv':'CSV',
                         'xls':'XLS',
                     }[str(ds.path).split('.')[-1].lower()]
-                    
-
-                    ds.head = ""
-                    # lcdt = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data))
-                    # lcdt.ReadString(open(ds.path,"r").read(),hasHead=(str(form.cleaned_data['hashead'])=="on"), getValue=False)
-                    # ds.head = lcdt.head
-
-                    ds.attr_delim = str(form.cleaned_data['attr_delim'])
-                    ds.record_delim = str(form.cleaned_data['record_delim'])
+                    #head shows if the dataset has head
+                    ds.head = ""#str(form.cleaned_data['hashead']))
+                    ds.attr_delim = str(form.cleaned_data['attr_delim']).replace('\\n','\n').replace('\\t','\t')
+                    ds.record_delim = str(form.cleaned_data['record_delim']).replace('\\n','\n').replace('\\t','\t')
                     ds.save()
                     return render(request,"success.html",{'title':'upload dataset succeed!','description':str(form.cleaned_data['name']).decode('utf8')})
                 else:

@@ -10,6 +10,16 @@ class LocalData:
     def __init__(self, datamapper):
         self.head = []
         self.items = []
+        '''
+            Usage:
+            def my_mapper(data, colindex, head):
+                return {
+                  'water': int(data),
+                  'foot': int(data),
+                  'fish': str(data)
+                }[head]
+            datamapper is parse raw data
+        '''
         self.datamapper = datamapper
     def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", getValue=True):
         '''
@@ -22,15 +32,7 @@ class LocalData:
         else:
             self.head = []
         self.items = []
-        '''
-            Usage:
-            def my_mapper(data, colindex, head):
-                return {
-                  'water': int(data),
-                  'foot': int(data),
-                  'fish': str(data)
-                }[head]
-        '''
+
         if getValue:
             for record in records:
                 if record == "":
@@ -63,9 +65,9 @@ if __name__ == '__main__':
     ld.SaveCSV("k.csv")
     print ld.head
     print ld.items
-    print GroupByKey(ld.items, 0)
-    print GroupByKey(ld.items, 0,True)
-    print Count(ld.items, lambda x:x[0]==1)    
-    print ReduceByKeyAsList(ld.items, 0, lambda x,y:x+y) #join list
+    # print GroupByKey(ld.items, 0)
+    # print GroupByKey(ld.items, 0,True)
+    # print Count(ld.items, lambda x:x[0]==1)    
+    # print ReduceByKeyAsList(ld.items, 0, lambda x,y:x+y) #join list
 
 

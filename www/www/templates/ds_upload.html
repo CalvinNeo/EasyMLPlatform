@@ -1,8 +1,8 @@
-{% include 'header.html' %}
-<form method='post' enctype="multipart/form-data" action="{% url 'index' 'dataset_upload' %}" style="position:absolute;width:50%;" ng-controller="uploadDatasetController" name="uploadForm">
+
+<form method='post' enctype="multipart/form-data" action="{% url 'index' 'dataset_upload' %}" style="width:100%;" ng-controller="uploadDatasetController" name="uploadForm">
 	{% csrf_token %}
 
-	<div class="container-fluid" ><div class="col-md-12">
+	<!-- <div class="container-fluid" ><div class="col-md-12"> -->
 		<p><label for="name">Name Your Dataset</label>
 			<input type="text" name="name" class="form-control" ng-model="formData.name" ng-minlength=1 ng-maxlength=20 required></input>
 			<div class="error" ng-show="uploadForm.name.$dirty && uploadForm.name.$invalid">
@@ -12,7 +12,7 @@
 		<p><label for="datasetfile">Upload Your Dataset File</label>
 		<input name="datasetfile" type="file" class="form-control" accept=".xls,.csv,.txt">
 		</p>
-	</div></div>
+	<!-- </div></div> -->
 	<div class="container-fluid" >
 		<div class="col-md-4">
 			<label for="hashead">Dataset Header</label>
@@ -28,11 +28,10 @@
 		</div>
 	</div>
 	<hr/>
-	<div class="container-fluid" ><div class="col-md-12">
-	<input type="submit" class="btn btn-success btn-lg btn-block" value="OK">
-	</div></div>
+	<!-- <div class="container-fluid" ><div class="col-md-12"> -->
+		<input type="submit" class="btn btn-success btn-lg btn-block" value="Upload">
+	<!-- </div></div> -->
 </form>
 <script>
 
 </script>
-{% include 'footer.html' %}

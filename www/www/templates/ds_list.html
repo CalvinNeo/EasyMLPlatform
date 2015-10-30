@@ -13,8 +13,9 @@
 		{% endif %}
 		{% if operation %}
 			<td><a href="javascript:void(0)" onclick="showDataset({{dataset.id}})">查看</a></td>
-			<td>删除</td>
-			<td>下载</td>
+			<td><a href="javascript:void(0)" onclick="deleteDataset({{dataset.id}})">删除</a></td>
+			<td><a href="javascript:void(0)" onclick="downloadDataset({{dataset.id}})">下载</a></td>
+			<td><a href="javascript:void(0)" onclick="trainDataset({{dataset.id}})">训练</a></td>
 		{% endif %}
 	</tr>
 {% endfor%}

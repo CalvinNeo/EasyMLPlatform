@@ -5,6 +5,7 @@ sys.path.append('..')
 import csv
 from optparse import OptionParser
 import operator
+from localdata import *
 
 def ReduceByKeyAsList(items, keyindex, lmda, removekey=False):
     g = GroupByKey(items, keyindex, removekey)
@@ -59,3 +60,8 @@ def Counts(items):
         else:
             groups[item] += 1
     return groups
+if __name__ == '__main__':
+    ld = LocalData(datamapper = lambda data,colindex,head:int(data))
+    ld.ReadString(open("1.txt","r").read(),True)
+    print GroupByKey(ld.items, 0)
+    print GroupByKey(ld.items, 0,True)
