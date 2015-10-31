@@ -10,6 +10,7 @@ from localdata import *
 def ReduceByKeyAsList(items, keyindex, lmda, removekey=False):
     g = GroupByKey(items, keyindex, removekey)
     '''
+        recieve a list
         map(lambda key:g[key], g) --value(maybe a list) to each key
         map(lambda key:g[key], g) --reduce for each in value
         return a list
@@ -18,12 +19,14 @@ def ReduceByKeyAsList(items, keyindex, lmda, removekey=False):
 def ReduceByKeyAsDict(items, keyindex, lmdakeyvalue, removekey=False):
     g = GroupByKey(items, keyindex, removekey)
     '''
+        recieve a list
         lmdakeyvalue get a (key, value) tuple, return a tuple (f(key),g(value)), f,g are some defined functions
         return a dict
     '''
     return dict(map(lmdakeyvalue, g.iteritems()))
 def GroupByKey(items, keyindex, removekey=False):
     '''
+        recieve a list
         split dataset into a dictionary classified by keys
         if keyindex = None EQUALS Group
     '''
@@ -42,16 +45,23 @@ def GroupByKey(items, keyindex, removekey=False):
                 groups[value].append(item)
     return groups
 def SortByKey(items, keyindex, comparelmda, removekey=False):
+    '''
+        recieve a list
+    '''
     g = GroupByKey(items, keyindex, removekey)
     return sorted(g, cmp=comparelmda)
 def Count(items, lmda):
     '''
+        recieve a list
         Assertion:
         lmda must be True/False lambda function, return True if such condition should be counted, False otherwise
     '''
     return reduce(operator.add, map(lambda x:1 if lmda(x)==True else 0, items))
 def Counts(items):
     '''
+        e.g.
+        in: 1,1,2,2,2,4
+        out: {1:2, 2:3, 4:1}
     '''
     groups = {}
     for item in items:

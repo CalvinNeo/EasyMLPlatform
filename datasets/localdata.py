@@ -65,9 +65,6 @@ if __name__ == '__main__':
     ld.SaveCSV("k.csv")
     print ld.head
     print ld.items
-    # print GroupByKey(ld.items, 0)
-    # print GroupByKey(ld.items, 0,True)
-    # print Count(ld.items, lambda x:x[0]==1)    
-    # print ReduceByKeyAsList(ld.items, 0, lambda x,y:x+y) #join list
+
 
 

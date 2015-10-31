@@ -8,3 +8,7 @@ class UploadDatasetForm(forms.Form):
     hashead = forms.CharField(max_length=10)  
     attr_delim = forms.CharField(max_length = 3)
     record_delim = forms.CharField(max_length = 3)
+
+class NewModelForm(forms.Form):
+    name = forms.CharField(max_length = 20)
+    modeltype = forms.CharField(max_length=10) 

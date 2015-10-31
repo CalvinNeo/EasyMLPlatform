@@ -55,10 +55,11 @@ def index(request, operation = "", *args, **kwargs):
             else:
                 form = UploadDatasetForm()
                 return render(request,"ds_upload.html",{'form':form})
-        elif operation == "model_upload":
+        elif operation == "model_new":
             if request.method == "POST":
                 pass
             else:
                 pass
         else:
             return render(request,"404.html",{'title':'Page Not Found'})
+

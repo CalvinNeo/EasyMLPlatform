@@ -8,3 +8,8 @@ create table dataset(id int(4) not null primary key auto_increment
 	,attr_delim varchar(3)
 	,record_delim varchar(3)
 )
+create table model(id int(4) not null primary key auto_increment
+	,name varchar(20) not null
+	,path varchar(255)
+	,modeltype varchar(10)
+)
