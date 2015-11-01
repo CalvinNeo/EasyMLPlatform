@@ -15,43 +15,45 @@ def L0(vec):
         count of non-zero elements of a vector
     '''
     if type(vec).__name__ in ['matrix','ndarray']:
-        pass
+        return np.sum(np.vectorize(lambda n:0 if n==0.0 else 1)(vec))
     else:
-        pass
+        return np.sum(np.vectorize(lambda n:0 if n==0.0 else 1)(np.matrix(vec)))
 
 def L1(vec):
     '''
         sum(abs(for each elements in a vector))
     '''
     if type(vec).__name__ in ['matrix','ndarray']:
-        pass
+        return np.sum(np.vectorize(lambda n:abs(n))(vec))
     else:
-        pass
+        return np.sum(np.vectorize(lambda n:abs(n))(np.matrix(vec)))
 
 def L2(vec):
     '''
         sqrt(sigma(square each elements))
     '''
     if type(vec).__name__ in ['matrix','ndarray']:
-        pass
+        return np.sum(np.vectorize(lambda n:n**2)(vec))**0.5
     else:
-        pass
+        return np.sum(np.vectorize(lambda n:n**2)(np.matrix(vec)))**0.5
 
 def EuclideanDist(vec1, vec2):
     '''
         Euclidean Distance:
             sqrt(sigma((vec1[i] - vec2[i]) ^ 2))
     '''
-    if type(vec).__name__ in ['matrix','ndarray']:
-        pass
+    if type(vec1).__name__ in ['matrix','ndarray']:
+        r = vec1-vec2
+        return np.trace(np.dot(r,r.T))**0.5
     else:
-        pass
+        r = np.matrix(vec1) - np.matrix(vec2)
+        return np.trace(np.dot(r,r.T))**0.5
 def ManhattanDist(vec1, vec2):
     '''
         ManhattanDist Distance:
             sigma(abs(vec1[i] - vec2[i]))
     '''
-    if type(vec).__name__ in ['matrix','ndarray']:
+    if type(vec1).__name__ in ['matrix','ndarray']:
         pass
     else:
         pass
@@ -71,3 +73,6 @@ if __name__ == '__main__':
     print type(np.array([1,2])).__name__
     print type(np.matrix('1 2')).__name__
     print 1 in [1,2,3]
+    print np.sum(np.vectorize(lambda n:0 if n==0.0 else 1)([0,1,2,3]))
+    print "------------"
+    print EuclideanDist([1,2],[3,4])
