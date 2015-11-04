@@ -57,6 +57,31 @@ def ManhattanDist(vec1, vec2):
         pass
     else:
         pass
+class Assessment:
+    def __init__(self, model, dataset):
+        self.model = model
+        self.dataset = dataset
+        self.TP, self.TN, self.FP, self.FN = 0, 0, 0, 0
+    def TFPN(self):
+        '''
+                            Positive    Negative
+        Correct Prediction      TP         TN
+        Wrong Prediction        FP         FN
+        '''
+        pass
+    def P(self):
+        return self.TP / (self.TP + self.FP)
+    def R(self):
+        return self.TP / (self.TP + self.FN)
+    def F1(self):
+        return 2.0 / (1.0 / self.P() + 1.0 / self.R())
+    def ROC(self):
+        pass
+    def Test(self):
+        '''
+            Can distributed
+        '''
+
 
 if __name__ == '__main__':
     # i = 5

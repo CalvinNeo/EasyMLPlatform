@@ -19,11 +19,12 @@ class DecisionTree:
         self.dataset = dataset
         self.classfeatureindex = classfeatureindex
         self.tree = {}
+    #这两个函数相对"独立"
     def ShannonEntropy(self, items = None):
         if items == None:
-            items = self.dataset.items
+            items = self.dataset.Iter()
         feature_count = ReduceByKeyAsDict(items, self.classfeatureindex, lambda (key,value):(key,len(value)), True)
-        shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value):float(value)/len(items),feature_count.iteritems()),0)
+        shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value):float(value)/len(self.dataset.Length()),feature_count.iteritems()),0)
         return shentr
     def SplitDataset(self, items, classfeatureindex):
         '''
@@ -33,13 +34,12 @@ class DecisionTree:
             {feature_value:[datasets_divided_by_this_feature]}
         '''
         featurevalues = GroupByKey(items, classfeatureindex, True)
-        shentr = reduce(operator.add, map(lambda (key,value):len(value)/float(len(items))*self.ShannonEntropy(value),featurevalues.iteritems()),0)
+        shentr = reduce(operator.add, map(lambda (key,value):len(value)/float(self.dataset.Length)*self.ShannonEntropy(value),featurevalues.iteritems()),0)
         return featurevalues, shentr
+
     def BestFeature(self, datasetitems):
         '''
             return the feature best split the dataset
-            Usage:
-            self.BestFeature(self.dataset.items)
         '''
         origin_entropy = self.ShannonEntropy()
         best_gain = 0.0 #g is infomation gain
@@ -86,11 +86,9 @@ class DecisionTree:
         for value in featurevalues.keys():
             mytree[headindex[bestfeature]][value] \
                 = self.CreateTree(featurevalues[value], headindex[:bestfeature]+headindex[bestfeature+1:])
-            # datasetitems = featurevalues[value]
-            # headindex = headindex[:bestfeature]+headindex[bestfeature+1:]
         return mytree
     def BuildTree(self):
-        self.tree = self.CreateTree(self.dataset.items, range(len(self.dataset.head)))
+        self.tree = self.CreateTree(self.dataset.Iter(), range(len(self.dataset.head)))
         return self.tree
     def Classify(self, test):
         '''

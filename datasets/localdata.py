@@ -5,11 +5,19 @@ sys.path.append('..')
 import csv
 from optparse import OptionParser
 import operator
+from monads import *
 
 class LocalData:
     def __init__(self, datamapper):
+        '''
+            mode:
+            all -all items in dataset will be used to train
+            sfold -sfold cross validation
+
+        '''
         self.head = []
         self.items = []
+        self.mode = 'all'
         '''
             Usage:
             def my_mapper(data, colindex, head):
@@ -21,6 +29,16 @@ class LocalData:
             datamapper is parse raw data
         '''
         self.datamapper = datamapper
+    def Iter(self):
+        if self.mode == 'all':
+            for item in self.items:
+                yield item
+    def Index(self, i):
+        if self.mode == 'all':
+            return self.items[i]
+    def Length(self):
+        if self.mode == 'all':
+            return len(self.items)
     def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", getValue=True):
         '''
             generate head 1,2,3... if there are no heads
@@ -59,12 +77,37 @@ class LocalData:
                 spamwriter.writerow(self.head)
             for x in self.items:
                 spamwriter.writerow(x)
+
+class TestClass:
+    def __init__(self):
+        self.d = [1,2,3,4,5,6]
+        self.mode = 'haha'
+    def Iter(self):
+        if self.mode == 'haha':
+            for i in self.d:
+                yield i
+        else:
+            for i in self.d:
+                yield 'i'
 if __name__ == '__main__':
     ld = LocalData(datamapper = lambda data,colindex,head:int(data))
     ld.ReadString(open("1.txt","r").read(),True)
     ld.SaveCSV("k.csv")
     print ld.head
-    print ld.items
+    for items in ld.Iter():
+        print items
+    print GroupByKey(ld.Iter(),0)
+    print "----------------------"
+    t = TestClass()
+    j = 0
+    for i in t.Iter():
+        j += 1
+        if j > 1:
+            t.mode = 'nono'
+        print i
+    t.mode = 'nono'
+    for i in t.Iter():
+        print i
 
 
 
