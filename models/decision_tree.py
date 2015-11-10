@@ -20,24 +20,25 @@ class DecisionTree:
         self.classfeatureindex = classfeatureindex
         self.tree = {}
     #这两个函数相对"独立"
-    def ShannonEntropy(self, items = None):
-        if items == None:
-            items = self.dataset.Iter()
-        feature_count = ReduceByKeyAsDict(items, self.classfeatureindex, lambda (key,value):(key,len(value)), True)
+    def ShannonEntropy(self, dataset = None):
+        if dataset == None:
+            dataset = self.dataset
+        feature_count = ReduceByKeyAsDict(dataset.Iter(), self.classfeatureindex, lambda (key,value):(key,len(value)), True)
         shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value):float(value)/len(self.dataset.Length()),feature_count.iteritems()),0)
         return shentr
-    def SplitDataset(self, items, classfeatureindex):
+    def SplitDataset(self, dataset, classfeatureindex):
         '''
             e.g. feature A is the best split feature and it has value True and False (represented by classfeaturevalue)
             Use classfeatureindex to split dataset
             Return:
-            {feature_value:[datasets_divided_by_this_feature]}
+            feature_value:[datasets_divided_by_this_feature]
+            shentr:ShannonEntropy
         '''
-        featurevalues = GroupByKey(items, classfeatureindex, True)
-        shentr = reduce(operator.add, map(lambda (key,value):len(value)/float(self.dataset.Length)*self.ShannonEntropy(value),featurevalues.iteritems()),0)
+        featurevalues = GroupByKey(dataset.Iter(), classfeatureindex, True)
+        shentr = reduce(operator.add, map(lambda (key,value):len(value)/float(self.dataset.Length())*self.ShannonEntropy(value),featurevalues.iteritems()),0)
         return featurevalues, shentr
 
-    def BestFeature(self, datasetitems):
+    def BestFeature(self, dataset):
         '''
             return the feature best split the dataset
         '''
@@ -60,35 +61,15 @@ class DecisionTree:
             MajorityCount return 1
         '''
         return sorted(Counts(classfeatures).iteritems(), key = operator.itemgetter(1), reverse = True)[0][0]
-    def CreateTree(self, datasetitems, headindex):
+    def CreateTree(self, dataset):
         '''
             build recursive decision tree
-            datasetitems part of self.dataset.items
-            headindex range(len(self.dataset.head)) avoid charset problems
+            dataset part of self.dataset
             classfeatures is a list of class-feature values in each item
         '''
-        wholetree = {}
-        classfeatures = [item[self.classfeatureindex] for item in datasetitems]
-        if len(classfeatures) == 0:
-            #empty dataset
-            return None
-        elif classfeatures.count(classfeatures[0]) == len(classfeatures):
-            #all items share same class
-            return classfeatures[0]
-        if len(datasetitems[0]) == 1:
-            #if only left classfeature column, choose which value of this feature is in major
-            return self.MajorityCount(classfeatures)
-        bestfeature = self.BestFeature(datasetitems)
-        mytree = {headindex[bestfeature]:{}}
-
-        featurevalues, shentr = self.SplitDataset(datasetitems, bestfeature)
-        
-        for value in featurevalues.keys():
-            mytree[headindex[bestfeature]][value] \
-                = self.CreateTree(featurevalues[value], headindex[:bestfeature]+headindex[bestfeature+1:])
-        return mytree
+        pass
     def BuildTree(self):
-        self.tree = self.CreateTree(self.dataset.Iter(), range(len(self.dataset.head)))
+        self.tree = self.CreateTree(self.dataset)
         return self.tree
     def Classify(self, test):
         '''

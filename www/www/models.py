@@ -10,7 +10,7 @@ import datasets.localdata
 def get_upload_to(instance, filename):
     # paths = { 'I':'images/', 'V':'videos/', 'A':'audio/', 'D':'documents'/ }
     # return settings.MEDIA_ROOT + 'content/' + paths[instance.content_type] + filename
-    return settings.MEDIA_ROOT + 'dataset/' + random_file_name(filename)
+    return 'dataset/' + random_file_name(filename)
 
 class Dataset(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -28,14 +28,15 @@ class Dataset(models.Model):
         return "#{}: ({}) {} @ {} attr_delim: {} record_delim: {}".format(self.id,self.filetype,self.name,self.path,self.attr_delim,self.record_delim)
 
     @staticmethod
-    def GetDatasets(pageindex=0, max_item=10):
+    def GetDatasets(pageindex = 0, max_item = 10):
         l = len(Dataset.objects.all())
         if l > 0:
             return Dataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
         else:
             return {}
+            
     @staticmethod
-    def ViewDataset(unicodedatasetindex=None, maximum_items=100):
+    def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
         if unicodedatasetindex != None:
             #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
             datasetindex = int(unicodedatasetindex)
@@ -43,11 +44,20 @@ class Dataset(models.Model):
                 datasetfile = Dataset.objects.get(id = datasetindex)
                 #open local dataset
                 lcdt = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data))
-                lcdt.ReadString(open(str(datasetfile.path),"r").read(),hasHead=True, getValue=True)
+                lcdt.ReadString(open(settings.MEDIA_ROOT+str(datasetfile.path),"r").read(),hasHead=True, getValue=True)
 
                 return lcdt
         return None
 
+    @staticmethod
+    def DeleteDataset(unicodedatasetindex = None):
+        if unicodedatasetindex != None:
+            datasetindex = int(unicodedatasetindex)
+            item = Dataset.objects.get(id = datasetindex)
+            os.remove(settings.MEDIA_ROOT+str(item.path))
+            item.delete()
+            return 'true'
+        return 'false'
 class MLModel(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=20)

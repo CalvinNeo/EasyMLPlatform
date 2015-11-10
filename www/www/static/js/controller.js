@@ -56,3 +56,6 @@ function bodyController($scope, $http){
 function uploadDatasetController($scope, $http){
 
 }
+function newModelController($scope, $http){
+
+}

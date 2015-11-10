@@ -26,10 +26,16 @@
 		$("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
 	}
 	function downloadDataset(datasetindex){
-		
+
 	}
 	function deleteDataset(datasetindex){
-		
+		$.ajax({
+			url : '/api/dataset_delete?datasetindex='+datasetindex
+			,async : false
+			,success : function (data, textStatus) {
+				alert(data);
+				}
+			})
 	}
 	function trainDataset(datasetindex){
 		

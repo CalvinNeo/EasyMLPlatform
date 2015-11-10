@@ -1,0 +1,21 @@
+<form method='post' enctype="multipart/form-data" action="{% url 'index' 'model_new' %}" style="width:100%;" ng-controller="newModelController" name="newForm">
+	{% csrf_token %}
+
+	<!-- Model -->
+		<p><label for="name">Name Your Model</label>
+			<input type="text" name="name" class="form-control" ng-model="formData.name" ng-minlength=1 ng-maxlength=20 required></input>
+			<div class="error" ng-show="newForm.name.$dirty && newForm.name.$invalid">
+				<small class="error text-danger" ng-show="newForm.name.$error.required"> Name Required </small>
+			</div>
+		</p>
+		<label for="model_type">Product Search: </label>
+		<input id="modeltype" type="text" class="form-control" data-provide="typeahead" name="modeltype"
+			 data-source='["Deluxe Bicycle", "Super Deluxe Trampoline", "Super Duper Scooter"]'>
+	<hr/>
+	<!-- Train -->
+
+	<hr/>
+	<input type="submit" class="btn btn-success btn-lg btn-block" value="OK">
+</form>
+
+

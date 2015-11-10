@@ -6,7 +6,19 @@ import csv
 from optparse import OptionParser
 import operator
 from localdata import *
-
+'''
+    dataset.items is deprecated
+    dataset.Iter() recommended
+'''
+def L2DS(lst):
+    '''
+        input list output Dataset
+    '''
+    pass
+def D2DS(dct):
+    '''
+        input dict output Dataset
+    '''
 def ReduceByKeyAsList(items, keyindex, lmda, removekey=False):
     g = GroupByKey(items, keyindex, removekey)
     '''

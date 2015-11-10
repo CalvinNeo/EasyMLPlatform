@@ -8,15 +8,28 @@ import operator
 from monads import *
 
 class LocalData:
-    def __init__(self, datamapper):
+    def __init__(self, datamapper, *args, **kwargs):
+        if 'head' in kwargs.keys():
+            self.head = kwargs['head']
+        else:
+            self.head = []
+        if 'items' in kwargs.keys():
+            self.items = kwargs['items']
+        else:
+            self.items = []
+        '''
+            classfeatureindex is expected class or value of this record(if the dataset is used to classify)
+        '''
+        if 'classfeatureindex' in kwargs.keys():
+            self.classfeatureindex = kwargs['classfeatureindex']
+        else:
+            self.classfeatureindex = -1
         '''
             mode:
             all -all items in dataset will be used to train
             sfold -sfold cross validation
 
-        '''
-        self.head = []
-        self.items = []
+        '''        
         self.mode = 'all'
         '''
             Usage:
@@ -39,6 +52,8 @@ class LocalData:
     def Length(self):
         if self.mode == 'all':
             return len(self.items)
+    def Spawn(self, cols, lins):
+        pass
     def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", getValue=True):
         '''
             generate head 1,2,3... if there are no heads
