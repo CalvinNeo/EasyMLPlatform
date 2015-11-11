@@ -58,6 +58,7 @@ class Dataset(models.Model):
             item.delete()
             return 'true'
         return 'false'
+
 class MLModel(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=20)
@@ -66,6 +67,15 @@ class MLModel(models.Model):
 
     class Meta:
         db_table = 'models'
+
+    @staticmethod
+    def AllDistributedModels():
+        return ["EM","SVM","NAIVE_BAYES","K_MEANS","KNN"]
+
+    @staticmethod
+    def AllModels():
+        return MLModel.AllDistributedModels() + \
+            ["DECISION_TREE","ADABOOST","PCA","LOGISTIC","CRF","FP_GROWTH"]
 
     def __unicode__(self):
         return "#{}: ({}) {} @ {}".format(self.id,self.modeltype,self.name,self.path)

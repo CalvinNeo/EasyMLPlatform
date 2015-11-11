@@ -11,30 +11,31 @@ import json
 import pickle
 
 class DecisionTree:
-    def __init__(self, dataset, classfeatureindex = -1):
+    def __init__(self, dataset):
         '''
             dataset: (datasets.localdata) 
             classfeatureindex: index of the column which defines the feature in dataset 
         '''
         self.dataset = dataset
-        self.classfeatureindex = classfeatureindex
         self.tree = {}
     #这两个函数相对"独立"
     def ShannonEntropy(self, dataset = None):
         if dataset == None:
             dataset = self.dataset
-        feature_count = ReduceByKeyAsDict(dataset.Iter(), self.classfeatureindex, lambda (key,value):(key,len(value)), True)
-        shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value):float(value)/len(self.dataset.Length()),feature_count.iteritems()),0)
+        feature_count = ReduceByKeyAsDict(dataset.Iter(), dataset.classfeatureindex, \
+            lambda (key,value):(key,len(value)), True)
+        shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value): \
+            float(value)/self.dataset.Length(),feature_count.iteritems()),0)
         return shentr
-    def SplitDataset(self, dataset, classfeatureindex):
+    def SplitDataset(self, dataset):
         '''
             e.g. feature A is the best split feature and it has value True and False (represented by classfeaturevalue)
             Use classfeatureindex to split dataset
             Return:
             feature_value:[datasets_divided_by_this_feature]
-            shentr:ShannonEntropy
+            shentr:
         '''
-        featurevalues = GroupByKey(dataset.Iter(), classfeatureindex, True)
+        featurevalues = GroupByKey(dataset.Iter(), dataset.classfeatureindex, True)
         shentr = reduce(operator.add, map(lambda (key,value):len(value)/float(self.dataset.Length())*self.ShannonEntropy(value),featurevalues.iteritems()),0)
         return featurevalues, shentr
 
@@ -45,8 +46,9 @@ class DecisionTree:
         origin_entropy = self.ShannonEntropy()
         best_gain = 0.0 #g is infomation gain
         best_featureid = 0
-        for i in xrange(len(datasetitems[0])):
-            feature, new_entropy = self.SplitDataset(datasetitems, i)
+        for i in xrange(dataset.ColumnLength()):
+            dataset.classfeatureindex = i
+            feature, new_entropy = self.SplitDataset(dataset)
             infomation_gain = new_entropy - origin_entropy
             if infomation_gain > best_gain:
                 best_gain = infomation_gain
@@ -67,7 +69,22 @@ class DecisionTree:
             dataset part of self.dataset
             classfeatures is a list of class-feature values in each item
         '''
-        pass
+        classfeatures = dataset.Column(dataset.classfeatureindex)
+        if len(classfeatures) == 0:
+            #empty dataset
+            return None
+        elif classfeatures.count(classfeatures[0]) == len(classfeatures):
+            #all items share same class
+            return classfeatures[0]
+        if dataset.ColumnLength() == 1:
+            #if only one feature left, choose which value of this feature is in major
+            return self.MajorityCount(classfeatures)
+        bestfeature = self.BestFeature(dataset)
+        mytree = {headindex[bestfeature]:{}}
+        featurevalues, shentr = self.SplitDataset(dataset, bestfeature)
+        for value in featurevalues.keys():
+            mytree[headindex[bestfeature]][value] = self.CreateTree(featurevalues[value], headindex[:bestfeature]+headindex[bestfeature+1:])
+        return mytree
     def BuildTree(self):
         self.tree = self.CreateTree(self.dataset)
         return self.tree
@@ -109,7 +126,7 @@ if __name__ == '__main__':
             return str(data)
     ld = datasets.localdata.LocalData(datamapper=my_mapper)
     ld.ReadString(open("dat_cls.txt","r").read(),True)
-    dt = DecisionTree(ld,-1)
+    dt = DecisionTree(ld)
     print dt.BuildTree()
 
     

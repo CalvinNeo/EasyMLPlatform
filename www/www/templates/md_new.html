@@ -1,4 +1,4 @@
-<form method='post' enctype="multipart/form-data" action="{% url 'index' 'model_new' %}" style="width:100%;" ng-controller="newModelController" name="newForm">
+<form method='post' enctype="multipart/form-data" action="{% url 'index' 'model_new' %}" ng-controller="newModelController" name="newForm">
 	{% csrf_token %}
 
 	<!-- Model -->
@@ -8,14 +8,32 @@
 				<small class="error text-danger" ng-show="newForm.name.$error.required"> Name Required </small>
 			</div>
 		</p>
-		<label for="model_type">Product Search: </label>
-		<input id="modeltype" type="text" class="form-control" data-provide="typeahead" name="modeltype"
-			 data-source='["Deluxe Bicycle", "Super Deluxe Trampoline", "Super Duper Scooter"]'>
+		<label for="modeltype">Prototype</label>
+		<input id="modeltype" type="text" class="form-control" data-provide="typeahead" name="modeltype" 
+			 autocomplete="off" />
 	<hr/>
 	<!-- Train -->
 
 	<hr/>
 	<input type="submit" class="btn btn-success btn-lg btn-block" value="OK">
 </form>
+<script>
+$("#modeltype").typeahead({
+    source: [{% for type in modeltypes %}'{{type}}',{% endfor%}],//数据源
+    items: 8,//最多显示个数
+    updater: function (item) {
+        return item;//这里一定要return，否则选中不显示，外加调用display的时候null reference错误。
+    },
+    displayText: function (item) {
+        return item;//返回字符串
+    },
+    afterSelect: function (item) {
+        //选择项之后的事件 ，item是当前选中的。
+        return item;
+    },
+    delay: 500//延迟时间
+});
+
+</script>
 
 

@@ -1,20 +1,25 @@
 <table class="table table-striped">
 <thead>
 <tr>
+	{% if select %}
+		<td> 
+
+		</td>
+	{% endif %}
 	<td>Name</td><td>Type</td><td>Head</td>
 </tr>
 </thead>
 <tbody>
 {% for model in models %}
 	<tr>
-		<td>{{model.name}}</td><td>{{model.modeltype}}</td>
 		{% if select %}
-			<td>选择</td>
+			<td><input type="checkbox" id="check_{{model.id}}"></input></td>
 		{% endif %}
+		<td>{{model.name}}</td><td>{{model.modeltype}}</td>
 		{% if operation %}
-			<td><a href="javascript:void(0)" onclick="showDataset({{model.id}})">查看</a></td>
+			<td><a href="javascript:void(0)" onclick="showModel({{model.id}})">查看</a></td>
 			<td><a href="javascript:void(0)" onclick="deleteDataset({{model.id}})">删除</a></td>
-			<td><a href="javascript:void(0)" onclick="downloadDataset({{model.id}})">下载</a></td>
+			<td><a href="javascript:void(0)" onclick="deleteModel({{model.id}})">下载</a></td>
 		{% endif %}
 	</tr>
 {% endfor%}

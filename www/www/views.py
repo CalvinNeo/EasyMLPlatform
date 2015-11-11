@@ -30,6 +30,8 @@ def index(request, operation = "", *args, **kwargs):
             'datasets':Dataset.GetDatasets(),
             'select':True,'operation':True })
          ,'models': render(request,"trainmodel.html",{
+            'distributed_modeltypes':MLModel.AllDistributedModels()
+            ,'modeltypes':MLModel.AllModels()
             })
          ,'apply': render(request,"404.html",{'title':'Not Completed'})
          ,'accessment': render(request,"404.html",{'title':'Not Completed'})
@@ -62,11 +64,15 @@ def index(request, operation = "", *args, **kwargs):
             else:
                 form = UploadDatasetForm()
                 return render(request,"ds_upload.html",{'form':form})
-        elif operation == "model_new":
+        elif operation == "md_new":
             if request.method == "POST":
                 pass
             else:
-                pass
+                print "---",str(MLModel.AllDistributedModels())
+                return render(request,"md_new.html",{
+                    'distributed_modeltypes':str(MLModel.AllDistributedModels())
+                    ,'modeltypes':str(MLModel.AllModels())
+                    })
         elif operation == "model_view":
             pass
         else:

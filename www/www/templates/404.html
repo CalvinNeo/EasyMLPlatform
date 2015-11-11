@@ -1,4 +1,79 @@
 {% include 'header.html' %}
 <h1 class="header text-danger">404</h1>
 <h3>{{title}}</h3>
+
+
+    <div style="margin: 50px 50px">
+        <label for="product_search">Product Search: </label>
+        <input id="product_search" type="text" data-provide="typeahead">
+        <div id="product" style="border-width: 1; padding: 5px; border-style: solid"></div>
+    </div>
+    <script>
+        $(document).ready(function ($) {
+            // Workaround for bug in mouse item selection
+            $.fn.typeahead.Constructor.prototype.blur = function () {
+                var that = this;
+                setTimeout(function () { that.hide() }, 250);
+            };
+
+            var products = [
+            {
+                id: 0,
+                name: "Deluxe Bicycle",
+                price: 499.98
+            },
+            {
+                id: 1,
+                name: "Super Deluxe Trampoline",
+                price: 134.99
+            },
+            {
+                id: 2,
+                name: "Super Duper Scooter",
+                price: 49.95
+            }
+            ];
+
+            var that = this;
+
+            $('#product_search').typeahead({
+                source: function (query, process) {
+                    $('#product').hide();
+                    var results = _.map(products, function (product) {
+                        return product.id + "";
+                    });
+                    process(results);
+                },
+
+                matcher: function (item) {
+                    return true;
+                },
+
+                highlighter: function (id) {
+                    var product = _.find(products, function (p) {
+                        return p.id == id;
+                    });
+                    return product.name + " ($" + product.price + ")";
+                },
+
+                updater: function (id) {
+                    var product = _.find(products, function (p) {
+                        return p.id == id;
+                    });
+                    that.setSelectedProduct(product);
+                    return product.name;
+                }
+
+            });
+
+            $('#product').hide();
+            this.setSelectedProduct = function (product) {
+                $('#product').html("Purchase: <strong>" + product.name + " ($" + product.price + ")</strong>").show();
+            }
+        })
+    </script>
+
+
+
 {% include 'footer.html' %}
+

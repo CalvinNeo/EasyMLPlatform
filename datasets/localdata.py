@@ -9,16 +9,17 @@ from monads import *
 
 class LocalData:
     def __init__(self, datamapper, *args, **kwargs):
-        if 'head' in kwargs.keys():
+        if 'head' in kwargs.keys() and kwargs['head'] != None:
             self.head = kwargs['head']
         else:
             self.head = []
-        if 'items' in kwargs.keys():
+        if 'items' in kwargs.keys() and kwargs['items'] != None:
             self.items = kwargs['items']
         else:
             self.items = []
         '''
-            classfeatureindex is expected class or value of this record(if the dataset is used to classify)
+            classfeatureindex is the index of the column which defines the feature in dataset 
+            (if the dataset is used to classify or regress)
         '''
         if 'classfeatureindex' in kwargs.keys():
             self.classfeatureindex = kwargs['classfeatureindex']
@@ -42,6 +43,9 @@ class LocalData:
             datamapper is parse raw data
         '''
         self.datamapper = datamapper
+    def __str__(self):
+        return "DATASET: " + str(self.head) + " " + str(self.items)
+
     def Iter(self):
         if self.mode == 'all':
             for item in self.items:
@@ -52,6 +56,12 @@ class LocalData:
     def Length(self):
         if self.mode == 'all':
             return len(self.items)
+    def ColumnLength(self):
+        if self.mode == 'all':
+            return len(self.head)
+    def Column(self, i):
+        if self.mode == 'all':
+            return [item[i] for item in self.items]
     def Spawn(self, cols, lins):
         pass
     def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", getValue=True):
