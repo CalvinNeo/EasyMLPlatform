@@ -6,37 +6,53 @@ import csv
 from optparse import OptionParser
 import operator
 from localdata import *
+import localdata
 '''
     dataset.items is deprecated
     dataset.Iter() recommended
 '''
-def L2DS(lst):
+def L2DS(lst, head=None, classfeatureindex=-1):
     '''
         input list output Dataset
     '''
-    pass
+    ld = localdata.LocalData(datamapper=None, head=head, items=lst, classfeatureindex=classfeatureindex)
+    return ld
 def D2DS(dct):
     '''
         input dict output Dataset
     '''
-def ReduceByKeyAsList(items, keyindex, lmda, removekey=False):
+    return dct
+def lmdaprint(text):
+    print "lamdaprint: ", text
+def ReduceByKeyAsList(items, keyindex, lmda, lmdamap=None, removekey=False, returnDataset=False):
     g = GroupByKey(items, keyindex, removekey)
     '''
         recieve a list
-        map(lambda key:g[key], g) --value(maybe a list) to each key
-        map(lambda key:g[key], g) --reduce for each in value
-        return a list
+        map(lambda key: ... , g) --value(maybe a list) to each key
+        map(lmdamap, g[key]) --reduce for each in value
+        return a list or dataset according to returnDataset
+        In:
+        1,1,2
+        1,2,3
+        2,2,2
+        4,7,9
+        Out(reduce by lambda x,y:x + y where keyindex = 0):
+        [[1, 1, 2, 1, 2, 3], [2, 2, 2], [4, 7, 9]] ---> join 
+        Out(reduce by lambda x,y:x + y where keyindex = 0, lmdamap = len(x)): ---> get sum of len
+        [6, 3, 3]
     '''
-    return map(lambda key:reduce(lmda, g[key]), g)
-def ReduceByKeyAsDict(items, keyindex, lmdakeyvalue, removekey=False):
+    r = map(lambda key:reduce(lmda, map(lmdamap, g[key])), g)
+    return L2DS(r) if returnDataset else r
+def ReduceByKeyAsDict(items, keyindex, lmdakeyvalue, removekey=False, returnDataset=False):
     g = GroupByKey(items, keyindex, removekey)
     '''
         recieve a list
-        lmdakeyvalue get a (key, value) tuple, return a tuple (f(key),g(value)), f,g are some defined functions
+        lmdakeyvalue get a (key, value) tuple, return a tuple (f(key),g(value)), f,g are some given functions
         return a dict
     '''
-    return dict(map(lmdakeyvalue, g.iteritems()))
-def GroupByKey(items, keyindex, removekey=False):
+    r = dict(map(lmdakeyvalue, g.iteritems()))
+    return D2DS(r) if returnDataset else r
+def GroupByKey(items, keyindex, removekey=False, returnDataset=False):
     '''
         recieve a list
         split dataset into a dictionary classified by keys
@@ -55,13 +71,14 @@ def GroupByKey(items, keyindex, removekey=False):
                 groups[value].append(item[0:keyindex] + item[keyindex+1:] if keyindex > -1 else item[:len(item)-1])
             else:
                 groups[value].append(item)
-    return groups
-def SortByKey(items, keyindex, comparelmda, removekey=False):
+    return L2DS(groups) if returnDataset else groups
+def SortByKey(items, keyindex, comparelmda, removekey=False, returnDataset=False):
     '''
         recieve a list
     '''
     g = GroupByKey(items, keyindex, removekey)
-    return sorted(g, cmp=comparelmda)
+    r = sorted(g, cmp=comparelmda)
+    return D2DS(r) if returnDataset else r
 def Count(items, lmda):
     '''
         recieve a list
@@ -87,3 +104,4 @@ if __name__ == '__main__':
     ld.ReadString(open("1.txt","r").read(),True)
     print GroupByKey(ld.items, 0)
     print GroupByKey(ld.items, 0,True)
+    print ReduceByKeyAsList(ld.Iter(), 0, lambda x,y:x + y,lambda x:len(x),removekey=False, returnDataset=False)

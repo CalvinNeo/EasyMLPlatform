@@ -23,11 +23,11 @@ class DecisionTree:
         if dataset == None:
             dataset = self.dataset
         feature_count = ReduceByKeyAsDict(dataset.Iter(), dataset.classfeatureindex, \
-            lambda (key,value):(key,len(value)), True)
+            lambda (key,value):(key,len(value)), True, returnDataset = True)
         shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value): \
             float(value)/self.dataset.Length(),feature_count.iteritems()),0)
         return shentr
-    def SplitDataset(self, dataset):
+    def SplitDataset(self, dataset, classfeatureindex):
         '''
             e.g. feature A is the best split feature and it has value True and False (represented by classfeaturevalue)
             Use classfeatureindex to split dataset
@@ -35,24 +35,26 @@ class DecisionTree:
             feature_value:[datasets_divided_by_this_feature]
             shentr:
         '''
-        featurevalues = GroupByKey(dataset.Iter(), dataset.classfeatureindex, True)
-        shentr = reduce(operator.add, map(lambda (key,value):len(value)/float(self.dataset.Length())*self.ShannonEntropy(value),featurevalues.iteritems()),0)
+        featurevalues = GroupByKey(dataset.Iter(), classfeatureindex, True)
+        shentr = reduce(operator.add, map(lambda (key,value): \
+            len(value)/float(self.dataset.Length())*self.ShannonEntropy(L2DS(value)),featurevalues.iteritems()),0)
         return featurevalues, shentr
 
     def BestFeature(self, dataset):
         '''
-            return the feature best split the dataset
+            return the feature best split the dataset INTEGER
         '''
         origin_entropy = self.ShannonEntropy()
         best_gain = 0.0 #g is infomation gain
-        best_featureid = 0
+        best_featureid = 0 
+        # Do NOT INCLUDE CLASSFEATUREINDEX
         for i in xrange(dataset.ColumnLength()):
-            dataset.classfeatureindex = i
-            feature, new_entropy = self.SplitDataset(dataset)
+            feature, new_entropy = self.SplitDataset(dataset, i)
             infomation_gain = new_entropy - origin_entropy
             if infomation_gain > best_gain:
                 best_gain = infomation_gain
                 best_featureid = i
+        print "best_featureid", best_featureid
         return best_featureid
     def MajorityCount(self, classfeatures):
         '''
@@ -80,10 +82,12 @@ class DecisionTree:
             #if only one feature left, choose which value of this feature is in major
             return self.MajorityCount(classfeatures)
         bestfeature = self.BestFeature(dataset)
-        mytree = {headindex[bestfeature]:{}}
+        mytree = {dataset.head[bestfeature]:{}}
         featurevalues, shentr = self.SplitDataset(dataset, bestfeature)
         for value in featurevalues.keys():
-            mytree[headindex[bestfeature]][value] = self.CreateTree(featurevalues[value], headindex[:bestfeature]+headindex[bestfeature+1:])
+            newdataset = dataset.Spawn(range(0,bestfeature)+range(bestfeature+1,dataset.ColumnLength()), items = featurevalues[value])
+            print dataset
+            mytree[dataset.head[bestfeature]][value] = self.CreateTree(newdataset)
         return mytree
     def BuildTree(self):
         self.tree = self.CreateTree(self.dataset)

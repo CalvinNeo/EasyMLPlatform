@@ -44,13 +44,13 @@ class LocalData:
         '''
         self.datamapper = datamapper
     def __str__(self):
-        return "DATASET: " + str(self.head) + " " + str(self.items)
+        return "DATASET: " + str(self.head) + " " + str(self.items) + " " + str(self.classfeatureindex)
 
     def Iter(self):
         if self.mode == 'all':
             for item in self.items:
                 yield item
-    def Index(self, i):
+    def Item(self, i):
         if self.mode == 'all':
             return self.items[i]
     def Length(self):
@@ -62,7 +62,17 @@ class LocalData:
     def Column(self, i):
         if self.mode == 'all':
             return [item[i] for item in self.items]
-    def Spawn(self, cols, lins):
+    def Spawn(self, colindexs, *args, **kwargs):
+        newhead = [self.head[i] for i in colindexs]
+        if 'items' in kwargs.keys() and kwargs['items'] != None:
+            newitems = list(kwargs['items'])
+        else:
+            newitems = [[self.items[i][j] for j in colindexs] for i in kwargs['linindexs']]
+        print "classfeatureindex", self.classfeatureindex, colindexs
+        positiveindex = self.ColumnLength() + self.classfeatureindex if self.classfeatureindex < 0 else self.classfeatureindex
+        newclassfeatureindex = colindexs.index(positiveindex) if positiveindex in colindexs else -1
+        return LocalData(self.datamapper, head = newhead, items = newitems, classfeatureindex = newclassfeatureindex)
+    def SpawnRect(self, x1, y1, x2, y2, cpy=True):
         pass
     def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", getValue=True):
         '''
@@ -133,6 +143,6 @@ if __name__ == '__main__':
     t.mode = 'nono'
     for i in t.Iter():
         print i
-
-
-
+    print "-----------------"
+    print ld.Spawn([0,1],linindexs = [0,1])
+    print ld
