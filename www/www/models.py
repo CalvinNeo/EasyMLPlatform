@@ -6,7 +6,7 @@ from django.db import models
 from www.utils import random_file_name
 from www import settings
 import datasets.localdata
-
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "www.settings") 
 def get_upload_to(instance, filename):
     # paths = { 'I':'images/', 'V':'videos/', 'A':'audio/', 'D':'documents'/ }
     # return settings.MEDIA_ROOT + 'content/' + paths[instance.content_type] + filename

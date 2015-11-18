@@ -1,6 +1,4 @@
-#!/usr/bin/python
-#encoding=utf-8
-# @innerac
+#coding:utf8
 import urllib2
 import urllib
 import string
