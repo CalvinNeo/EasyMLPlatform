@@ -1,0 +1,1 @@
+python "%DJANGO_BIN%\django-admin.py" startproject dataprovider

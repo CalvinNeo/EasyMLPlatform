@@ -113,6 +113,8 @@ class LocalData:
             for x in self.items:
                 spamwriter.writerow(x)
 
+    def SetURL(self, url):
+        pass
 class TestClass:
     def __init__(self):
         self.d = [1,2,3,4,5,6]

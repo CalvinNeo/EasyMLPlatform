@@ -1,3 +1,3 @@
 #coding:utf8
 
-__all__=['datamgr','localdata','onlinedata','monads']
+__all__=['datamgr','localdata','monads']

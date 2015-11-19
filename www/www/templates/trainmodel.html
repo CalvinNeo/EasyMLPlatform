@@ -6,17 +6,15 @@
 		<div>
 			{% include 'md_list.html' %}
 		</div>
-		<div>
-			<iframe frameborder=0 width="100%" height="100%"  scrolling=auto id="modelviewframe"></iframe>
-		</div>
+
 	</div>
 	<div class="col-md-6">
-		<p class="lead"> New Model</p>
+		<p class="lead"> New Model </p>
 		<div>
 			{% include 'md_new.html' %}
 		</div>
 		<div>
-			
+			<iframe frameborder=0 width="100%" height="100%"  scrolling=auto id="modelviewframe"></iframe>
 		</div>
 	</div>
 </div>
@@ -25,6 +23,15 @@
 	$(function(){
 		$("#modelnewframe").attr("src","/index/md_new")
 	})
+	function showModel(modelindex){
+		$("#modelviewframe").attr("src","/index/md_view?modelindex="+modelindex)
+	}
+	function downloadModel(modelindex){
+		
+	}
+	function deleteModel(modelindex){
+
+	}
 </script>
 {% include 'footer.html' %}
 <!--

@@ -55,6 +55,7 @@ def ReduceByKeyAsDict(items, keyindex, lmdakeyvalue, removekey=False, returnData
 def GroupByKey(items, keyindex, removekey=False, returnDataset=False):
     '''
         recieve a list
+        return a dict
         split dataset into a dictionary classified by keys
         if keyindex = None EQUALS Group
     '''
