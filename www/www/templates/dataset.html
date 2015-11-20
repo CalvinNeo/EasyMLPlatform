@@ -7,13 +7,13 @@
 			{% include 'ds_list.html' %}
 		</div>
 		<div>
-			<iframe frameborder=0 width="100%" height="100%"  scrolling=auto id="datasetviewframe"></iframe>
+			{% include 'ds_upload.html' %}
 		</div>
 	</div>
-	<div class="col-md-6">
-		<p class="lead"> Dataset Upload</p>
+	<div class="col-md-6">		
+		<p class="lead"> Dataset View</p>
 		<div>
-			{% include 'ds_upload.html' %}
+			<iframe frameborder=0 width="100%" height="100%"  scrolling=auto id="datasetviewframe"></iframe>
 		</div>
 		<div>
 			

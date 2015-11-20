@@ -6,6 +6,7 @@ import csv
 from optparse import OptionParser
 import operator
 from monads import *
+import crawl
 
 class LocalData:
     def __init__(self, datamapper, *args, **kwargs):
@@ -17,6 +18,10 @@ class LocalData:
             self.items = kwargs['items']
         else:
             self.items = []
+        if 'online' in kwargs.keys() and kwargs['online'] != None:
+            self.online = kwargs['online']
+        else:
+            self.online = False
         '''
             classfeatureindex is the index of the column which defines the feature in dataset 
             (if the dataset is used to classify or regress)
@@ -47,21 +52,36 @@ class LocalData:
         return "DATASET: " + str(self.head) + " " + str(self.items) + " " + str(self.classfeatureindex)
 
     def Iter(self):
-        if self.mode == 'all':
-            for item in self.items:
-                yield item
-    def Item(self, i):
-        if self.mode == 'all':
-            return self.items[i]
-    def Length(self):
-        if self.mode == 'all':
-            return len(self.items)
-    def ColumnLength(self):
-        if self.mode == 'all':
-            return len(self.head)
-    def Column(self, i):
-        if self.mode == 'all':
-            return [item[i] for item in self.items]
+        if self.online:
+            pass
+        else:
+            if self.mode == 'all':
+                for item in self.items:
+                    yield item
+    def Item(self, i):        
+        if self.online:
+            pass
+        else:
+            if self.mode == 'all':
+                return self.items[i]
+    def Length(self):               
+        if self.online:
+            pass
+        else:
+            if self.mode == 'all':
+                return len(self.items)
+    def ColumnLength(self):          
+        if self.online:
+            pass
+        else:
+            if self.mode == 'all':
+                return len(self.head)
+    def Column(self, i):          
+        if self.online:
+            pass
+        else:
+            if self.mode == 'all':
+                return [item[i] for item in self.items]
     def Spawn(self, colindexs, *args, **kwargs):
         newhead = [self.head[i] for i in colindexs]
         if 'items' in kwargs.keys() and kwargs['items'] != None:
@@ -113,8 +133,10 @@ class LocalData:
             for x in self.items:
                 spamwriter.writerow(x)
 
-    def SetURL(self, url):
-        pass
+    def SetURL(self, urls, search_lmda = None, iter_lmda = None, *args, **kwargs):
+        if type(urls.__name__) != 'list':
+            urls = [urls]
+
 class TestClass:
     def __init__(self):
         self.d = [1,2,3,4,5,6]
@@ -148,3 +170,5 @@ if __name__ == '__main__':
     print "-----------------"
     print ld.Spawn([0,1],linindexs = [0,1])
     print ld
+    print "+++++++++++++++++++"
+    print type([1,2,3]).__name__

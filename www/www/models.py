@@ -70,7 +70,7 @@ class MLModel(models.Model):
 
     @staticmethod
     def AllDistributedModels():
-        return ["EM","SVM","NAIVE_BAYES","K_MEANS","KNN"]
+        return ["EM","SVM","NAIVE_BAYES","K_MEANS","KNN","MATRIX"]
 
     @staticmethod
     def AllModels():

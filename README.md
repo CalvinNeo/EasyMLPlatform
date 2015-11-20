@@ -6,6 +6,7 @@ an easy distributed machine learning platform
 2. Django 1.9
 3. MySQLdb
 4. mysql-python
+5. BeautifulSoup
 
 ## Run
 

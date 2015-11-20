@@ -6,8 +6,8 @@ import json
 import sys
 import re
 import os
-import static
 from bs4 import BeautifulSoup
+
 
 def getHtml(url):
     req = urllib2.Request(url)
@@ -15,6 +15,13 @@ def getHtml(url):
     page = urllib2.urlopen(req)
     html = page.read()
     return html
+    
+class Crawl:
+    def __init__(self, url):
+        self.url = url
+    def start(self):
+        html = getHtml(url1)
+        soup = BeautifulSoup(html)
 
 def ddu(tmp):
     return eval(repr(tmp)[1:])
@@ -56,10 +63,6 @@ def findNext(lis):
         # print repr(name)
         sets.append(name)
     return sets
-def save(page,files,types):
-    f = open(files,types)
-    f.write(page+'\n')
-    f.close()
 
 
 def start(name):
