@@ -1,0 +1,27 @@
+<html>
+<head>
+</head>
+<body>
+<table>
+<thead>
+<tr>
+	{% for col in head %}
+		<td> 
+			{{col}}
+		</td>
+	{% endfor %}
+</tr>
+</thead>
+<tbody>
+{% for row in data %}
+	<tr>
+		{% for col in row %}
+			<td>{{col}}</td>
+		{% endfor %}
+	</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</body>
+</html>

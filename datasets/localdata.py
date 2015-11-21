@@ -133,7 +133,7 @@ class LocalData:
             for x in self.items:
                 spamwriter.writerow(x)
 
-    def SetURL(self, urls, search_lmda = None, iter_lmda = None, *args, **kwargs):
+    def SetURL(self, urls, locate_lmda = None, iter_lmda = None, *args, **kwargs):
         if type(urls.__name__) != 'list':
             urls = [urls]
 

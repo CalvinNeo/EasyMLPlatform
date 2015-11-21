@@ -13,9 +13,16 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import url
+from django.conf.urls import patterns, include, url
+from django.conf import settings
 from django.contrib import admin
+admin.autodiscover()
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-]
+
+urlpatterns = patterns('',
+    url(r'^admin/', include(admin.site.urls))
+    ,url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_ROOT})
+    ,url(r'^$', 'dataprovider.views.index')
+    ,url(r'^index/(\w+)/$', 'dataprovider.views.index',name = 'index')
+    ,url(r'^index/$', 'dataprovider.views.index',name = 'index')
+)
