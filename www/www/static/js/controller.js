@@ -54,7 +54,15 @@ function bodyController($scope, $http){
 		{'padding-top':'0px','overflow-x':'hidden','background':'#f4f4f4'};
 }
 function uploadDatasetController($scope, $http){
-
+	$scope.datatype = "file"
+	$scope.uploadFormShow = function(){
+		return $scope.datatype == "file"
+	}
+	$scope.onlineShow = function(){
+		return !$scope.uploadFormShow()
+	}
+	$scope.onlineForm = {}
+	$scope.uploadForm = {}
 }
 function newModelController($scope, $http){
 

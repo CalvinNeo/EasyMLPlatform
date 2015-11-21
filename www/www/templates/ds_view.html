@@ -1,4 +1,4 @@
-<body ng-controller="bodyController" ng-style="bodystyle">
+<body ng-controller="bodyController" ng-style="bodystyle" >
 	<table class="table table-striped">
 	<thead>
 	<tr>
@@ -19,5 +19,9 @@
 	</table>
 <script>
 	document.getElementsByTagName('head')[0].innerHTML = window.parent.document.getElementsByTagName('head')[0].innerHTML
+	var iframe = window.parent.document.getElementById("datasetviewframe");
+	try{
+		iframe.height =  iframe.contentWindow.document.documentElement.scrollHeight;
+	}catch (ex){}
 </script>
 </body>

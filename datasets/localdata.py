@@ -133,10 +133,11 @@ class LocalData:
             for x in self.items:
                 spamwriter.writerow(x)
 
-    def SetURL(self, urls, locate_lmda = None, iter_lmda = None, *args, **kwargs):
+    def SetURL(self, urls, locate_lmda, search_lmda = None, *args, **kwargs):
         if type(urls.__name__) != 'list':
             urls = [urls]
-
+        for url in urls:
+            crawl = crawl.Crawl(url, locate_lmda, search_lmda, code='utf8')
 class TestClass:
     def __init__(self):
         self.d = [1,2,3,4,5,6]

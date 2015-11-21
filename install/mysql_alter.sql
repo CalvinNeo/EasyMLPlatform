@@ -1,9 +1,10 @@
 create database if not exists mlplatform default charset utf8 COLLATE utf8_general_ci;
 use mlplatform;
-create table dataset(id int(4) not null primary key auto_increment
+alter table dataset(
+	id int(4) not null primary key auto_increment
 	,name varchar(20) not null
-	,type tinyint not DEFAULT 0 --0 is localdata 1 is onlinedata
-	,path varchar(255) --localdata filepath onlinedata url
+	,type int(1) not DEFAULT 0 --0 local 1 online
+	,path varchar(255) --filepath local url online
 	,filetype varchar(10)
 	,head varchar(1023)
 	,attr_delim varchar(3)
@@ -11,7 +12,8 @@ create table dataset(id int(4) not null primary key auto_increment
 	,location varchar(255)
 	,search varchar(255)
 )
-create table model(id int(4) not null primary key auto_increment
+alter table model(
+	id int(4) not null primary key auto_increment
 	,name varchar(20) not null
 	,path varchar(255)
 	,modeltype varchar(10)
