@@ -24,11 +24,13 @@ def api(request, operation = "", *args, **kwargs):
     }[operation]
 
 def index(request, operation = "", *args, **kwargs):
-    print "index:",operation
+    print "--------------------index:",operation
     try:
         return {'dataset': render(request,"dataset.html",{
             'datasets':Dataset.GetDatasets(),
-            'select':True,'operation':True })
+            'oldatasets':OnlineDataset.GetDatasets(),
+            'select':True,'operation':True 
+            })
          ,'models': render(request,"trainmodel.html",{
             'distributed_modeltypes':MLModel.AllDistributedModels()
             ,'modeltypes':MLModel.AllModels()
@@ -45,25 +47,16 @@ def index(request, operation = "", *args, **kwargs):
             if request.method == "POST":
                 form = UploadDatasetForm(request.POST,request.FILES)
                 print "-----------------------------aa"
-                print dir(form)
-                print form.data
-                print form.errors
+                # print "request.META", request.META
+                print "files", form.files
+                print "form.data",form.data
+                print "ERRORS:", form.errors
+                print "FILES", request.FILES
+                print "form.is_valid()",form.is_valid()
                 if form.is_valid():
                     ds = Dataset()
-                    print "-----------------------------bb"
                     ds.name = str(form.cleaned_data['name'])
-                    # if 'dataseturl' in form.cleaned_data.keys():
-                        # ds.type = 1
-                        # ds.path = form.cleaned_data['dataseturl']
-                        # ds.filetype = ""
-                        # ds.head = ""
-                        # ds.attr_delim = ""
-                        # ds.record_delim = ""
-                        # ds.location = form.cleaned_data['location']
-                        # ds.search = form.cleaned_data['search']
-                    # else:
-                    # ds.type = 0
-                    ds.path = form.cleaned_data['datasetfile']
+                    ds.path = form.cleaned_data['path']
                     ds.filetype = {
                         'txt':'TXT',
                         'csv':'CSV',
@@ -73,9 +66,6 @@ def index(request, operation = "", *args, **kwargs):
                     ds.head = ""
                     ds.attr_delim = ',' if str(form.cleaned_data['attr_delim']) == '' else str(form.cleaned_data['attr_delim']).replace('\\n','\n').replace('\\t','\t')
                     ds.record_delim = '\n' if str(form.cleaned_data['record_delim']) == '' else str(form.cleaned_data['record_delim']).replace('\\n','\n').replace('\\t','\t')
-                    # ds.location = ""
-                    # ds.search = ""
-                        
                     ds.save()
                     return render(request,"success.html",{'title':'upload dataset succeed!','description':str(form.cleaned_data['name']).decode('utf8')})
                 else:
@@ -83,6 +73,28 @@ def index(request, operation = "", *args, **kwargs):
             else:
                 form = UploadDatasetForm()
                 return render(request,"ds_upload.html",{'form':form})
+        elif operation == "onlinedataset_upload":
+            if request.method == "POST":
+                form = OnlineDatasetForm(request.POST,request.FILES)
+                print "-----------------------------aa"
+                print "files", form.files
+                print "form.data",form.data
+                print "ERRORS:", form.errors
+                print "FILES", request.FILES
+                print "form.is_valid()",form.is_valid()
+                if form.is_valid():
+                    ds = OnlineDataset()
+                    ds.name = str(form.cleaned_data['name'])
+                    ds.url = form.cleaned_data['url']
+                    ds.location = 'table' if str(form.cleaned_data['location']) == '' else str(form.cleaned_data['location']).replace('\\n','\n').replace('\\t','\t')
+                    ds.search = '' if str(form.cleaned_data['location']) == '' else str(form.cleaned_data['location']).replace('\\n','\n').replace('\\t','\t')
+                    ds.save()
+                    return render(request,"success.html",{'title':'upload online dataset succeed!','description':str(form.cleaned_data['name']).decode('utf8')})
+                else:
+                    return render(request,"error.html",{'title':'invalid online dataset','description':form.errors})
+            else:
+                form = OnlineDatasetForm()
+                return render(request,"olds_upload.html",{'form':form})
         elif operation == "md_new":
             if request.method == "POST":
                 pass

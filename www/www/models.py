@@ -3,6 +3,9 @@ import sys,os
 sys.path.append('../')
 
 from django.db import models
+# from django.contrib.contenttypes import generic
+# from django.contrib.contenttypes.models import ContentType
+
 from www.utils import random_file_name
 from www import settings
 import datasets.localdata
@@ -11,15 +14,27 @@ def get_upload_to(instance, filename):
     # paths = { 'I':'images/', 'V':'videos/', 'A':'audio/', 'D':'documents'/ }
     # return settings.MEDIA_ROOT + 'content/' + paths[instance.content_type] + filename
     return 'dataset/' + random_file_name(filename)
+def get_model_upload_to(instance, filename):
+    return settings.MEDIA_ROOT + 'upload/models/' + random_file_name(filename)
 
+# null ：缺省设置为false.通常不将其用于字符型字段上，比如CharField,TextField上.字符型字段如果没有值会返回空字符串。
+# blank：该字段是否可以为空。如果为假，则必须有值
+# choices：一个用来选择值的2维元组。第一个值是实际存储的值，第二个用来方便进行选择。如SEX_CHOICES= ((‘F’,'Female’),(‘M’,'Male’),)
+# core：db_column，db_index 如果为真将为此字段创建索引
+# default：设定缺省值
+# editable：如果为假，admin模式下将不能改写。缺省为真
+# help_text：admin模式下帮助文档
+# primary_key：设置主键，如果没有设置django创建表时会自动加上：
 class Dataset(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key = True,)
     name = models.CharField(max_length=20)
+    #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
     path = models.FileField(upload_to = get_upload_to)
     filetype = models.CharField(max_length=10)  
     head = models.CharField(max_length=1023)
     attr_delim = models.CharField(max_length=3)
     record_delim = models.CharField(max_length=3)
+
 
     class Meta:
         db_table = 'dataset'
@@ -54,16 +69,68 @@ class Dataset(models.Model):
         if unicodedatasetindex != None:
             datasetindex = int(unicodedatasetindex)
             item = Dataset.objects.get(id = datasetindex)
-            os.remove(settings.MEDIA_ROOT+str(item.path))
+            try:
+                os.remove(settings.MEDIA_ROOT+str(item.path))
+            except:
+                pass
             item.delete()
             return 'true'
         return 'false'
 
-class MLModel(models.Model):
-    id = models.IntegerField(primary_key=True)
+class OnlineDataset(models.Model):
+    id = models.AutoField(primary_key = True)
     name = models.CharField(max_length=20)
-    modeltype = models.CharField(max_length=10) 
-    path = models.FileField(upload_to = lambda instance, filename:settings.MEDIA_ROOT + 'upload/models/' + random_file_name(filename))
+    #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
+    url = models.URLField()
+    location = models.CharField(max_length=1023)
+    search = models.CharField(max_length=1023)
+
+
+    class Meta:
+        db_table = 'onlinefield'
+
+    def __unicode__(self):
+        return "#{}: {} @ {} location: {} search: {}".format(self.id,self.name,self.path,self.location,self.search)
+
+    @staticmethod
+    def GetDatasets(pageindex = 0, max_item = 10):
+        l = len(OnlineDataset.objects.all())
+        if l > 0:
+            return OnlineDataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
+        else:
+            return {}
+            
+    @staticmethod
+    def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
+        if unicodedatasetindex != None:
+            #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
+            datasetindex = int(unicodedatasetindex)
+            if datasetindex >= 0:
+                pass
+        return None
+
+    @staticmethod
+    def DeleteDataset(unicodedatasetindex = None):
+        if unicodedatasetindex != None:
+            datasetindex = int(unicodedatasetindex)
+            item = Dataset.objects.get(id = datasetindex)
+            item.delete()
+            return 'true'
+        return 'false'
+
+    @staticmethod
+    def Tolocal(unicodedatasetindex = None):
+        if unicodedatasetindex != None:
+            datasetindex = int(unicodedatasetindex)
+            return 'true'
+        return 'false'
+
+class MLModel(models.Model):
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length = 20)
+    modeltype = models.CharField(max_length = 10) 
+    #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
+    path = models.FileField(upload_to = get_model_upload_to)
 
     class Meta:
         db_table = 'models'
