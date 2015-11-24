@@ -1,0 +1,29 @@
+<table class="table table-striped">
+<thead>
+<tr>
+	{% if select %}
+		<td> 
+
+		</td>
+	{% endif %}
+	<td>Name</td><td>URL</td>
+</tr>
+</thead>
+<tbody>
+{% for dataset in oldatasets %}
+	<tr>
+		{% if select %}
+			<td><input type="checkbox" id="olcheck_{{dataset.id}}"></input></td>
+		{% endif %}
+		<td><a href="javascript:void(0)" onclick="showOLDataset({{dataset.id}})">{{dataset.name}}</a></td>
+		<td><a href="{{dataset.url}}">{{dataset.url}}</a></td>
+		{% if operation %}
+			<td><a href="javascript:void(0)" onclick="deleteOLDataset({{dataset.id}})">DELETE</a></td>
+			<td><a href="javascript:void(0)" onclick="dumpOLDataset({{dataset.id}})">LOCALIZE</a></td>
+			<td><a href="javascript:void(0)" onclick="trainOLDataset({{dataset.id}})">TRAIN</a></td>
+		{% endif %}
+	</tr>
+{% endfor%}
+
+</tbody>
+</table>

@@ -27,9 +27,10 @@ def index(request, operation = "", *args, **kwargs):
     print "--------------------index:",operation
     try:
         return {'dataset': render(request,"dataset.html",{
-            'datasets':Dataset.GetDatasets(),
-            'oldatasets':OnlineDataset.GetDatasets(),
-            'select':True,'operation':True 
+            'datasets':Dataset.GetDatasets()
+            ,'oldatasets':OnlineDataset.GetDatasets()
+            ,'renewstrategies':OnlineDataset.AllRenewStrategies()
+            ,'select':True,'operation':True 
             })
          ,'models': render(request,"trainmodel.html",{
             'distributed_modeltypes':MLModel.AllDistributedModels()
@@ -40,6 +41,13 @@ def index(request, operation = "", *args, **kwargs):
          ,'assessment': render(request,"assessmodel.html",{})
          #Partial
          ,'ds_view':render(request,"ds_view.html",{'dataset':Dataset.ViewDataset(unicodedatasetindex=request.GET.get('datasetindex'))})
+         ,'olds_view':render(request,"olds_view.html",{
+            'dataset':OnlineDataset.ViewDataset(unicodedatasetindex=request.GET.get('datasetindex'))
+            })
+         #util
+         ,'302':render(request,"302.html",{'url':request.GET.get('url')
+            ,'time':0 if request.GET.get('time')==None else request.GET.get('time')
+            })
         }[operation.decode('utf8')]
     except KeyError:
         #form action
@@ -72,7 +80,10 @@ def index(request, operation = "", *args, **kwargs):
                     return render(request,"error.html",{'title':'invalid dataset','description':form.errors})
             else:
                 form = UploadDatasetForm()
-                return render(request,"ds_upload.html",{'form':form})
+                return render(request,"ds_upload.html",{
+                    'form':form
+                    ,'renewstrategies':OnlineDataset.AllRenewStrategies()
+                    })
         elif operation == "onlinedataset_upload":
             if request.method == "POST":
                 form = OnlineDatasetForm(request.POST,request.FILES)
@@ -94,7 +105,11 @@ def index(request, operation = "", *args, **kwargs):
                     return render(request,"error.html",{'title':'invalid online dataset','description':form.errors})
             else:
                 form = OnlineDatasetForm()
-                return render(request,"olds_upload.html",{'form':form})
+                print "((((((((((((((((((((((((((((" + OnlineDataset.AllRenewStrategies()
+                return render(request,"olds_upload.html",{
+                    'form':form
+                    ,'renewstrategies':OnlineDataset.AllRenewStrategies()
+                    })
         elif operation == "md_new":
             if request.method == "POST":
                 pass

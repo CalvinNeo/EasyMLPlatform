@@ -1,26 +1,31 @@
 
 <form method='post' enctype="multipart/form-data" action="{% url 'index' 'dataset_upload' %}" style="width:100%;" name="uploadForm" id="uploadFrom" >
 	{% csrf_token %}
-
-		<p><label for="name">Name Your Dataset</label>
-			<input type="text" name="name" class="form-control" ng-model="uploadForm.name" ng-minlength=1 ng-maxlength=20 required></input>
-			<div class="error" ng-show="uploadForm.name.$dirty && uploadForm.name.$invalid">
-				<small class="error text-danger" ng-show="uploadForm.name.$error.required"> Name Required </small>
+		<div class="container-fluid" style="padding:0 0 0 0;margin:0 0 0 0">
+			<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+				<p><label for="name">Name Your Dataset</label>
+					<input type="text" name="name" class="form-control" ng-model="uploadForm.name" ng-minlength=1 ng-maxlength=20 required></input>
+					<div class="error" ng-show="uploadForm.name.$dirty && uploadForm.name.$invalid">
+						<small class="error text-danger" ng-show="uploadForm.name.$error.required"> Name Required </small>
+					</div>
+				</p>
 			</div>
-		</p>
-		<p><label for="path">Upload Your Dataset File</label>
-		<input name="path" type="file" class="form-control" accept=".xls,.csv,.txt">
-		</p>
-	<div class="container-fluid" >
-		<div class="col-md-4">
+			<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+				<p><label for="path">Upload Your Dataset File</label>
+				<input name="path" type="file" class="form-control" accept=".xls,.csv,.txt">
+				</p>
+			</div>
+		</div>
+	<div class="container-fluid" style="padding:0 0 0 0;margin:0 0 0 0">
+		<div class="col-md-4" style="padding:0 0 0 0;margin:0 0 0 0">
 			<label for="hashead">Dataset Header</label>
 			<p><input name="hashead" type="checkbox" class="">Has Head</input></p>
 		</div>
-		<div class="col-md-4">
+		<div class="col-md-4" style="padding:0 0 0 0;margin:0 0 0 0">
 			<label for="attr_delim">Attribute Delimeter</label>
 			<input name="attr_delim" type="text" class="form-control">
 		</div>
-		<div class="col-md-4">
+		<div class="col-md-4" style="padding:0 0 0 0;margin:0 0 0 0">
 			<label for="record_delim">Record Delimeter</label>
 			<input name="record_delim" type="text" class="form-control">
 		</div>

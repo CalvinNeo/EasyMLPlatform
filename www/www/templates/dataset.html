@@ -4,7 +4,7 @@
 	<div class="col-md-6">
 		<div ng-controller="uploadDatasetController">
 			<ul id="mytab" class="nav nav-tabs">
-				<li class="active"><a href="javascript:void(0)" data-toggle="tab" ng-click="datatype='file'">FILE</a></li>
+				<li class="active"><a href="javascript:void(0)" data-toggle="tab" ng-click="datatype='file'">LOCAL</a></li>
 				<li><a href="javascript:void(0)" data-toggle="tab" ng-click="datatype='online'">ONLINE</a></li>
 			</ul>
 		
@@ -14,7 +14,7 @@
 		</div>
 		<div ng-show="onlineShow()">
 			<p class="lead"> Online Dataset List</p>
-			{% include 'onds_list.html' %}
+			{% include 'olds_list.html' %}
 		</div>
 	
 		<div ng-show="uploadFormShow()">
@@ -23,7 +23,7 @@
 		</div>
 		<div ng-show="onlineShow()">
 			<p class="lead"> New Online Dataset</p>
-			{% include 'onds_upload.html' %}
+			{% include 'olds_upload.html' %}
 		</div>
 		</div>
 	</div>
@@ -55,6 +55,18 @@
 			})
 	}
 	function trainDataset(datasetindex){
+		
+	}
+	function showOLDataset(datasetindex){
+		$("#datasetviewframe").attr("src","/index/olds_view?datasetindex="+datasetindex)
+	}
+	function deleteOLDataset(datasetindex){
+		
+	}
+	function dumpOLDataset(datasetindex){
+		
+	}
+	function trainOLDataset(datasetindex){
 		
 	}
 </script>

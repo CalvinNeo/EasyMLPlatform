@@ -48,40 +48,49 @@ class LocalData:
             datamapper is parse raw data
         '''
         self.datamapper = datamapper
+        self.crawl = None
     def __str__(self):
         return "DATASET: " + str(self.head) + " " + str(self.items) + " " + str(self.classfeatureindex)
 
     def Iter(self):
         if self.online:
-            pass
+            if self.crawl != None:
+                self.items = self.crawl.start()
+                for item in self.items:
+                    yield item
         else:
             if self.mode == 'all':
                 for item in self.items:
                     yield item
+
     def Item(self, i):        
         if self.online:
             pass
         else:
             if self.mode == 'all':
                 return self.items[i]
+
     def Length(self):               
         if self.online:
             pass
         else:
             if self.mode == 'all':
                 return len(self.items)
+
     def ColumnLength(self):          
         if self.online:
             pass
         else:
             if self.mode == 'all':
                 return len(self.head)
+
     def Column(self, i):          
         if self.online:
             pass
         else:
             if self.mode == 'all':
                 return [item[i] for item in self.items]
+
     def Spawn(self, colindexs, *args, **kwargs):
         newhead = [self.head[i] for i in colindexs]
         if 'items' in kwargs.keys() and kwargs['items'] != None:
@@ -92,6 +101,7 @@ class LocalData:
         positiveindex = self.ColumnLength() + self.classfeatureindex if self.classfeatureindex < 0 else self.classfeatureindex
         newclassfeatureindex = colindexs.index(positiveindex) if positiveindex in colindexs else -1
         return LocalData(self.datamapper, head = newhead, items = newitems, classfeatureindex = newclassfeatureindex)
+    
     def SpawnRect(self, x1, y1, x2, y2, cpy=True):
         pass
     def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", getValue=True):
@@ -133,11 +143,12 @@ class LocalData:
             for x in self.items:
                 spamwriter.writerow(x)
 
-    def SetURL(self, urls, locate_lmda, search_lmda = None, *args, **kwargs):
+    def SetURL(self, urls, locate, search_lmda = None, *args, **kwargs):
         if type(urls.__name__) != 'list':
             urls = [urls]
-        for url in urls:
-            crawl = crawl.Crawl(url, locate_lmda, search_lmda, code='utf8')
+        if len(urls) > 0:
+            self.crawl = crawl.Crawl(urls[0], locate, search_lmda, code='utf8')
+            
 class TestClass:
     def __init__(self):
         self.d = [1,2,3,4,5,6]

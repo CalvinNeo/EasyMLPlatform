@@ -14,6 +14,7 @@ class OnlineDatasetForm(forms.Form):
     url = forms.URLField()
     location = forms.CharField(max_length=1023,required=False)
     search = forms.CharField(max_length=1023,required=False)
+    renewstrategy = forms.CharField(max_length=32,required=False)
 
 class NewModelForm(forms.Form):
     name = forms.CharField(max_length = 20)

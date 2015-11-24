@@ -1,0 +1,35 @@
+<form method='post' enctype="multipart/form-data" action="{% url 'index' 'onlinedataset_upload' %}" style="width:100%;" name="uploadForm" id="onlineFrom" >
+	{% csrf_token %}
+
+	<p><label for="name">Name Your Dataset</label>
+		<input type="text" name="name" class="form-control" ng-model="onlineFrom.name" ng-minlength=1 ng-maxlength=20 required>
+		<div class="error" ng-show="onlineFrom.name.$dirty && onlineFrom.name.$invalid">
+			<small class="error text-danger" ng-show="onlineFrom.name.$error.required"> Name Required </small>
+		</div>
+	</p>
+	<p><label for="url">URL</label>
+		<input name="url" type="text" class="form-control" ng-pattern="/^((http|https)://)?([\w-]+\.)+[\w-:]+(/[\w- ./?%&=_]*)?$/" required ng-model="onlineFrom.url">
+		<div class="error" ng-show="onlineFrom.url.$dirty && onlineFrom.url.$invalid">
+			<small class="error text-danger" ng-show="onlineFrom.url.$error.required"> URL Required </small>
+		</div>
+	</p>
+	<div class="container-fluid" >
+		<div class="col-md-6">
+			<label for="location">Table Location (CSS Selector)</label>
+			<input name="location" type="text" class="form-control">
+		</div>
+		<div class="col-md-6">
+			<label for="search">Read</label>
+			<input name="search" type="text" class="form-control">
+		</div>
+	</div>
+	<hr/>
+	<input type="submit" class="btn btn-success btn-lg btn-block" value="Upload">
+</form>
+<script>
+	document.getElementsByTagName('head')[0].innerHTML = window.parent.document.getElementsByTagName('head')[0].innerHTML
+	var iframe = window.parent.document.getElementById("datasetviewframe");
+	try{
+		iframe.height =  iframe.contentWindow.document.documentElement.scrollHeight;
+	}catch (ex){}
+</script>

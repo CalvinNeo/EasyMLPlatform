@@ -9,6 +9,7 @@ from django.db import models
 from www.utils import random_file_name
 from www import settings
 import datasets.localdata
+
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "www.settings") 
 def get_upload_to(instance, filename):
     # paths = { 'I':'images/', 'V':'videos/', 'A':'audio/', 'D':'documents'/ }
@@ -84,13 +85,14 @@ class OnlineDataset(models.Model):
     url = models.URLField()
     location = models.CharField(max_length=1023)
     search = models.CharField(max_length=1023)
+    renewstrategy = models.CharField(max_length=32)
 
 
     class Meta:
         db_table = 'onlinefield'
 
     def __unicode__(self):
-        return "#{}: {} @ {} location: {} search: {}".format(self.id,self.name,self.path,self.location,self.search)
+        return "#{}: {} @ {} location: {} search: {}".format(self.id,self.name,self.url,self.location,self.search)
 
     @staticmethod
     def GetDatasets(pageindex = 0, max_item = 10):
@@ -102,11 +104,15 @@ class OnlineDataset(models.Model):
             
     @staticmethod
     def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
+        print "+++++++++++++++++++++++++==OLDATASETVIEW:",unicodedatasetindex
         if unicodedatasetindex != None:
             #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
             datasetindex = int(unicodedatasetindex)
-            if datasetindex >= 0:
-                pass
+            olds = OnlineDataset.objects.all()[datasetindex]
+            print olds
+            datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data),online = True)
+            datasets.SetURL(olds['url'], olds['locate'], None)
+            return list(datasets.Iter())
         return None
 
     @staticmethod
@@ -125,6 +131,10 @@ class OnlineDataset(models.Model):
             return 'true'
         return 'false'
 
+    @staticmethod
+    def AllRenewStrategies():
+        return ['APPEND', 'REPLACE', 'COMPARE-APPEND']
+
 class MLModel(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 20)
@@ -137,12 +147,17 @@ class MLModel(models.Model):
 
     @staticmethod
     def AllDistributedModels():
-        return ["EM","SVM","NAIVE_BAYES","K_MEANS","KNN","MATRIX"]
+        return ["EM","SVM","NAIVE_BAYES","K_MEANS","KNN"]
+
+    @staticmethod
+    def AllNonTrainingModels():
+        return ["MATRIX"]
 
     @staticmethod
     def AllModels():
         return MLModel.AllDistributedModels() + \
             ["DECISION_TREE","ADABOOST","PCA","LOGISTIC","CRF","FP_GROWTH"]
+
 
     def __unicode__(self):
         return "#{}: ({}) {} @ {}".format(self.id,self.modeltype,self.name,self.path)

@@ -17,9 +17,15 @@ def getHtml(url):
     return html
 
 class Crawl:
-    def __init__(self, url, locate_lmda, search_lmda = None, *args, **kwargs):
+    def __init__(self, url, location, search_lmda = None, *args, **kwargs):
         self.url = url
-        self.locate_lmda = locate_lmda
+        if type(location).__name__ == 'function':
+            self.locate_lmda = location
+            self.locate_css = None
+        elif type(location).__name__ == 'str':
+            self.locate_lmda = None
+            self.locate_css = location
+
         self.search_lmda = search_lmda
         if 'code' in kwargs.keys() and kwargs['code'] != None:
             self.code = kwargs['code']
@@ -28,7 +34,10 @@ class Crawl:
     def start(self):
         html = getHtml(self.url)
         soup = BeautifulSoup(html, "html.parser")
-        location = self.locate_lmda(soup)
+        if self.locate_lmda != None:
+            location = self.locate_lmda(soup)
+        elif self.locate_css != None:
+            location = soup.select(self.locate_css)
         if(type(location).__name__ != 'NoneType'):
             if self.search_lmda == None:#默认table
                 thead = location.find("thead")
@@ -42,8 +51,9 @@ class Crawl:
             else:
                 return self.search_lmda(soup)
 if __name__ == '__main__':
-    cr = Crawl("http://127.0.0.1:8091/index/1/",lambda soup:soup.find("table"))
-    cr.start()
+    # cr = Crawl("http://127.0.0.1:8091/index/1/",lambda soup:soup.find("table"))
+    # cr.start()
+    print type('lambda x:x + 2')
 
 # def ddu(tmp):
 #     return eval(repr(tmp)[1:])

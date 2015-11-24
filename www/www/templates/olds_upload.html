@@ -1,28 +1,57 @@
-	<form method='post' enctype="multipart/form-data" action="{% url 'index' 'onlinedataset_upload' %}" style="width:100%;" name="uploadForm" id="onlineFrom" >
-		{% csrf_token %}
-
-		<p><label for="name">Name Your Dataset</label>
-			<input type="text" name="name" class="form-control" ng-model="onlineFrom.name" ng-minlength=1 ng-maxlength=20 required>
-			<div class="error" ng-show="onlineFrom.name.$dirty && onlineFrom.name.$invalid">
-				<small class="error text-danger" ng-show="onlineFrom.name.$error.required"> Name Required </small>
-			</div>
-		</p>
-		<p><label for="url">URL</label>
-			<input name="url" type="text" class="form-control" ng-pattern="/^((http|https)://)?([\w-]+\.)+[\w-:]+(/[\w- ./?%&=_]*)?$/" required ng-model="onlineFrom.url">
-			<div class="error" ng-show="onlineFrom.url.$dirty && onlineFrom.url.$invalid">
-				<small class="error text-danger" ng-show="onlineFrom.url.$error.required"> URL Required </small>
-			</div>
-		</p>
-		<div class="container-fluid" >
-			<div class="col-md-6">
-				<label for="location">Table Location</label>
-				<input name="location" type="text" class="form-control">
-			</div>
-			<div class="col-md-6">
-				<label for="search">Read</label>
-				<input name="search" type="text" class="form-control">
-			</div>
+<form method='post' enctype="multipart/form-data" action="{% url 'index' 'onlinedataset_upload' %}" style="width:100%;" name="uploadForm" id="onlineFrom" >
+	{% csrf_token %}
+	<div class="container-fluid" style="padding:0 0 0 0;margin:0 0 0 0">
+		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+			<p><label for="name">Name Your Dataset</label>
+				<input type="text" name="name" class="form-control" ng-model="onlineFrom.name" ng-minlength=1 ng-maxlength=20 required>
+				<div class="error" ng-show="onlineFrom.name.$dirty && onlineFrom.name.$invalid">
+					<small class="error text-danger" ng-show="onlineFrom.name.$error.required"> Name Required </small>
+				</div>
+			</p>
 		</div>
-		<hr/>
-		<input type="submit" class="btn btn-success btn-lg btn-block" value="Upload">
-	</form>
+		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+			<p><label for="url">URL</label>
+				<input name="url" type="text" class="form-control" ng-pattern="/^((http|https)://)?([\w-]+\.)+[\w-:]+(/[\w- ./?%&=_]*)?$/" required ng-model="onlineFrom.url">
+				<div class="error" ng-show="onlineFrom.url.$dirty && onlineFrom.url.$invalid">
+					<small class="error text-danger" ng-show="onlineFrom.url.$error.required"> URL Required </small>
+				</div>
+			</p>
+		</div>
+	</div>
+	<div class="container-fluid" style="padding:0 0 0 0;margin:0 0 0 0">
+		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+			<label for="location">Table Location (CSS Selector)</label>
+			<input name="location" type="text" class="form-control">
+		</div>
+		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+			<label for="search">Read</label>
+			<input name="search" type="text" class="form-control">
+		</div>
+	</div>
+	<div class="container-fluid" style="padding:0 0 0 0;margin:0 0 0 0">
+		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+			<label for="renew">Renew Strategy</label>
+			<input name="renew" type="text" class="form-control" id="renewstrategy">
+		</div>
+	</div>
+	<hr/>
+	<input type="submit" class="btn btn-success btn-lg btn-block" value="Upload">
+</form>
+<script>
+$("#renewstrategy").typeahead({
+    source: [{% for strategy in renewstrategies %}'{{strategy}}',{% endfor%}],//数据源
+    items: 8,//最多显示个数
+    updater: function (item) {
+        return item;//这里一定要return，否则选中不显示，外加调用display的时候null reference错误。
+    },
+    displayText: function (item) {
+        return item;//返回字符串
+    },
+    afterSelect: function (item) {
+        //选择项之后的事件 ，item是当前选中的。
+        return item;
+    },
+    delay: 500//延迟时间
+});
+
+</script>
