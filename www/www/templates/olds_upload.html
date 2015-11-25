@@ -1,7 +1,7 @@
 <form method='post' enctype="multipart/form-data" action="{% url 'index' 'onlinedataset_upload' %}" style="width:100%;" name="uploadForm" id="onlineFrom" >
 	{% csrf_token %}
-	<div class="container-fluid" style="padding:0 0 0 0;margin:0 0 0 0">
-		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+	<div class="container-fluid npnm" >
+		<div class="col-md-6 npnm" >
 			<p><label for="name">Name Your Dataset</label>
 				<input type="text" name="name" class="form-control" ng-model="onlineFrom.name" ng-minlength=1 ng-maxlength=20 required>
 				<div class="error" ng-show="onlineFrom.name.$dirty && onlineFrom.name.$invalid">
@@ -9,7 +9,7 @@
 				</div>
 			</p>
 		</div>
-		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+		<div class="col-md-6 npnm" >
 			<p><label for="url">URL</label>
 				<input name="url" type="text" class="form-control" ng-pattern="/^((http|https)://)?([\w-]+\.)+[\w-:]+(/[\w- ./?%&=_]*)?$/" required ng-model="onlineFrom.url">
 				<div class="error" ng-show="onlineFrom.url.$dirty && onlineFrom.url.$invalid">
@@ -18,18 +18,18 @@
 			</p>
 		</div>
 	</div>
-	<div class="container-fluid" style="padding:0 0 0 0;margin:0 0 0 0">
-		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+	<div class="container-fluid npnm" >
+		<div class="col-md-6 npnm" >
 			<label for="location">Table Location (CSS Selector)</label>
 			<input name="location" type="text" class="form-control">
 		</div>
-		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+		<div class="col-md-6 npnm" >
 			<label for="search">Read</label>
 			<input name="search" type="text" class="form-control">
 		</div>
 	</div>
-	<div class="container-fluid" style="padding:0 0 0 0;margin:0 0 0 0">
-		<div class="col-md-6" style="padding:0 0 0 0;margin:0 0 0 0">
+	<div class="container-fluid npnm" >
+		<div class="col-md-6 npnm" >
 			<label for="renew">Renew Strategy</label>
 			<input name="renew" type="text" class="form-control" id="renewstrategy">
 		</div>
@@ -53,5 +53,4 @@ $("#renewstrategy").typeahead({
     },
     delay: 500//延迟时间
 });
-
 </script>

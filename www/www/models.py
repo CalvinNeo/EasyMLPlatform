@@ -57,12 +57,14 @@ class Dataset(models.Model):
             #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
             datasetindex = int(unicodedatasetindex)
             if datasetindex >= 0:
-                datasetfile = Dataset.objects.get(id = datasetindex)
-                #open local dataset
-                lcdt = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data))
-                lcdt.ReadString(open(settings.MEDIA_ROOT+str(datasetfile.path),"r").read(),hasHead=True, getValue=True)
-
-                return lcdt
+                try:
+                    datasetfile = Dataset.objects.get(id = datasetindex)
+                    #open local dataset
+                    lcdt = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data))
+                    lcdt.ReadString(open(settings.MEDIA_ROOT+str(datasetfile.path),"r").read(), hasHead=True, getValue=True)
+                    return lcdt
+                except:
+                    return None
         return None
 
     @staticmethod
@@ -82,7 +84,7 @@ class OnlineDataset(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length=20)
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
-    url = models.URLField()
+    url = models.CharField(max_length=200)
     location = models.CharField(max_length=1023)
     search = models.CharField(max_length=1023)
     renewstrategy = models.CharField(max_length=32)
@@ -104,22 +106,25 @@ class OnlineDataset(models.Model):
             
     @staticmethod
     def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
-        print "+++++++++++++++++++++++++==OLDATASETVIEW:",unicodedatasetindex
         if unicodedatasetindex != None:
             #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
             datasetindex = int(unicodedatasetindex)
-            olds = OnlineDataset.objects.all()[datasetindex]
-            print olds
-            datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data),online = True)
-            datasets.SetURL(olds['url'], olds['locate'], None)
-            return list(datasets.Iter())
+            try:
+                olds = OnlineDataset.objects.get(id = datasetindex)
+                ds = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data), online = True)
+                ds.SetURL(olds.url, olds.location, None)
+                ds.OnlineRenew()
+                return ds
+            except:
+                return None
         return None
 
     @staticmethod
     def DeleteDataset(unicodedatasetindex = None):
+        print "AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhh",unicodedatasetindex
         if unicodedatasetindex != None:
             datasetindex = int(unicodedatasetindex)
-            item = Dataset.objects.get(id = datasetindex)
+            item = OnlineDataset.objects.get(id = datasetindex)
             item.delete()
             return 'true'
         return 'false'

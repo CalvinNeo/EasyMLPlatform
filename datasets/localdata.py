@@ -54,10 +54,9 @@ class LocalData:
 
     def Iter(self):
         if self.online:
-            if self.crawl != None:
-                self.items = self.crawl.start()
-                for item in self.items:
-                    yield item
+            self.OnlineRenew()
+            for item in self.items:
+                yield item
         else:
             if self.mode == 'all':
                 for item in self.items:
@@ -144,11 +143,15 @@ class LocalData:
                 spamwriter.writerow(x)
 
     def SetURL(self, urls, locate, search_lmda = None, *args, **kwargs):
-        if type(urls.__name__) != 'list':
+        if type(urls).__name__ != 'list':
             urls = [urls]
         if len(urls) > 0:
             self.crawl = crawl.Crawl(urls[0], locate, search_lmda, code='utf8')
-            
+
+    def OnlineRenew(self):
+        if self.crawl != None:
+            crawl_fetch = self.crawl.start()
+            self.head, self.items = crawl_fetch['head'], crawl_fetch['items']
 class TestClass:
     def __init__(self):
         self.d = [1,2,3,4,5,6]

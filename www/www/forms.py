@@ -11,7 +11,7 @@ class UploadDatasetForm(forms.Form):
 class OnlineDatasetForm(forms.Form):
     name = forms.CharField(max_length=20)
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
-    url = forms.URLField()
+    url = forms.CharField(200)
     location = forms.CharField(max_length=1023,required=False)
     search = forms.CharField(max_length=1023,required=False)
     renewstrategy = forms.CharField(max_length=32,required=False)

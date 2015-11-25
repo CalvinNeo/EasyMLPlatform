@@ -15,16 +15,21 @@ import datasets.localdata
 #     names = [row[0] for row in cursor.fetchall()]
 #     db.close()
 #     return render_to_response('list.html', {'names': names})
+
 def api(request, operation = "", *args, **kwargs):
     print "api:",operation
     print request.GET.get('datasetindex')
-    return {
-        '': HttpResponse("")
-        ,'dataset_delete': HttpResponse(Dataset.DeleteDataset(unicodedatasetindex=request.GET.get('datasetindex')))
-    }[operation]
+    operation = str(operation)
+    if operation == "dataset_delete":
+        return HttpResponse(Dataset.DeleteDataset(unicodedatasetindex=request.GET.get('datasetindex')))
+    elif operation == "oldataset_delete":
+        return HttpResponse(OnlineDataset.DeleteDataset(unicodedatasetindex=request.GET.get('datasetindex')))
+    else:
+        return HttpResponse("")
 
 def index(request, operation = "", *args, **kwargs):
-    print "--------------------index:",operation
+    print "--------------------index:",operation,request.GET
+    #特别注意一点,{}[p]这种选择方式,dict里面是全部求值的
     try:
         return {'dataset': render(request,"dataset.html",{
             'datasets':Dataset.GetDatasets()
@@ -39,11 +44,7 @@ def index(request, operation = "", *args, **kwargs):
             })
          ,'apply': render(request,"404.html",{'title':'Not Completed'})
          ,'assessment': render(request,"assessmodel.html",{})
-         #Partial
-         ,'ds_view':render(request,"ds_view.html",{'dataset':Dataset.ViewDataset(unicodedatasetindex=request.GET.get('datasetindex'))})
-         ,'olds_view':render(request,"olds_view.html",{
-            'dataset':OnlineDataset.ViewDataset(unicodedatasetindex=request.GET.get('datasetindex'))
-            })
+
          #util
          ,'302':render(request,"302.html",{'url':request.GET.get('url')
             ,'time':0 if request.GET.get('time')==None else request.GET.get('time')
@@ -87,12 +88,6 @@ def index(request, operation = "", *args, **kwargs):
         elif operation == "onlinedataset_upload":
             if request.method == "POST":
                 form = OnlineDatasetForm(request.POST,request.FILES)
-                print "-----------------------------aa"
-                print "files", form.files
-                print "form.data",form.data
-                print "ERRORS:", form.errors
-                print "FILES", request.FILES
-                print "form.is_valid()",form.is_valid()
                 if form.is_valid():
                     ds = OnlineDataset()
                     ds.name = str(form.cleaned_data['name'])
@@ -105,11 +100,18 @@ def index(request, operation = "", *args, **kwargs):
                     return render(request,"error.html",{'title':'invalid online dataset','description':form.errors})
             else:
                 form = OnlineDatasetForm()
-                print "((((((((((((((((((((((((((((" + OnlineDataset.AllRenewStrategies()
                 return render(request,"olds_upload.html",{
                     'form':form
                     ,'renewstrategies':OnlineDataset.AllRenewStrategies()
                     })
+        elif operation == 'ds_view':
+            return render(request,"ds_view.html",{
+                'dataset':Dataset.ViewDataset(unicodedatasetindex=request.GET.get('datasetindex'))
+                })
+        elif operation == 'olds_view':
+            return render(request,"olds_view.html",{
+                'dataset':OnlineDataset.ViewDataset(unicodedatasetindex=request.GET.get('datasetindex'))
+                })
         elif operation == "md_new":
             if request.method == "POST":
                 pass

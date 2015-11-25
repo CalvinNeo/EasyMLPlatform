@@ -22,7 +22,7 @@ class Crawl:
         if type(location).__name__ == 'function':
             self.locate_lmda = location
             self.locate_css = None
-        elif type(location).__name__ == 'str':
+        elif type(location).__name__ in ['str','unicode']:
             self.locate_lmda = None
             self.locate_css = location
 
@@ -37,7 +37,7 @@ class Crawl:
         if self.locate_lmda != None:
             location = self.locate_lmda(soup)
         elif self.locate_css != None:
-            location = soup.select(self.locate_css)
+            location = soup.select(self.locate_css)[0]
         if(type(location).__name__ != 'NoneType'):
             if self.search_lmda == None:#默认table
                 thead = location.find("thead")
