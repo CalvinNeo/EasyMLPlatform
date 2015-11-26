@@ -49,46 +49,69 @@ class LocalData:
         '''
         self.datamapper = datamapper
         self.crawl = None
+
     def __str__(self):
         return "DATASET: " + str(self.head) + " " + str(self.items) + " " + str(self.classfeatureindex)
+
+    def __getitem__(self, i):
+        return self.Item(i)
+
+    def __len__(self):
+        return self.Length()
 
     def Iter(self):
         if self.online:
             self.OnlineRenew()
+
+        if self.mode == 'all':
             for item in self.items:
                 yield item
-        else:
-            if self.mode == 'all':
-                for item in self.items:
-                    yield item
+        elif self.mode == 'sfold':
+            for index in xrange(0, len(self.items), self.nsplit):
+                yield self.items[index]
 
-    def Item(self, i):        
+    def Item(self, i):
         if self.online:
-            pass
-        else:
-            if self.mode == 'all':
-                return self.items[i]
+            self.OnlineRenew()
 
-    def Length(self):               
-        if self.online:
-            pass
-        else:
-            if self.mode == 'all':
-                return len(self.items)
+        if self.mode == 'all':
+            return self.items[i]
+        elif self.mode == 'sfold':
+            return self.items[i*self.nsplit]
 
-    def ColumnLength(self):          
+    def Length(self):
         if self.online:
-            pass
-        else:
-            if self.mode == 'all':
-                return len(self.head)
+            self.OnlineRenew()
 
-    def Column(self, i):          
+        if self.mode == 'all':
+            return len(self.items)
+        elif self.mode == 'sfold':
+            return int(len(self.items) / self.nsplit)
+
+    def ColumnLength(self):
         if self.online:
-            pass
-        else:
-            if self.mode == 'all':
-                return [item[i] for item in self.items]
+            self.OnlineRenew()
+
+        if self.mode == 'all':
+            return len(self.head)
+        elif self.mode == 'sfold':
+            return int(len(self.head) / self.nsplit)
+
+    def Column(self, i):
+        if self.online:
+            self.OnlineRenew()
+
+        if self.mode == 'all':
+            return [item[i] for item in self.items]
+        elif self.mode == 'sfold':
+            return [self.items[index][i] for index in xrange(0, len(self.items), self.nsplit)] 
+
+    def RealIndex(self, index):
+        '''
+            in: -1
+            out: len(self.head) - 1
+        '''
+        return self.ColumnLength() + index if index < 0 else index
 
     def Spawn(self, colindexs, *args, **kwargs):
         newhead = [self.head[i] for i in colindexs]
@@ -97,12 +120,13 @@ class LocalData:
         else:
             newitems = [[self.items[i][j] for j in colindexs] for i in kwargs['linindexs']]
         print "classfeatureindex", self.classfeatureindex, colindexs
-        positiveindex = self.ColumnLength() + self.classfeatureindex if self.classfeatureindex < 0 else self.classfeatureindex
+        positiveindex = self.RealIndex(self.classfeatureindex)
         newclassfeatureindex = colindexs.index(positiveindex) if positiveindex in colindexs else -1
         return LocalData(self.datamapper, head = newhead, items = newitems, classfeatureindex = newclassfeatureindex)
     
     def SpawnRect(self, x1, y1, x2, y2, cpy=True):
         pass
+
     def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", getValue=True):
         '''
             generate head 1,2,3... if there are no heads
@@ -125,6 +149,7 @@ class LocalData:
                     self.head = range(len(data_col))
                     hasHead = True
                 self.items.append(map(self.datamapper,data_col,range(len(data_col)),self.head))
+
     def ReadCSV(self, path, hasHead=False, getValue=True):
         self.ReadString(open(path, 'r'), hasHead, getValue)
     def ReadXML(self, path, hasHead=False, getValue=True):
@@ -152,6 +177,7 @@ class LocalData:
         if self.crawl != None:
             crawl_fetch = self.crawl.start()
             self.head, self.items = crawl_fetch['head'], crawl_fetch['items']
+
 class TestClass:
     def __init__(self):
         self.d = [1,2,3,4,5,6]
@@ -187,3 +213,5 @@ if __name__ == '__main__':
     print ld
     print "+++++++++++++++++++"
     print type([1,2,3]).__name__
+    print range(0, 10, 3)
+    print ld[0]

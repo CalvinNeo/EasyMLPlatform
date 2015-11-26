@@ -2,6 +2,7 @@
 import sys
 sys.path.append('..')
 
+from modelbase import *
 import numpy as np
 import math
 import sys

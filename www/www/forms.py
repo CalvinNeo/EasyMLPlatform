@@ -18,5 +18,4 @@ class OnlineDatasetForm(forms.Form):
 
 class NewModelForm(forms.Form):
     name = forms.CharField(max_length = 20)
-    modeltype = forms.CharField(max_length=10) 
-    path = forms.FileField()
+    modeltype = forms.CharField(max_length= 32) 

@@ -57,6 +57,7 @@ def ManhattanDist(vec1, vec2):
         pass
     else:
         pass
+        
 class Assessment:
     def __init__(self, model, dataset):
         self.model = model
@@ -77,10 +78,11 @@ class Assessment:
         return 2.0 / (1.0 / self.P() + 1.0 / self.R())
     def ROC(self):
         pass
-    def Test(self):
+    def SFoldValidate(self, s):
         '''
-            Can distributed
+            s-fold cross validation
         '''
+
 
 
 if __name__ == '__main__':

@@ -40,9 +40,11 @@ def index(request, operation = "", *args, **kwargs):
          ,'models': render(request,"trainmodel.html",{
             'distributed_modeltypes':MLModel.AllDistributedModels()
             ,'modeltypes':MLModel.AllModels()
+            ,'models': MLModel.GetModels()
             ,'select':True,'operation':True
             })
-         ,'apply': render(request,"404.html",{'title':'Not Completed'})
+         ,'apply': render(request,"applymodel.html",{
+            })
          ,'assessment': render(request,"assessmodel.html",{})
 
          #util
@@ -114,13 +116,21 @@ def index(request, operation = "", *args, **kwargs):
                 })
         elif operation == "md_new":
             if request.method == "POST":
-                pass
+                form = NewModelForm(request.POST,request.FILES)
+                if form.is_valid():
+                    mm = MLModel()
+                    mm.name = str(form.cleaned_data['name'])
+                    mm.modeltype = str(form.cleaned_data['modeltype'])
+                    mm.save()
+                    return render(request,"success.html",{'title':'create new model succeed!','description':str(form.cleaned_data['name']).decode('utf8')})
+                else:
+                    return render(request,"error.html",{'title':'invalid model','description':form.errors})
             else:
                 return render(request,"md_new.html",{
                     'distributed_modeltypes':str(MLModel.AllDistributedModels())
                     ,'modeltypes':str(MLModel.AllModels())
                     })
-        elif operation == "model_view":
+        elif operation == "md_view":
             pass
         else:
             return render(request,"404.html",{'title':'Page Not Found'})

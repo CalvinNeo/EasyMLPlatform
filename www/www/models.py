@@ -121,7 +121,6 @@ class OnlineDataset(models.Model):
 
     @staticmethod
     def DeleteDataset(unicodedatasetindex = None):
-        print "AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhh",unicodedatasetindex
         if unicodedatasetindex != None:
             datasetindex = int(unicodedatasetindex)
             item = OnlineDataset.objects.get(id = datasetindex)
@@ -143,9 +142,8 @@ class OnlineDataset(models.Model):
 class MLModel(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 20)
-    modeltype = models.CharField(max_length = 10) 
+    modeltype = models.CharField(max_length = 32) 
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
-    path = models.FileField(upload_to = get_model_upload_to)
 
     class Meta:
         db_table = 'models'
@@ -163,6 +161,34 @@ class MLModel(models.Model):
         return MLModel.AllDistributedModels() + \
             ["DECISION_TREE","ADABOOST","PCA","LOGISTIC","CRF","FP_GROWTH"]
 
+    @staticmethod
+    def GetModels(pageindex = 0, max_item = 10):
+        l = len(MLModel.objects.all())
+        if l > 0:
+            return MLModel.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
+        else:
+            return {}
+            
+    @staticmethod
+    def ViewModel(unicodemodelindex = None, maximum_items = 100):
+        if unicodemodelindex != None:
+            #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
+            modelindex = int(unicodemodelindex)
+            try:
+                md = MLModel.objects.get(id = modelindex)
+                return md
+            except:
+                return None
+        return None
+
+    @staticmethod
+    def DeleteModel(unicodemodelindex = None):
+        if unicodemodelindex != None:
+            modelindex = int(unicodemodelindex)
+            item = MLModel.objects.get(id = modelindex)
+            item.delete()
+            return 'true'
+        return 'false'
 
     def __unicode__(self):
-        return "#{}: ({}) {} @ {}".format(self.id,self.modeltype,self.name,self.path)
+        return "#{}: ({}) {} @ ".format(self.id,self.modeltype,self.name)

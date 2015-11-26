@@ -1,19 +1,28 @@
-<form method='post' enctype="multipart/form-data" action="{% url 'index' 'model_new' %}" ng-controller="newModelController" name="newForm">
+<form method='post' enctype="multipart/form-data" action="{% url 'index' 'md_new' %}" ng-controller="newModelController" name="newForm">
 	{% csrf_token %}
 
 	<!-- Model -->
-		<p><label for="name">Name Your Model</label>
-			<input type="text" name="name" class="form-control" ng-model="formData.name" ng-minlength=1 ng-maxlength=20 required></input>
-			<div class="error" ng-show="newForm.name.$dirty && newForm.name.$invalid">
-				<small class="error text-danger" ng-show="newForm.name.$error.required"> Name Required </small>
-			</div>
-		</p>
-		<label for="modeltype">Prototype</label>
-		<input id="modeltype" type="text" class="form-control" data-provide="typeahead" name="modeltype" 
-			 autocomplete="off" />
+
+	<div class="container-fluid npnm" >
+		<div class="col-md-6 npnm" >
+			<p><label for="name">Name Your Model</label>
+				<input type="text" name="name" class="form-control" ng-model="formData.name" ng-minlength=1 ng-maxlength=20 required></input>
+				<div class="error" ng-show="newForm.name.$dirty && newForm.name.$invalid">
+					<small class="error text-danger" ng-show="newForm.name.$error.required"> Name Required </small>
+				</div>
+			</p>
+		</div>
+		<div class="col-md-6 npnm" >
+			<p><label for="modeltype">Prototype</label>
+			<input id="modeltype" type="text" class="form-control" data-provide="typeahead" name="modeltype" 
+				 autocomplete="off" /></p>
+		</div>
+	</div>
 	<hr/>
 	<!-- Train -->
-
+	<div>
+		{% include 'ds_list.html' %}
+	</div>
 	<hr/>
 	<input type="submit" class="btn btn-success btn-lg btn-block" value="OK">
 </form>

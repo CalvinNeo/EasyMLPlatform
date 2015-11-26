@@ -2,6 +2,7 @@
 import sys
 sys.path.append('..')
 
+from modelbase import *
 import math
 import datasets.localdata
 from datasets.monads import *

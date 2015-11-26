@@ -3,6 +3,7 @@ import sys
 sys.path.append('..')
 
 import math
+from modelbase import *
 import datasets
 from datasets.localdata import *
 from datasets.monads import *
@@ -10,13 +11,14 @@ import operator
 import json
 import pickle
 
-class DecisionTree:
+class DecisionTree(ModelBase):
     def __init__(self, dataset):
         '''
             dataset: (datasets.localdata) 
             classfeatureindex: index of the column which defines the feature in dataset 
         '''
-        self.dataset = dataset
+        ModelBase.__init__(self, dataset)
+        self.Test = self.Classify
         self.tree = {}
     #这两个函数相对"独立"
     def ShannonEntropy(self, dataset = None):
@@ -27,6 +29,7 @@ class DecisionTree:
         shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value): \
             float(value)/self.dataset.Length(),feature_count.iteritems()),0)
         return shentr
+
     def SplitDataset(self, dataset, classfeatureindex):
         '''
             e.g. feature A is the best split feature and it has value True and False (represented by classfeaturevalue)
@@ -47,8 +50,10 @@ class DecisionTree:
         origin_entropy = self.ShannonEntropy()
         best_gain = 0.0 #g is infomation gain
         best_featureid = 0 
-        # Do NOT INCLUDE CLASSFEATUREINDEX
+        # DO NOT INCLUDE CLASSFEATUREINDEX
         for i in xrange(dataset.ColumnLength()):
+            if dataset.RealIndex(i) == dataset.RealIndex(dataset.classfeatureindex):
+                continue
             feature, new_entropy = self.SplitDataset(dataset, i)
             infomation_gain = new_entropy - origin_entropy
             if infomation_gain > best_gain:
@@ -56,6 +61,7 @@ class DecisionTree:
                 best_featureid = i
         print "best_featureid", best_featureid
         return best_featureid
+
     def MajorityCount(self, classfeatures):
         '''
             TEST: USE DATA LIKE:
@@ -65,6 +71,7 @@ class DecisionTree:
             MajorityCount return 1
         '''
         return sorted(Counts(classfeatures).iteritems(), key = operator.itemgetter(1), reverse = True)[0][0]
+
     def CreateTree(self, dataset):
         '''
             build recursive decision tree
@@ -89,9 +96,11 @@ class DecisionTree:
             print dataset
             mytree[dataset.head[bestfeature]][value] = self.CreateTree(newdataset)
         return mytree
+
     def BuildTree(self):
         self.tree = self.CreateTree(self.dataset)
         return self.tree
+
     def Classify(self, test):
         '''
             predict new samples with trained tree
@@ -112,9 +121,11 @@ class DecisionTree:
         fw = open(filename, 'w')
         pickle.dump(self.tree, fw)
         fw.close()
+
     def LoadTree(self, filename):
         fr = open(filename)
         return pickle.load(filename)
+
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):
         # return {
