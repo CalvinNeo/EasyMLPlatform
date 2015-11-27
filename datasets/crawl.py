@@ -31,6 +31,7 @@ class Crawl:
             self.code = kwargs['code']
         else:
             self.code = 'utf8'
+            
     def start(self):
         html = getHtml(self.url)
         soup = BeautifulSoup(html, "html.parser")

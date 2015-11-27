@@ -24,6 +24,8 @@ def api(request, operation = "", *args, **kwargs):
         return HttpResponse(Dataset.DeleteDataset(unicodedatasetindex=request.GET.get('datasetindex')))
     elif operation == "oldataset_delete":
         return HttpResponse(OnlineDataset.DeleteDataset(unicodedatasetindex=request.GET.get('datasetindex')))
+    elif operation == 'onlinedataset_dump':
+        return HttpResponse(OnlineDataset.DumpDataset(unicodedatasetindex=request.GET.get('datasetindex')))
     else:
         return HttpResponse("")
 
@@ -80,7 +82,8 @@ def index(request, operation = "", *args, **kwargs):
                         'xls':'XLS',
                     }[str(ds.path).split('.')[-1].lower()]
                     #head shows if the dataset has head
-                    ds.head = ""
+                    ds.head = str(form.cleaned_data['head'])
+                    ds.hashead = bool(form.cleaned_data['hashead'])
                     ds.attr_delim = ',' if str(form.cleaned_data['attr_delim']) == '' else str(form.cleaned_data['attr_delim']).replace('\\n','\n').replace('\\t','\t')
                     ds.record_delim = '\n' if str(form.cleaned_data['record_delim']) == '' else str(form.cleaned_data['record_delim']).replace('\\n','\n').replace('\\t','\t')
                     ds.save()
@@ -100,6 +103,8 @@ def index(request, operation = "", *args, **kwargs):
                     ds = OnlineDataset()
                     ds.name = str(form.cleaned_data['name'])
                     ds.url = form.cleaned_data['url']
+                    ds.head = str(form.cleaned_data['head'])
+                    ds.hashead = bool(form.cleaned_data['hashead'])
                     ds.location = 'table' if str(form.cleaned_data['location']) == '' else str(form.cleaned_data['location']).replace('\\n','\n').replace('\\t','\t')
                     ds.search = '' if str(form.cleaned_data['location']) == '' else str(form.cleaned_data['location']).replace('\\n','\n').replace('\\t','\t')
                     ds.save()
@@ -137,7 +142,7 @@ def index(request, operation = "", *args, **kwargs):
                     ,'modeltypes':str(MLModel.AllModels())
                     })
         elif operation == "md_view":
-            pass
+            md = MLModel.GetModels(unicodedatasetindex=request.GET.get('modelindex'))
         else:
             return render(request,"404.html",{'title':'Page Not Found'})
 

@@ -7,6 +7,8 @@ from optparse import OptionParser
 import operator
 from localdata import *
 import localdata
+import ast
+
 '''
     dataset.items is deprecated
     dataset.Iter() recommended
@@ -17,13 +19,16 @@ def L2DS(lst, head=None, classfeatureindex=-1):
     '''
     ld = localdata.LocalData(datamapper=None, head=head, items=lst, classfeatureindex=classfeatureindex)
     return ld
+
 def D2DS(dct):
     '''
         input dict output Dataset
     '''
     return dct
+
 def lmdaprint(text):
     print "lamdaprint: ", text
+    
 def ReduceByKeyAsList(items, keyindex, lmda, lmdamap=None, removekey=False, returnDataset=False):
     g = GroupByKey(items, keyindex, removekey)
     '''
@@ -43,6 +48,7 @@ def ReduceByKeyAsList(items, keyindex, lmda, lmdamap=None, removekey=False, retu
     '''
     r = map(lambda key:reduce(lmda, map(lmdamap, g[key])), g)
     return L2DS(r) if returnDataset else r
+
 def ReduceByKeyAsDict(items, keyindex, lmdakeyvalue, removekey=False, returnDataset=False):
     g = GroupByKey(items, keyindex, removekey)
     '''
@@ -52,6 +58,7 @@ def ReduceByKeyAsDict(items, keyindex, lmdakeyvalue, removekey=False, returnData
     '''
     r = dict(map(lmdakeyvalue, g.iteritems()))
     return D2DS(r) if returnDataset else r
+
 def GroupByKey(items, keyindex, removekey=False, returnDataset=False):
     '''
         recieve a list
@@ -73,6 +80,7 @@ def GroupByKey(items, keyindex, removekey=False, returnDataset=False):
             else:
                 groups[value].append(item)
     return L2DS(groups) if returnDataset else groups
+
 def SortByKey(items, keyindex, comparelmda, removekey=False, returnDataset=False):
     '''
         recieve a list
@@ -80,6 +88,7 @@ def SortByKey(items, keyindex, comparelmda, removekey=False, returnDataset=False
     g = GroupByKey(items, keyindex, removekey)
     r = sorted(g, cmp=comparelmda)
     return D2DS(r) if returnDataset else r
+
 def Count(items, lmda):
     '''
         recieve a list
@@ -87,6 +96,7 @@ def Count(items, lmda):
         lmda must be True/False lambda function, return True if such condition should be counted, False otherwise
     '''
     return reduce(operator.add, map(lambda x:1 if lmda(x)==True else 0, items))
+    
 def Counts(items):
     '''
         e.g.

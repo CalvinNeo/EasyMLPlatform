@@ -9,6 +9,7 @@ from django.db import models
 from www.utils import random_file_name
 from www import settings
 import datasets.localdata
+from ml_models.modelbase import *
 
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "www.settings") 
 def get_upload_to(instance, filename):
@@ -26,16 +27,17 @@ def get_model_upload_to(instance, filename):
 # editable：如果为假，admin模式下将不能改写。缺省为真
 # help_text：admin模式下帮助文档
 # primary_key：设置主键，如果没有设置django创建表时会自动加上：
+
 class Dataset(models.Model):
     id = models.AutoField(primary_key = True,)
     name = models.CharField(max_length=20)
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
     path = models.FileField(upload_to = get_upload_to)
     filetype = models.CharField(max_length=10)  
-    head = models.CharField(max_length=1023)
+    head = models.CharField(max_length=1023, default='')
     attr_delim = models.CharField(max_length=3)
     record_delim = models.CharField(max_length=3)
-
+    hashead = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'dataset'
@@ -47,9 +49,12 @@ class Dataset(models.Model):
     def GetDatasets(pageindex = 0, max_item = 10):
         l = len(Dataset.objects.all())
         if l > 0:
-            return Dataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
+            if max_item == -1:
+                return Dataset.objects.all()
+            else:
+                return Dataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
         else:
-            return {}
+            return []
             
     @staticmethod
     def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
@@ -83,12 +88,13 @@ class Dataset(models.Model):
 class OnlineDataset(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length=20)
-    #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
+    #if you use lambda here you can't pass migration, 因为lambda不能被序列化!
+    head = models.CharField(max_length=1023, default='')
     url = models.CharField(max_length=200)
     location = models.CharField(max_length=1023)
     search = models.CharField(max_length=1023)
     renewstrategy = models.CharField(max_length=32)
-
+    hashead = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'onlinefield'
@@ -100,9 +106,12 @@ class OnlineDataset(models.Model):
     def GetDatasets(pageindex = 0, max_item = 10):
         l = len(OnlineDataset.objects.all())
         if l > 0:
-            return OnlineDataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
+            if max_item == -1:
+                return Dataset.objects.all()
+            else:
+                return OnlineDataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
         else:
-            return {}
+            return []
             
     @staticmethod
     def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
@@ -111,7 +120,7 @@ class OnlineDataset(models.Model):
             datasetindex = int(unicodedatasetindex)
             try:
                 olds = OnlineDataset.objects.get(id = datasetindex)
-                ds = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data), online = True)
+                ds = datasets.localdata.LocalData(online = True)
                 ds.SetURL(olds.url, olds.location, None)
                 ds.OnlineRenew()
                 return ds
@@ -129,10 +138,36 @@ class OnlineDataset(models.Model):
         return 'false'
 
     @staticmethod
-    def Tolocal(unicodedatasetindex = None):
+    def DumpDataset(unicodedatasetindex = None):
         if unicodedatasetindex != None:
+            # try:
             datasetindex = int(unicodedatasetindex)
+            filepath = 'dataset/' + random_file_name(None, 'txt')
+            # DB
+            olds = OnlineDataset.objects.get(id = datasetindex)
+            print '-----------------------', olds
+            ds = Dataset()
+            ds.name = olds.name
+            ds.path = filepath
+            ds.filetype = 'TXT'
+            ds.head = olds.head
+            ds.hashead = olds.hashead
+            ds.attr_delim = ',' 
+            ds.record_delim = '\n' 
+            ds.save()
+            #file
+            output = open(settings.MEDIA_ROOT + filepath, 'w')
+            print '-----------------------', ds
+            ds = OnlineDataset.ViewDataset(datasetindex)
+            if ds == None:
+                return 'false'
+            output.write(','.join(ds.head) + '\n')
+            for line in ds.items:
+                output.write(','.join(line) + '\n')
+            output.close()
             return 'true'
+            # except:
+            #     return 'false'
         return 'false'
 
     @staticmethod
@@ -150,83 +185,8 @@ class MLModel(models.Model):
 
     @staticmethod
     def AllModelInfo():
-        return {
-            'MATRIX_ADD':{
-                'ndataset': 2
-                ,'distributed': True
-                ,'nontraining': True
-            },
-            'MATRIX_DOT':{
-                'ndataset': 2
-                ,'distributed': True
-                ,'nontraining': True
-            },
-            'MATRIX_INV':{
-                'ndataset': 1
-                ,'distributed': True
-                ,'nontraining': True
-            },
-            'MATRIX_PCA':{
-                'ndataset': 2
-                ,'distributed': True
-                ,'nontraining': False
-            },
-
-
-            'EM':{
-                'ndataset': 1
-                ,'distributed': True
-                ,'nontraining': False
-            },
-            'SVM':{
-                'ndataset': 1
-                ,'distributed': True
-                ,'nontraining': False
-            },
-            'NAIVE_BAYES':{
-                'ndataset': 1
-                ,'distributed': True
-                ,'nontraining': False
-            },
-            'K_MEANS':{
-                'ndataset': 1
-                ,'distributed': True
-                ,'nontraining': False
-            },
-            'KNN':{
-                'ndataset': 1
-                ,'distributed': True
-                ,'nontraining': False
-            },
-
-            'DECISION_TREE':{
-                'ndataset': 1
-                ,'distributed': False
-                ,'nontraining': False
-            },
-            'ADABOOST':{
-                'ndataset': 1
-                ,'distributed': False
-                ,'nontraining': False
-            },
-            'LOGISTIC':{
-                'ndataset': 1
-                ,'distributed': False
-                ,'nontraining': False
-            },
-            'CRF':{
-                'ndataset': 1
-                ,'distributed': False
-                ,'nontraining': False
-            },
-            'FP_GROWTH':{
-                'ndataset': 1
-                ,'distributed': False
-                ,'nontraining': False
-            },
-
-        }
-
+        return ModelBase.AllModelInfo()
+        
     @staticmethod
     def AllDistributedModels():
         return [ k  for (k,v) in MLModel.AllModelInfo().items() if v['distributed']==True ]
@@ -240,8 +200,7 @@ class MLModel(models.Model):
     @staticmethod
     def AllModels():
         return [ k for (k,v) in MLModel.AllModelInfo().items()]
-        return MLModel.AllDistributedModels() + \
-            ["DECISION_TREE","ADABOOST","PCA","LOGISTIC","CRF","FP_GROWTH"]
+        return MLModel.AllDistributedModels() + ["DECISION_TREE","ADABOOST","PCA","LOGISTIC","CRF","FP_GROWTH"]            
 
     @staticmethod
     def GetModels(pageindex = 0, max_item = 10):
@@ -274,3 +233,12 @@ class MLModel(models.Model):
 
     def __unicode__(self):
         return "#{}: ({}) {} @ ".format(self.id,self.modeltype,self.name)
+
+class TrainingTask(models.Model):
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length = 20)
+    modeltype = models.CharField(max_length = 32) 
+    #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
+
+    class Meta:
+        db_table = 'trainingtask'

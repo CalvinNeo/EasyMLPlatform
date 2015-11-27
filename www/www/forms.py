@@ -7,6 +7,8 @@ class UploadDatasetForm(forms.Form):
     path = forms.FileField(required=True)
     attr_delim = forms.CharField(max_length=3,required=False)
     record_delim = forms.CharField(max_length=3,required=False)
+    head = forms.CharField(max_length=1023,required=False)
+    hashead = forms.BooleanField(required=False)
 
 class OnlineDatasetForm(forms.Form):
     name = forms.CharField(max_length=20)
@@ -15,6 +17,8 @@ class OnlineDatasetForm(forms.Form):
     location = forms.CharField(max_length=1023,required=False)
     search = forms.CharField(max_length=1023,required=False)
     renewstrategy = forms.CharField(max_length=32,required=False)
+    head = forms.CharField(max_length=1023,required=False)
+    hashead = forms.BooleanField(required=False)
 
 class NewModelForm(forms.Form):
     name = forms.CharField(max_length = 20)

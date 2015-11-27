@@ -1,8 +1,8 @@
-<form method='post' enctype="multipart/form-data" action="{% url 'index' 'onlinedataset_upload' %}" style="width:100%;" name="uploadForm" id="onlineFrom" >
+<form method='post' enctype="multipart/form-data" autocomplete=off action="{% url 'index' 'onlinedataset_upload' %}" style="width:100%;" name="uploadForm" id="onlineFrom" >
 	{% csrf_token %}
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
-			<p><label for="name">Name Your Dataset</label>
+			<p><label for="name">Name Your Online Dataset</label>
 				<input type="text" name="name" class="form-control" ng-model="onlineFrom.name" ng-minlength=1 ng-maxlength=20 required>
 				<div class="error" ng-show="onlineFrom.name.$dirty && onlineFrom.name.$invalid">
 					<small class="error text-danger" ng-show="onlineFrom.name.$error.required"> Name Required </small>
@@ -32,6 +32,16 @@
 		<div class="col-md-6 npnm" >
 			<label for="renew">Renew Strategy</label>
 			<input name="renew" type="text" class="form-control" id="renewstrategy">
+		</div>
+	</div>
+	<div class="container-fluid npnm" >
+		<div class="col-md-4 npnm" >
+			<label for="hashead">Dataset Header</label>
+			<p><input name="hashead" type="checkbox" class="">Has Head</input></p>
+		</div>
+		<div class="col-md-8 npnm" >
+			<label for="head">Specified Types</label>
+			<input name="head" type="text" class="form-control"></input>
 		</div>
 	</div>
 	<hr/>

@@ -8,3 +8,8 @@ import math
 import sys
 from collections import defaultdict, namedtuple
 import itertools
+
+
+if __name__ == '__main__':
+    pass
+    # print repr(f)

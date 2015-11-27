@@ -12,4 +12,10 @@
 <script>
 	document.getElementsByTagName('head')[0].innerHTML = window.parent.document.getElementsByTagName('head')[0].innerHTML
 </script>
+<script>
+	var iframe = window.parent.document.getElementById("datasetviewframe");
+	try{
+		iframe.height =  iframe.contentWindow.document.documentElement.scrollHeight;
+	}catch (ex){}
+</script>
 </body>

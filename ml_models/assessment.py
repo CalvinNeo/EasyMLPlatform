@@ -48,6 +48,7 @@ def EuclideanDist(vec1, vec2):
     else:
         r = np.matrix(vec1) - np.matrix(vec2)
         return np.trace(np.dot(r,r.T))**0.5
+
 def ManhattanDist(vec1, vec2):
     '''
         ManhattanDist Distance:
@@ -63,6 +64,7 @@ class Assessment:
         self.model = model
         self.dataset = dataset
         self.TP, self.TN, self.FP, self.FN = 0, 0, 0, 0
+
     def TFPN(self):
         '''
                             Positive    Negative
@@ -70,19 +72,30 @@ class Assessment:
         Wrong Prediction        FP         FN
         '''
         pass
+
     def P(self):
         return self.TP / (self.TP + self.FP)
+
     def R(self):
         return self.TP / (self.TP + self.FN)
+
     def F1(self):
         return 2.0 / (1.0 / self.P() + 1.0 / self.R())
+
     def ROC(self):
         pass
-    def SFoldValidate(self, s):
+
+    def SFoldValidate(self, s, train = False, models = []):
         '''
             s-fold cross validation
         '''
+        if s > 1:
+            if train:
+                pass
+            elif len(models) == s - 1:
+                pass
 
+        return None
 
 
 if __name__ == '__main__':

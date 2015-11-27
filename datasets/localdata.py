@@ -7,9 +7,10 @@ from optparse import OptionParser
 import operator
 from monads import *
 import crawl
+import parse
 
 class LocalData:
-    def __init__(self, datamapper, *args, **kwargs):
+    def __init__(self, datamapper = None, *args, **kwargs):
         if 'head' in kwargs.keys() and kwargs['head'] != None:
             self.head = kwargs['head']
         else:
@@ -38,6 +39,15 @@ class LocalData:
         '''        
         self.mode = 'all'
         '''
+            dstype is the type of dataset include:
+            table
+            JSON
+        '''
+        if 'dstype' in kwargs.keys():
+            self.dstype = kwargs['dstype']
+        else:
+            self.dstype = 'table'       
+        '''
             Usage:
             def my_mapper(data, colindex, head):
                 return {
@@ -45,9 +55,19 @@ class LocalData:
                   'foot': int(data),
                   'fish': str(data)
                 }[head]
-            datamapper is parse raw data
+            or 
+            datamapper = lambda data,colindex,head:int(data)
+
+            datamapper read raw data from str to other types you want
+            datamapper DO NOT parse raw data
+            FOR MOST TIMES
+            use `parse` module is enough
         '''
-        self.datamapper = datamapper
+        if datamapper == None:
+            self.datamapper = self.default_datamapper
+        else:
+            self.datamapper = datamapper
+
         self.crawl = None
 
     def __str__(self):
@@ -58,6 +78,12 @@ class LocalData:
 
     def __len__(self):
         return self.Length()
+
+    def default_datamapper(self, data, colindex, head):
+        return parse.parsestr(data, [parse.extendboolean])
+
+    def GenerateHead(self, ncol):
+        self.head = range(len(ncol))
 
     def Iter(self):
         if self.online:
@@ -190,7 +216,7 @@ class TestClass:
             for i in self.d:
                 yield 'i'
 if __name__ == '__main__':
-    ld = LocalData(datamapper = lambda data,colindex,head:int(data))
+    ld = LocalData()
     ld.ReadString(open("1.txt","r").read(),True)
     ld.SaveCSV("k.csv")
     print ld.head
