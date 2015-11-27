@@ -44,6 +44,12 @@ def index(request, operation = "", *args, **kwargs):
             ,'select':True,'operation':True
             })
          ,'apply': render(request,"applymodel.html",{
+            'distributed_modeltypes':MLModel.AllDistributedModels()
+            ,'modeltypes':MLModel.AllModels()
+            ,'models': MLModel.GetModels()
+            ,'datasets':Dataset.GetDatasets()
+            ,'oldatasets':OnlineDataset.GetDatasets()
+            ,'select':True,'operation':False
             })
          ,'assessment': render(request,"assessmodel.html",{})
 

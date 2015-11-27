@@ -6,14 +6,28 @@
 		<div>
 			{% include 'md_list.html' %}
 		</div>
-		<p class="lead"> New Model </p>
+		<p class="lead"> Dataset List </p>
 		<div>
-			{% include 'md_new.html' %}
+			<div ng-controller="switchDatasetController">
+				<ul id="mytab" class="nav nav-tabs">
+					<li ng-class="{true:'active',false:''}[datatype=='file']">
+						<a href="javascript:void(0)" data-toggle="tab" ng-click="setdatatype('file')">LOCAL</a></li>
+					<li ng-class="{true:'active',false:''}[datatype=='online']">
+						<a href="javascript:void(0)" data-toggle="tab" ng-click="setdatatype('online')">ONLINE</a></li>
+				</ul>
+			
+			<div ng-show="uploadFormShow()">
+				{% include 'ds_list.html' %}
+			</div>
+			<div ng-show="onlineShow()">
+				{% include 'olds_list.html' %}
+			</div>
+		
+		</div>
 		</div>
 	</div>
 	<div class="col-md-6">
 		<div>
-			<iframe frameborder=0 width="100%" height="100%"  scrolling=auto id="modelviewframe"></iframe>
 		</div>
 	</div>
 </div>

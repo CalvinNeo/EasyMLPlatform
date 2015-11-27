@@ -6,7 +6,7 @@
 
 		</td>
 	{% endif %}
-	<td>Name</td><td>URL</td>
+	<td>Name</td><td>URL</td><td>Location</td><td>Renew</td>
 </tr>
 </thead>
 <tbody>
@@ -15,8 +15,10 @@
 		{% if select %}
 			<td><input type="checkbox" id="olcheck_{{dataset.id}}"></input></td>
 		{% endif %}
-		<td><a href="javascript:void(0)" onclick="showOLDataset({{dataset.id}})">{{dataset.name}}</a></td>
-		<td><a href="{{dataset.url}}">{{dataset.url}}</a></td>
+			<td><a href="javascript:void(0)" onclick="showOLDataset({{dataset.id}})">{{dataset.name}}</a></td>
+			<td><a href="{{dataset.url}}">{{dataset.url}}</a></td>			
+			<td>{{dataset.location}}</td>
+			<td>{{dataset.renewstrategy}}</td>
 		{% if operation %}
 			<td><a href="javascript:void(0)" onclick="deleteOLDataset({{dataset.id}})">DELETE</a></td>
 			<td><a href="javascript:void(0)" onclick="dumpOLDataset({{dataset.id}})">LOCALIZE</a></td>
@@ -24,6 +26,6 @@
 		{% endif %}
 	</tr>
 {% endfor%}
-
+	
 </tbody>
 </table>

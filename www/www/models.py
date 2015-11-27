@@ -149,15 +149,97 @@ class MLModel(models.Model):
         db_table = 'models'
 
     @staticmethod
+    def AllModelInfo():
+        return {
+            'MATRIX_ADD':{
+                'ndataset': 2
+                ,'distributed': True
+                ,'nontraining': True
+            },
+            'MATRIX_DOT':{
+                'ndataset': 2
+                ,'distributed': True
+                ,'nontraining': True
+            },
+            'MATRIX_INV':{
+                'ndataset': 1
+                ,'distributed': True
+                ,'nontraining': True
+            },
+            'MATRIX_PCA':{
+                'ndataset': 2
+                ,'distributed': True
+                ,'nontraining': False
+            },
+
+
+            'EM':{
+                'ndataset': 1
+                ,'distributed': True
+                ,'nontraining': False
+            },
+            'SVM':{
+                'ndataset': 1
+                ,'distributed': True
+                ,'nontraining': False
+            },
+            'NAIVE_BAYES':{
+                'ndataset': 1
+                ,'distributed': True
+                ,'nontraining': False
+            },
+            'K_MEANS':{
+                'ndataset': 1
+                ,'distributed': True
+                ,'nontraining': False
+            },
+            'KNN':{
+                'ndataset': 1
+                ,'distributed': True
+                ,'nontraining': False
+            },
+
+            'DECISION_TREE':{
+                'ndataset': 1
+                ,'distributed': False
+                ,'nontraining': False
+            },
+            'ADABOOST':{
+                'ndataset': 1
+                ,'distributed': False
+                ,'nontraining': False
+            },
+            'LOGISTIC':{
+                'ndataset': 1
+                ,'distributed': False
+                ,'nontraining': False
+            },
+            'CRF':{
+                'ndataset': 1
+                ,'distributed': False
+                ,'nontraining': False
+            },
+            'FP_GROWTH':{
+                'ndataset': 1
+                ,'distributed': False
+                ,'nontraining': False
+            },
+
+        }
+
+    @staticmethod
     def AllDistributedModels():
+        return [ k  for (k,v) in MLModel.AllModelInfo().items() if v['distributed']==True ]
         return ["EM","SVM","NAIVE_BAYES","K_MEANS","KNN"]
 
     @staticmethod
     def AllNonTrainingModels():
+        return [ k  for (k,v) in MLModel.AllModelInfo().items() if v['nontraining']==True]
         return ["MATRIX"]
 
     @staticmethod
     def AllModels():
+        return [ k for (k,v) in MLModel.AllModelInfo().items()]
         return MLModel.AllDistributedModels() + \
             ["DECISION_TREE","ADABOOST","PCA","LOGISTIC","CRF","FP_GROWTH"]
 

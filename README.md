@@ -7,6 +7,7 @@ an easy distributed machine learning platform
 3. MySQLdb
 4. mysql-python
 5. BeautifulSoup
+6. django-pagination
 
 ## Run
 

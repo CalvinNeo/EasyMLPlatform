@@ -53,7 +53,7 @@ function bodyController($scope, $http){
 		{'padding-top':'55px','overflow-x':'hidden','background':'#f4f4f4'}:
 		{'padding-top':'0px','overflow-x':'hidden','background':'#f4f4f4'};
 }
-function uploadDatasetController($scope, $http, $location){
+function switchDatasetController($scope, $http, $location){
 	var cleanned_location = $location.path().replace('/','')
 	$scope.datatype = cleanned_location ==''? 'file' : cleanned_location
 	$scope.setdatatype = function(x){

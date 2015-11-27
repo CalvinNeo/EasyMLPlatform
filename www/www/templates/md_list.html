@@ -15,7 +15,8 @@
 		{% if select %}
 			<td><input type="checkbox" id="check_{{model.id}}"></input></td>
 		{% endif %}
-		<td><a href="javascript:void(0)" onclick="showModel({{model.id}})">{{model.name}}</a></td><td>{{model.modeltype}}</td>
+			<td><a href="javascript:void(0)" onclick="showModel({{model.id}})">{{model.name}}</a></td>
+			<td>{{model.modeltype}}</td>
 		{% if operation %}
 			<td><a href="javascript:void(0)" onclick="deleteDataset({{model.id}})">DELETE</a></td>
 			<td><a href="javascript:void(0)" onclick="deleteModel({{model.id}})">DOWNLOAD</a></td>
