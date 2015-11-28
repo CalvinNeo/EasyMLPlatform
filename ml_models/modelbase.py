@@ -1,6 +1,10 @@
 class ModelBase:
-    def __init__(self, dataset):
+    def __init__(self, dataset, prototype):
         self.dataset = dataset
+        '''
+            ['boosting','bp','crf','decision_tree','em',...]
+        '''
+        self.prototype = prototype
 
     def Test(self, inp):
         return inp
@@ -13,21 +17,25 @@ class ModelBase:
                 'ndataset': 2
                 ,'distributed': True
                 ,'nontraining': True
+                ,'modeltype': None
             },
             'MATRIX_DOT':{
                 'ndataset': 2
                 ,'distributed': True
                 ,'nontraining': True
+                ,'modeltype': None
             },
             'MATRIX_INV':{
                 'ndataset': 1
                 ,'distributed': True
                 ,'nontraining': True
+                ,'modeltype': None
             },
             'MATRIX_PCA':{
                 'ndataset': 2
                 ,'distributed': True
                 ,'nontraining': False
+                ,'modeltype': None
             },
 
 
@@ -35,52 +43,62 @@ class ModelBase:
                 'ndataset': 1
                 ,'distributed': True
                 ,'nontraining': False
+                ,'modeltype': None
             },
             'SVM':{
                 'ndataset': 1
                 ,'distributed': True
                 ,'nontraining': False
+                ,'modeltype': 'CLASSIFY'
             },
             'NAIVE_BAYES':{
                 'ndataset': 1
                 ,'distributed': True
                 ,'nontraining': False
+                ,'modeltype': 'CLASSIFY'
             },
             'K_MEANS':{
                 'ndataset': 1
                 ,'distributed': True
                 ,'nontraining': False
+                ,'modeltype': 'CLUSTER'
             },
             'KNN':{
                 'ndataset': 1
                 ,'distributed': True
                 ,'nontraining': False
+                ,'modeltype': 'CLUSTER'
             },
 
             'DECISION_TREE':{
                 'ndataset': 1
                 ,'distributed': False
                 ,'nontraining': False
+                ,'modeltype': 'CLASSIFY'
             },
             'ADABOOST':{
                 'ndataset': 1
                 ,'distributed': False
                 ,'nontraining': False
+                ,'modeltype': 'CLASSIFY'
             },
             'LOGISTIC':{
                 'ndataset': 1
                 ,'distributed': False
                 ,'nontraining': False
+                ,'modeltype': 'CLASSIFY'
             },
             'CRF':{
                 'ndataset': 1
                 ,'distributed': False
                 ,'nontraining': False
+                ,'modeltype': 'CLASSIFY'
             },
             'FP_GROWTH':{
                 'ndataset': 1
                 ,'distributed': False
                 ,'nontraining': False
+                ,'modeltype': None
             },
         }
 

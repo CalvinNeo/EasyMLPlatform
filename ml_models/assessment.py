@@ -60,18 +60,26 @@ def ManhattanDist(vec1, vec2):
         pass
         
 class Assessment:
-    def __init__(self, model, dataset):
+    def __init__(self, model, dataset, inputs):
         self.model = model
         self.dataset = dataset
+        self.inputs = inp
         self.TP, self.TN, self.FP, self.FN = 0, 0, 0, 0
 
     def TFPN(self):
         '''
+        Classify Judge
                             Positive    Negative
         Correct Prediction      TP         TN
         Wrong Prediction        FP         FN
         '''
-        pass
+        for inp in self.inputs:
+            a = self.model.Test(inp)
+
+    def MeanSquare(self):
+        '''
+        Regress Judge
+        '''
 
     def P(self):
         return self.TP / (self.TP + self.FP)
@@ -85,7 +93,8 @@ class Assessment:
     def ROC(self):
         pass
 
-    def SFoldValidate(self, s, train = False, models = []):
+    @staticmethod
+    def SFoldValidate(s, train = False, models = []):
         '''
             s-fold cross validation
         '''

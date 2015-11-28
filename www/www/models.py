@@ -177,7 +177,13 @@ class OnlineDataset(models.Model):
 class MLModel(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 20)
-    modeltype = models.CharField(max_length = 32) 
+    modeltype = models.CharField(max_length = 32)
+    '''
+        INITED
+        TRAINING
+        TRAINED
+    '''
+    modelstatus = models.CharField(max_length = 32)
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
     class Meta:
@@ -186,7 +192,7 @@ class MLModel(models.Model):
     @staticmethod
     def AllModelInfo():
         return ModelBase.AllModelInfo()
-        
+
     @staticmethod
     def AllDistributedModels():
         return [ k  for (k,v) in MLModel.AllModelInfo().items() if v['distributed']==True ]

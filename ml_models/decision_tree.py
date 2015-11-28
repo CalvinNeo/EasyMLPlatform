@@ -17,9 +17,10 @@ class DecisionTree(ModelBase):
             dataset: (datasets.localdata) 
             classfeatureindex: index of the column which defines the feature in dataset 
         '''
-        ModelBase.__init__(self, dataset)
+        ModelBase.__init__(self, dataset, 'CLASSIFY')
         self.Test = self.Classify
         self.tree = {}
+
     #这两个函数相对"独立"
     def ShannonEntropy(self, dataset = None):
         if dataset == None:
