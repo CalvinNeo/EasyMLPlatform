@@ -64,7 +64,7 @@ class Assessment:
         self.model = model
         self.dataset = dataset
         self.inputs = inp
-        self.TP, self.TN, self.FP, self.FN = 0, 0, 0, 0
+        self.TP, self.TN, self.FP, self.FN, self.po = 0, 0, 0, 0
 
     def TFPN(self):
         '''
