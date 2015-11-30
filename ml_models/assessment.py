@@ -64,7 +64,15 @@ class Assessment:
         self.model = model
         self.dataset = dataset
         self.inputs = inp
-        self.TP, self.TN, self.FP, self.FN, self.po = 0, 0, 0, 0
+        self.TP, self.TN, self.FP, self.FN = 0, 0, 0, 0
+        if 'Positive' in kwargs.keys() and kwargs['Positive'] != None:
+            self.Positive = kwargs['Positive']
+        else:
+            self.Positive = 1        
+        if 'Negative' in kwargs.keys() and kwargs['Negative'] != None:
+            self.Negative = kwargs['Negative']
+        else:
+            self.Negative = -1
 
     def TFPN(self):
         '''
