@@ -1,13 +1,35 @@
 class ModelBase:
-    def __init__(self, dataset, prototype):
+    def __init__(self, dataset, prototype, *args, **kwargs):
         self.dataset = dataset
         '''
-            ['boosting','bp','crf','decision_tree','em',...]
+            prototype in ['boosting','bp','crf','decision_tree','em',...]
         '''
         self.prototype = prototype
 
+        '''
+            Classify
+        '''
+        if 'positive' in kwargs.keys() and kwargs['positive'] != None:
+            self.Positive = kwargs['positive']
+        else:
+            self.Positive = 1        
+        if 'negative' in kwargs.keys() and kwargs['negative'] != None:
+            self.Negative = kwargs['negative']
+        else:
+            self.Negative = -1 
+        '''
+            Regress
+        '''
+        if 'classfeatureindex' in kwargs.keys() and kwargs['classfeatureindex'] != None:
+            self.classfeatureindex = kwargs['classfeatureindex']
+        else:
+            self.classfeatureindex = self.dataset.classfeatureindex
+
     def Test(self, inp):
         return inp
+
+    def T(self, inp):
+        return inp[classfeatureindex]
 
     @staticmethod
     def AllModelInfo():
@@ -104,14 +126,17 @@ class ModelBase:
 
 if __name__ == '__main__':
     class Base():
-        def __init__(self, dataset):
+        def __init__(self, dataset, *args, **kwargs):
             self.dataset = dataset
             print "Base:", self.dataset
+            if 'positive' in kwargs.keys() and kwargs['positive'] != None:
+                print kwargs['positive']
+
         def Test(self):
             print "AHA"
     class Derived(Base):
-        def __init__(self, dataset):
-            Base.__init__(self, dataset)
+        def __init__(self, dataset, *args, **kwargs):
+            Base.__init__(self, dataset, *args, **kwargs)
             print "Derived:", self.dataset
             # self.Test = self.OHO
             self.Test()
@@ -119,5 +144,5 @@ if __name__ == '__main__':
             print "OHO"
         # def Test(self):
         #     print "oHO"
-    d = Derived([1,2,3])
+    d = Derived([1,2,3], positive="FFFFFFFFFFFFFFFFFFFFFFFF")
     print ModelBase.AllModelInfo()

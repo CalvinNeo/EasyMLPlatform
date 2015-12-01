@@ -23,6 +23,7 @@ class LogisticRegression:
         self.alpha = alpha
         self.maxiter = maxiter
         self.weights = np.ones((len(self.dataset.head),1))
+
     def Regress(self):
         data = np.matrix([item[:self.classfeatureindex] + item[self.classfeatureindex+1:] + [1] if self.classfeatureindex > -1 else item[:len(item)-1] + [1] for item in self.dataset.items])
         t = np.matrix([item[self.classfeatureindex] for item in self.dataset.items]).T
@@ -32,10 +33,12 @@ class LogisticRegression:
             a = self.sigmoid(np.dot(data, self.weights))
             e = t - a
             self.weights += self.alpha * np.dot(data.T, e)
+
     def Classify(self, test):
         p = np.matrix(test + [1] )
         print self.sigmoid(np.dot(p , self.weights))
         return 1.0 if self.sigmoid(np.dot(p, self.weights)) > 0.5 else 0.0
+
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):
         if head == 'water':
@@ -47,6 +50,7 @@ if __name__ == '__main__':
                 return 1.0
             else:
                 return 0.0
+                
     ld = datasets.localdata.LocalData(datamapper = my_mapper)
     ld.ReadString(open("dat_cls.txt","r").read(),True)
     dt = LogisticRegression(ld, -1, maxiter = 100, alpha = 0.01)

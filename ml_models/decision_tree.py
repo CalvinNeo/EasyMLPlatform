@@ -12,12 +12,12 @@ import json
 import pickle
 
 class DecisionTree(ModelBase):
-    def __init__(self, dataset):
+    def __init__(self, dataset, *args, **kwargs):
         '''
             dataset: (datasets.localdata) 
             classfeatureindex: index of the column which defines the feature in dataset 
         '''
-        ModelBase.__init__(self, dataset, 'CLASSIFY')
+        ModelBase.__init__(self, dataset, 'CLASSIFY', *args, **kwargs)
         self.Test = self.Classify
         self.tree = {}
 

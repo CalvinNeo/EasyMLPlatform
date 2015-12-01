@@ -60,19 +60,10 @@ def ManhattanDist(vec1, vec2):
         pass
         
 class Assessment:
-    def __init__(self, model, dataset, inputs):
+    def __init__(self, model, dataset):
         self.model = model
         self.dataset = dataset
-        self.inputs = inp
         self.TP, self.TN, self.FP, self.FN = 0, 0, 0, 0
-        if 'Positive' in kwargs.keys() and kwargs['Positive'] != None:
-            self.Positive = kwargs['Positive']
-        else:
-            self.Positive = 1        
-        if 'Negative' in kwargs.keys() and kwargs['Negative'] != None:
-            self.Negative = kwargs['Negative']
-        else:
-            self.Negative = -1
 
     def TFPN(self):
         '''
@@ -81,8 +72,20 @@ class Assessment:
         Correct Prediction      TP         TN
         Wrong Prediction        FP         FN
         '''
-        for inp in self.inputs:
+        self.TP, self.TN, self.FP, self.FN = 0, 0, 0, 0
+        for inp in self.dataset.Iter():
             a = self.model.Test(inp)
+            t = self.model.T(inp)
+            jugdepositive = lambda x: True if x >= (self.model.Positive + self.model.Negative) / 2 else False
+            ja, jt = jugdepositive(a), jugdepositive(t)
+            if ja == True and jt == True:
+                self.TP += 1
+            elif ja == True and jt == False:
+                self.FP += 1
+            elif ja == False and jt == True:
+                self.FN += 1
+            elif ja == False and jt == False:
+                self.TN += 1
 
     def MeanSquare(self):
         '''
