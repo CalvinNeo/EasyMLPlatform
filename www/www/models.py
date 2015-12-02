@@ -177,12 +177,17 @@ class OnlineDataset(models.Model):
 class MLModel(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 20)
-    modeltype = models.CharField(max_length = 32)
     '''
         INITED
         TRAINING
         TRAINED
     '''
+    ModelTypeChoices = (
+        ('INITED', 'INITED'),
+        ('TRAINING', 'TRAINING'),
+        ('TRAINED', 'TRAINED'),
+    )
+    modeltype = models.CharField(max_length = 32, choices = ModelTypeChoices)    
     modelstatus = models.CharField(max_length = 32)
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 

@@ -20,9 +20,9 @@
 			<td>{{dataset.location}}</td>
 			<td>{{dataset.renewstrategy}}</td>
 		{% if operation %}
-			<td><a href="javascript:void(0)" onclick="deleteOLDataset({{dataset.id}})">DELETE</a></td>
-			<td><a href="javascript:void(0)" onclick="dumpOLDataset({{dataset.id}})">LOCALIZE</a></td>
-			<td><a href="javascript:void(0)" onclick="trainOLDataset({{dataset.id}})">TRAIN</a></td>
+			<td><a href="javascript:void(0)" onclick="deleteOLDataset({{dataset.id}})" class="label label-important">DELETE</a></td>
+			<td><a href="javascript:void(0)" onclick="dumpOLDataset({{dataset.id}})" class="label">LOCALIZE</a></td>
+			<td><a href="javascript:void(0)" onclick="trainOLDataset({{dataset.id}})" class="label">TRAIN</a></td>
 		{% endif %}
 	</tr>
 {% endfor%}

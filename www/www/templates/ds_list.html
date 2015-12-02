@@ -18,9 +18,9 @@
 		{% endif %}
 		<td><a href="javascript:void(0)" onclick="showDataset({{dataset.id}})">{{dataset.name}}</a></td><td>{{dataset.filetype}}</td><td>{{dataset.head}}</td>
 		{% if operation %}
-			<td><a href="javascript:void(0)" onclick="deleteDataset({{dataset.id}})">DELETE</a></td>
-			<td><a href="javascript:void(0)" onclick="downloadDataset({{dataset.id}})">DOWNLOAD</a></td>
-			<td><a href="javascript:void(0)" onclick="trainDataset({{dataset.id}})">TRAIN</a></td>
+			<td><a href="javascript:void(0)" onclick="deleteDataset({{dataset.id}})" class="label label-important">DELETE</a></td>
+			<td><a href="javascript:void(0)" onclick="downloadDataset({{dataset.id}})" class="label">DOWNLOAD</a></td>
+			<td><a href="javascript:void(0)" onclick="trainDataset({{dataset.id}})" class="label">TRAIN</a></td>
 		{% endif %}
 	</tr>
 {% endfor%}

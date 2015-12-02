@@ -10,60 +10,13 @@ import sys
 from collections import defaultdict, namedtuple
 import itertools
 
-def L0(vec):
-    '''
-        count of non-zero elements of a vector
-    '''
-    if type(vec).__name__ in ['matrix','ndarray']:
-        return np.sum(np.vectorize(lambda n:0 if n==0.0 else 1)(vec))
-    else:
-        return np.sum(np.vectorize(lambda n:0 if n==0.0 else 1)(np.matrix(vec)))
-
-def L1(vec):
-    '''
-        sum(abs(for each elements in a vector))
-    '''
-    if type(vec).__name__ in ['matrix','ndarray']:
-        return np.sum(np.vectorize(lambda n:abs(n))(vec))
-    else:
-        return np.sum(np.vectorize(lambda n:abs(n))(np.matrix(vec)))
-
-def L2(vec):
-    '''
-        sqrt(sigma(square each elements))
-    '''
-    if type(vec).__name__ in ['matrix','ndarray']:
-        return np.sum(np.vectorize(lambda n:n**2)(vec))**0.5
-    else:
-        return np.sum(np.vectorize(lambda n:n**2)(np.matrix(vec)))**0.5
-
-def EuclideanDist(vec1, vec2):
-    '''
-        Euclidean Distance:
-            sqrt(sigma((vec1[i] - vec2[i]) ^ 2))
-    '''
-    if type(vec1).__name__ in ['matrix','ndarray']:
-        r = vec1-vec2
-        return np.trace(np.dot(r,r.T))**0.5
-    else:
-        r = np.matrix(vec1) - np.matrix(vec2)
-        return np.trace(np.dot(r,r.T))**0.5
-
-def ManhattanDist(vec1, vec2):
-    '''
-        ManhattanDist Distance:
-            sigma(abs(vec1[i] - vec2[i]))
-    '''
-    if type(vec1).__name__ in ['matrix','ndarray']:
-        pass
-    else:
-        pass
-        
+       
 class Assessment:
     def __init__(self, model, dataset):
         self.model = model
         self.dataset = dataset
         self.TP, self.TN, self.FP, self.FN = 0, 0, 0, 0
+        self.Losses = [0.0] * self.dataset.Length()
 
     def TFPN(self):
         '''
@@ -87,10 +40,17 @@ class Assessment:
             elif ja == False and jt == False:
                 self.TN += 1
 
-    def MeanSquare(self):
+    def Loss(self):
         '''
         Regress Judge
         '''
+        self.Losses, index = [0.0] * self.dataset.Length(), 0
+        for inp in self.dataset.Iter():
+            a = self.model.Test(inp)
+            t = self.model.T(inp)
+            loss = self.model.Loss(t, a)
+            self.Losses[index] = loss
+            index += 1
 
     def P(self):
         return self.TP / (self.TP + self.FP)

@@ -24,12 +24,109 @@ class ModelBase:
             self.classfeatureindex = kwargs['classfeatureindex']
         else:
             self.classfeatureindex = self.dataset.classfeatureindex
+        if 'loss' in kwargs.keys() and kwargs['loss'] != None:
+            self.Loss = kwargs['loss']
+        else:
+            self.Loss = ModelBase.QuadLoss
 
     def Test(self, inp):
         return inp
 
     def T(self, inp):
         return inp[classfeatureindex]
+
+    @staticmethod
+    def QuadLoss(t, a):
+        '''
+            Quadratic Loss Function:
+            L(Y, f(X)) = (Y - f(X))^2
+        '''
+        if type(t).__name__ in ['matrix','ndarray']:
+            r = t-a
+        else:
+            r = np.matrix(t) - np.matrix(a)
+        return np.dot(r,r.T)
+
+    @staticmethod
+    def BinLoss(t, a):
+        '''
+            0-1 Loss Function:
+            L(Y, f(X)) = 1 if Y == f(X) else 0
+        '''
+        if type(t).__name__ in ['matrix','ndarray']:
+            r = t-a
+        else:
+            r = np.matrix(t) - np.matrix(a)
+        return 1 if np.sum(np.vectorize(lambda n:0 if n==0.0 else 1)(vec)) == 0.0 else 0
+
+    @staticmethod
+    def AbsLoss(t, a):
+        '''
+            Absolute Loss Function:
+            L(Y, f(X)) = Abs( Y - f(X) )
+        '''
+        pass
+
+    @staticmethod
+    def LogLoss(t, a):
+        '''
+            Log-likelihood Loss Function:
+        '''
+        pass
+
+    @staticmethod
+    def L0(vec):
+        '''
+            count of non-zero elements of a vector
+        '''
+        if type(vec).__name__ in ['matrix','ndarray']:
+            return np.sum(np.vectorize(lambda n:0 if n==0.0 else 1)(vec))
+        else:
+            return np.sum(np.vectorize(lambda n:0 if n==0.0 else 1)(np.matrix(vec)))
+
+    @staticmethod
+    def L1(vec):
+        '''
+            sum(abs(for each elements in a vector))
+        '''
+        if type(vec).__name__ in ['matrix','ndarray']:
+            return np.sum(np.vectorize(lambda n:abs(n))(vec))
+        else:
+            return np.sum(np.vectorize(lambda n:abs(n))(np.matrix(vec)))
+
+    @staticmethod
+    def L2(vec):
+        '''
+            sqrt(sigma(square each elements))
+        '''
+        if type(vec).__name__ in ['matrix','ndarray']:
+            return np.sum(np.vectorize(lambda n:n**2)(vec))**0.5
+        else:
+            return np.sum(np.vectorize(lambda n:n**2)(np.matrix(vec)))**0.5
+
+    @staticmethod
+    def EuclideanDist(vec1, vec2):
+        '''
+            Euclidean Distance:
+                sqrt(sigma((vec1[i] - vec2[i]) ^ 2))
+        '''
+        if type(vec1).__name__ in ['matrix','ndarray']:
+            r = vec1-vec2
+            return np.trace(np.dot(r,r.T))**0.5
+        else:
+            r = np.matrix(vec1) - np.matrix(vec2)
+            return np.trace(np.dot(r,r.T))**0.5
+
+    @staticmethod
+    def ManhattanDist(vec1, vec2):
+        '''
+            ManhattanDist Distance:
+                sigma(abs(vec1[i] - vec2[i]))
+        '''
+        if type(vec1).__name__ in ['matrix','ndarray']:
+            pass
+        else:
+            pass
 
     @staticmethod
     def AllModelInfo():

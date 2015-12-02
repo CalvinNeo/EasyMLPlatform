@@ -26,6 +26,8 @@ def api(request, operation = "", *args, **kwargs):
         return HttpResponse(OnlineDataset.DeleteDataset(unicodedatasetindex=request.GET.get('datasetindex')))
     elif operation == 'onlinedataset_dump':
         return HttpResponse(OnlineDataset.DumpDataset(unicodedatasetindex=request.GET.get('datasetindex')))
+    elif operation == 'model_view':
+        return HttpResponse(MLModel.GetModels(unicodedatasetindex=request.GET.get('modelindex')))
     else:
         return HttpResponse("")
 
@@ -59,6 +61,7 @@ def index(request, operation = "", *args, **kwargs):
          ,'302':render(request,"302.html",{'url':request.GET.get('url')
             ,'time':0 if request.GET.get('time')==None else request.GET.get('time')
             })
+         ,'':render(request,"index.html")
         }[operation.decode('utf8')]
     except KeyError:
         #form action

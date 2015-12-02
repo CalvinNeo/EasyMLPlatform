@@ -2,11 +2,11 @@
 	{% csrf_token %}
 
 	<!-- Model -->
-
+	<input name="actiontype" type="hidden" ng-model="actiontype"></input>
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
 			<p><label for="name">Name Your Model</label>
-				<input type="text" name="name" class="form-control" ng-model="formData.name" ng-minlength=1 ng-maxlength=20 required></input>
+				<input type="text" name="name" class="form-control" ng-model="modelForm.name" ng-minlength=1 ng-maxlength=20 required></input>
 				<div class="error" ng-show="newForm.name.$dirty && newForm.name.$invalid">
 					<small class="error text-danger" ng-show="newForm.name.$error.required"> Name Required </small>
 				</div>
@@ -15,7 +15,7 @@
 		<div class="col-md-6 npnm" >
 			<p><label for="modeltype">Prototype</label>
 			<input id="modeltype" type="text" class="form-control" data-provide="typeahead" name="modeltype" 
-				 autocomplete="off" /></p>
+				 autocomplete="off" ng-model="modelForm.modeltype" /></p>
 		</div>
 	</div>
 	<hr/>
@@ -24,7 +24,7 @@
 		{% include 'ds_list.html' %}
 	</div>
 	<hr/>
-	<input type="submit" class="btn btn-success btn-lg btn-block" value="OK">
+	<input type="submit" class="btn btn-success btn-block" value="{% templatetag openvariable %} {true:'Create New Model', false:'Modify This Model'}[actiontype=='new'] {% templatetag closevariable %}">
 </form>
 <script>
 $("#modeltype").typeahead({

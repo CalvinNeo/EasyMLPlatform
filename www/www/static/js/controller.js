@@ -65,6 +65,14 @@ function switchDatasetController($scope, $http, $location){
 			$location.path('/online')
 		}
 	}
+	$scope.actiontype = 'new'
+	$scope.setactiontype = function(x){
+		if (x == 'new'){
+			$scope.datatype = 'new'
+		}else{
+			$scope.datatype = 'change'
+		}
+	}
 	$scope.uploadFormShow = function(){
 		return $scope.datatype == "file"
 	}
@@ -75,5 +83,26 @@ function switchDatasetController($scope, $http, $location){
 	$scope.uploadForm = {}
 }
 function newModelController($scope, $http){
-
+	$scope.actiontype = 'new'
+	$scope.submitbutton = 'Create New Model'
+	$scope.modelForm = {}
+	$scope.setactiontype = function(x){
+		if (x == 'new'){
+			$scope.actiontype = 'new'
+			$scope.submitbutton = 'Create New Model'
+		}else{
+			$scope.actiontype = 'change'
+			$scope.submitbutton = 'Modify This Model'
+		}
+	}
+	$scope.updateModel = function(modelindex){
+		$scope.setactiontype('change')
+		$.ajax({
+			url : '/api/model_view?modelindex='+ modelindex
+			,async : true
+			,success : function (data, textStatus) {
+				$scope.modelForm['name'] = data['name']
+			}
+		})
+	}
 }

@@ -1,0 +1,47 @@
+{% include 'header.html' %}
+
+<script>
+	function showDataset(datasetindex){
+		$("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
+	}
+	function downloadDataset(datasetindex){
+
+	}
+	function deleteDataset(datasetindex){
+		$.ajax({
+			url : '/api/dataset_delete?datasetindex='+datasetindex
+			,async : false
+			,success : function (data, textStatus) {
+				location.reload(true)
+				}
+			})
+	}
+	function trainDataset(datasetindex){
+		
+	}
+	function showOLDataset(datasetindex){
+		$("#datasetviewframe").attr("src","/index/olds_view?datasetindex="+datasetindex)
+	}
+	function deleteOLDataset(datasetindex){
+		$.ajax({
+			url : '/api/oldataset_delete?datasetindex='+datasetindex
+			,async : false
+			,success : function (data, textStatus) {
+				location.reload(true)
+				}
+			})
+	}
+	function dumpOLDataset(datasetindex){
+		$.ajax({
+			url : '/api/onlinedataset_dump?datasetindex='+datasetindex
+			,async : false
+			,success : function (data, textStatus) {
+				location.reload(true)
+				}
+			})
+	}
+	function trainOLDataset(datasetindex){
+		
+	}
+</script>
+{% include 'footer.html' %}
