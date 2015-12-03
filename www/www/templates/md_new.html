@@ -1,4 +1,4 @@
-<form method='post' enctype="multipart/form-data" action="{% url 'index' 'md_new' %}" ng-controller="newModelController" name="newForm">
+<form method='post' enctype="multipart/form-data" action="{% url 'index' 'md_new' %}" name="newForm">
 	{% csrf_token %}
 
 	<!-- Model -->
@@ -23,8 +23,15 @@
 	<div>
 		{% include 'ds_list.html' %}
 	</div>
-	<hr/>
-	<input type="submit" class="btn btn-success btn-block" value="{% templatetag openvariable %} {true:'Create New Model', false:'Modify This Model'}[actiontype=='new'] {% templatetag closevariable %}">
+	<hr/>	
+	<div class="container-fluid npnm" >
+		<div class="col-md-6 npnm" >
+			<input type="submit" class="btn btn-success btn-block" value="{% templatetag openvariable %} {true:'Create New Model', false:'Modify This Model'}[actiontype=='new'] {% templatetag closevariable %}">
+		</div>
+		<div class="col-md-6 npnm" >
+			<input type="button" class="btn btn-info btn-block" value="Reset" ng-click="setactiontype('new')">
+		</div>
+	</div>
 </form>
 <script>
 $("#modeltype").typeahead({

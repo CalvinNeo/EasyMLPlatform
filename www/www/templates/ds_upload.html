@@ -37,7 +37,17 @@
 		</div>
 	</div>
 	<hr/>
-	<input type="submit" class="btn btn-success btn-block" value="Upload">
+	
+	<div class="container-fluid npnm" >
+		<div class="col-md-6 npnm" >
+			<input type="submit" class="btn btn-success btn-block" value="{% templatetag openvariable %} {true:'Upload Dataset', false:'Modify Dataset'}[uploadactiontype=='new'] {% templatetag closevariable %}">
+		</div>
+		<div class="col-md-6 npnm" >
+			<input type="button" class="btn btn-info btn-block" value="Reset" ng-click="setuploadactiontype('new')">
+		</div>
+	</div>
+
+	
 </form>
 
 

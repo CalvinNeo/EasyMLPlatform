@@ -245,6 +245,14 @@ class MLModel(models.Model):
     def __unicode__(self):
         return "#{}: ({}) {} @ ".format(self.id,self.modeltype,self.name)
 
+    def __repr__(self):
+        return  "{{ 'id':{}, 'modeltype':'{}', 'name':'{}' }}".format( str(self.id), str(self.modeltype), str(self.name) ) 
+
+        # return "#{}: ({}) {} @ ".format(self.id,self.modeltype,self.name)
+
+    # def __repr__(self):
+    #     return "{ 'id':{}, 'modeltype':{}, 'name':{} }".format(self.id, self.modeltype, self.name)
+
 class TrainingTask(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 20)

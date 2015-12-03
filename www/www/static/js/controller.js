@@ -65,7 +65,6 @@ function switchDatasetController($scope, $http, $location){
 			$location.path('/online')
 		}
 	}
-	$scope.actiontype = 'new'
 	$scope.setactiontype = function(x){
 		if (x == 'new'){
 			$scope.datatype = 'new'
@@ -81,28 +80,58 @@ function switchDatasetController($scope, $http, $location){
 	}
 	$scope.onlineForm = {}
 	$scope.uploadForm = {}
+	$scope.uploadactiontype = 'new'
+	$scope.onlineactiontype = 'new'
+	$scope.setuploadactiontype = function(x){
+		if (x == 'new'){
+			$scope.uploadForm = {}
+			$scope.uploadactiontype = 'new'
+		}else{
+			$scope.uploadactiontype = 'change'
+		}
+	}
+	$scope.setonlineactiontype = function(x){
+		if (x == 'new'){
+			$scope.onlineForm = {}
+			$scope.onlineactiontype = 'new'
+		}else{
+			$scope.onlineactiontype = 'change'
+		}
+	}
 }
 function newModelController($scope, $http){
 	$scope.actiontype = 'new'
-	$scope.submitbutton = 'Create New Model'
 	$scope.modelForm = {}
 	$scope.setactiontype = function(x){
 		if (x == 'new'){
+			$scope.modelForm = {}
 			$scope.actiontype = 'new'
-			$scope.submitbutton = 'Create New Model'
 		}else{
 			$scope.actiontype = 'change'
-			$scope.submitbutton = 'Modify This Model'
 		}
 	}
 	$scope.updateModel = function(modelindex){
 		$scope.setactiontype('change')
 		$.ajax({
 			url : '/api/model_view?modelindex='+ modelindex
-			,async : true
+			,async : false
 			,success : function (data, textStatus) {
-				$scope.modelForm['name'] = data['name']
+				// data = jQuery.parseJSON(data)
+				data = eval( "(" + data + ")" )
+				$scope.modelForm['name'] = data.name
+				$scope.modelForm['modeltype'] = data.modeltype
 			}
 		})
 	}
+	$scope.showModel = function(modelindex){
+		$scope.updateModel(modelindex)
+		$("#modelviewframe").attr("src","/index/md_view?modelindex="+modelindex)
+	}
+	$scope.downloadModel = function(modelindex){
+		
+	}
+	$scope.deleteModel = function(modelindex){
+
+	}
+
 }

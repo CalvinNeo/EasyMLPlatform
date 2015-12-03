@@ -1,12 +1,14 @@
 #coding:utf8
+
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.shortcuts import render
-from www.forms import *
-from www.models import *
 import MySQLdb
+import json
 
 import datasets.localdata
+from www.forms import *
+from www.models import *
 
 # def first_page(request):
 #     db = MySQLdb.connect(user='root', db='mlplatform', passwd='80868086', host='localhost')
@@ -27,7 +29,9 @@ def api(request, operation = "", *args, **kwargs):
     elif operation == 'onlinedataset_dump':
         return HttpResponse(OnlineDataset.DumpDataset(unicodedatasetindex=request.GET.get('datasetindex')))
     elif operation == 'model_view':
-        return HttpResponse(MLModel.GetModels(unicodedatasetindex=request.GET.get('modelindex')))
+        pass
+        # print "++++++++++++++++++++++++++++++API HITTED",json.dumps(repr(MLModel.ViewModel(unicodemodelindex=request.GET.get('modelindex'))))
+        return HttpResponse( repr(MLModel.ViewModel(unicodemodelindex=request.GET.get('modelindex'))) )
     else:
         return HttpResponse("")
 

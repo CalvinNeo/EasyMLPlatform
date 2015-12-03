@@ -1,8 +1,8 @@
 {% include 'header.html' %}
 
-<div class="container-fluid">
+<div class="container-fluid" ng-controller="newModelController" >
 	<h3>New Training Task</h3>
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<p class="lead"> Model List</p>
 		<div>
 			{% include 'md_list.html' %}
@@ -12,7 +12,7 @@
 			{% include 'md_new.html' %}
 		</div>
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-8">
 
 	</div>
 </div>
@@ -21,18 +21,7 @@
 	$(function(){
 		$("#modelnewframe").attr("src","/index/md_new")
 	})
-	function showModel(modelindex){
-		$("#modelviewframe").attr("src","/index/md_view?modelindex="+modelindex)
-	}
-	function downloadModel(modelindex){
-		
-	}
-	function deleteModel(modelindex){
 
-	}
-	function updateModel(modelindex){
-
-	}
 </script>
 {% include 'footer.html' %}
 <!--
