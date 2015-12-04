@@ -29,9 +29,12 @@ def api(request, operation = "", *args, **kwargs):
     elif operation == 'onlinedataset_dump':
         return HttpResponse(OnlineDataset.DumpDataset(unicodedatasetindex=request.GET.get('datasetindex')))
     elif operation == 'model_view':
-        pass
-        # print "++++++++++++++++++++++++++++++API HITTED",json.dumps(repr(MLModel.ViewModel(unicodemodelindex=request.GET.get('modelindex'))))
         return HttpResponse( repr(MLModel.ViewModel(unicodemodelindex=request.GET.get('modelindex'))) )
+    elif operation == 'dataset_view':
+        print "############################################################",repr(Dataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex')))
+        return HttpResponse( repr(Dataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex'))) )
+    elif operation == 'oldataset_view':
+        return HttpResponse( repr(OnlineDataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex'))) )
     else:
         return HttpResponse("")
 

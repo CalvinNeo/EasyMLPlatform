@@ -45,6 +45,12 @@ class Dataset(models.Model):
     def __unicode__(self):
         return "#{}: ({}) {} @ {} attr_delim: {} record_delim: {}".format(self.id,self.filetype,self.name,self.path,self.attr_delim,self.record_delim)
 
+    def __repr__(self):
+        return  "{{ 'id':{}, 'name':'{}', 'path':'{}' , 'filetype':'{}', 'head':'{}', \
+                'attr_delim':'{}', 'record_delim':'{}', 'hashead':'{}' }}" \
+            .format( str(self.id), str(self.name), str(self.path), str(self.filetype), str(self.head), 
+                str(self.attr_delim), str(self.record_delim) , str(self.hashead))
+            
     @staticmethod
     def GetDatasets(pageindex = 0, max_item = 10):
         l = len(Dataset.objects.all())
@@ -55,7 +61,23 @@ class Dataset(models.Model):
                 return Dataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
         else:
             return []
-            
+    
+    @staticmethod
+    def GetDataset(unicodedatasetindex = None):
+        if unicodedatasetindex != None:
+            #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
+            datasetindex = int(unicodedatasetindex)
+            if datasetindex >= 0:
+                try:
+                    dsinfo = Dataset.objects.get(id = datasetindex)
+                    #open local dataset
+                    lcdt = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data))
+                    lcdt.ReadString(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+                    return {'info':dsinfo, 'view':lcdt}
+                except:
+                    return None
+        return None
+
     @staticmethod
     def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
         if unicodedatasetindex != None:
@@ -102,17 +124,39 @@ class OnlineDataset(models.Model):
     def __unicode__(self):
         return "#{}: {} @ {} location: {} search: {}".format(self.id,self.name,self.url,self.location,self.search)
 
+    def __repr__(self):
+        return  "{{ 'id':{}, 'name':'{}', 'head':'{}' , 'url':'{}', 'location':'{}', \
+                'search':'{}', 'renewstrategy':'{}', 'hashead':'{}' }}" \
+            .format( str(self.id), str(self.name), str(self.head), str(self.url), str(self.location), 
+                str(self.search), str(self.renewstrategy) , str(self.hashead))
+
     @staticmethod
     def GetDatasets(pageindex = 0, max_item = 10):
         l = len(OnlineDataset.objects.all())
         if l > 0:
             if max_item == -1:
-                return Dataset.objects.all()
+                return OnlineDataset.objects.all()
             else:
                 return OnlineDataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
         else:
             return []
-            
+
+    @staticmethod
+    def GetDataset(unicodedatasetindex = None):
+        if unicodedatasetindex != None:
+            #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
+            datasetindex = int(unicodedatasetindex)
+            if datasetindex >= 0:
+                try:
+                    olds = OnlineDataset.objects.get(id = datasetindex)
+                    ds = datasets.localdata.LocalData(online = True)
+                    ds.SetURL(olds.url, olds.location, None)
+                    ds.OnlineRenew()
+                    return {'info':dsinfo, 'view':ds}
+                except:
+                    return None
+        return None
+
     @staticmethod
     def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
         if unicodedatasetindex != None:

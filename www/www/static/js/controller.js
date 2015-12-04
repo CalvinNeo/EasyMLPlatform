@@ -98,7 +98,87 @@ function switchDatasetController($scope, $http, $location){
 			$scope.onlineactiontype = 'change'
 		}
 	}
+
+	$scope.showDataset = function(datasetindex){
+		$scope.updateDataset(datasetindex)
+		$("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
+	}
+	$scope.downloadDataset = function(datasetindex){
+
+	}
+	$scope.deleteDataset = function(datasetindex){
+		$.ajax({
+			url : '/api/dataset_delete?datasetindex='+datasetindex
+			,async : false
+			,success : function (data, textStatus) {
+				location.reload(true)
+				}
+			})
+	}
+	$scope.trainDataset = function(datasetindex){
+		
+	}
+	$scope.updateDataset = function(datasetindex){
+		$scope.setuploadactiontype('change')
+		$.ajax({
+			url : '/api/dataset_view?datasetindex='+ datasetindex
+			,async : false
+			,success : function (data, textStatus) {
+				// data = jQuery.parseJSON(data)
+				data = eval( "(" + data + ")" )
+				$scope.uploadForm['name'] = data.name
+				$scope.uploadForm['hashead'] = data.hashead
+				$scope.uploadForm['attr_delim'] = data.attr_delim
+				$scope.uploadForm['record_delim'] = data.record_delim
+				$scope.uploadForm['head'] = data.head
+			}
+		})
+	}
+
+	$scope.showOLDataset = function(datasetindex){
+		$("#datasetviewframe").attr("src","/index/olds_view?datasetindex="+datasetindex)
+	}
+	$scope.deleteOLDataset = function(datasetindex){
+		$.ajax({
+			url : '/api/oldataset_delete?datasetindex='+datasetindex
+			,async : false
+			,success : function (data, textStatus) {
+				location.reload(true)
+				}
+			})
+	}
+	$scope.dumpOLDataset = function(datasetindex){
+		$.ajax({
+			url : '/api/onlinedataset_dump?datasetindex='+datasetindex
+			,async : false
+			,success : function (data, textStatus) {
+				location.reload(true)
+				}
+			})
+	}
+	$scope.trainOLDataset = function(datasetindex){
+		
+	}
+	$scope.updateOLDataset = function(datasetindex){
+		$scope.setonlineactiontype('change')
+		$.ajax({
+			url : '/api/oldataset_view?datasetindex='+ datasetindex
+			,async : false
+			,success : function (data, textStatus) {
+				// data = jQuery.parseJSON(data)
+				data = eval( "(" + data + ")" )
+				$scope.onlineForm['name'] = data.name
+				$scope.onlineForm['url'] = data.url
+				$scope.onlineForm['location'] = data.location
+				$scope.onlineForm['search'] = data.search
+				$scope.onlineForm['renew'] = data.renew
+				$scope.onlineForm['hashead'] = data.hashead
+				$scope.onlineForm['head'] = data.head
+			}
+		})
+	}
 }
+
 function newModelController($scope, $http){
 	$scope.actiontype = 'new'
 	$scope.modelForm = {}
