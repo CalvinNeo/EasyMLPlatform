@@ -43,6 +43,10 @@ class Dataset(models.Model):
         db_table = 'dataset'
 
     def __unicode__(self):
+        return  "{{ 'id':{}, 'name':'{}', 'path':'{}' , 'filetype':'{}', 'head':'{}', \
+                'attr_delim':'{}', 'record_delim':'{}', 'hashead':'{}' }}" \
+            .format( str(self.id), str(self.name), str(self.path), str(self.filetype), str(self.head), 
+                str(self.attr_delim), str(self.record_delim) , str(self.hashead))        
         return "#{}: ({}) {} @ {} attr_delim: {} record_delim: {}".format(self.id,self.filetype,self.name,self.path,self.attr_delim,self.record_delim)
 
     def __repr__(self):
@@ -50,7 +54,7 @@ class Dataset(models.Model):
                 'attr_delim':'{}', 'record_delim':'{}', 'hashead':'{}' }}" \
             .format( str(self.id), str(self.name), str(self.path), str(self.filetype), str(self.head), 
                 str(self.attr_delim), str(self.record_delim) , str(self.hashead))
-            
+
     @staticmethod
     def GetDatasets(pageindex = 0, max_item = 10):
         l = len(Dataset.objects.all())
@@ -122,6 +126,10 @@ class OnlineDataset(models.Model):
         db_table = 'onlinefield'
 
     def __unicode__(self):
+        return  "{{ 'id':{}, 'name':'{}', 'head':'{}' , 'url':'{}', 'location':'{}', \
+                'search':'{}', 'renewstrategy':'{}', 'hashead':'{}' }}" \
+            .format( str(self.id), str(self.name), str(self.head), str(self.url), str(self.location), 
+                str(self.search), str(self.renewstrategy) , str(self.hashead))
         return "#{}: {} @ {} location: {} search: {}".format(self.id,self.name,self.url,self.location,self.search)
 
     def __repr__(self):
@@ -287,6 +295,8 @@ class MLModel(models.Model):
         return 'false'
 
     def __unicode__(self):
+        return  "{{ 'id':{}, 'modeltype':'{}', 'name':'{}' }}".format( str(self.id), str(self.modeltype), str(self.name) ) 
+        
         return "#{}: ({}) {} @ ".format(self.id,self.modeltype,self.name)
 
     def __repr__(self):

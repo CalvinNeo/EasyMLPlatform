@@ -10,6 +10,12 @@ import crawl
 import parse
 
 class LocalData:
+    def __unicode__(self):
+        return  "{{ 'head':{}, 'items':{}, 'online':'{}' , 'classfeatureindex':{}, 'mode':'{}', \
+                'dstype':'{}' }}" \
+            .format( str(self.head), str(self.items), str(self.online), str(self.classfeatureindex), str(self.mode), 
+                str(self.dstype))
+
     def __init__(self, datamapper = None, *args, **kwargs):
         if 'head' in kwargs.keys() and kwargs['head'] != None:
             self.head = kwargs['head']
