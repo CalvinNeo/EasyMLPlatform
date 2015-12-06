@@ -31,9 +31,9 @@ def api(request, operation = "", *args, **kwargs):
     elif operation == 'model_view':
         return HttpResponse( repr(MLModel.ViewModel(unicodemodelindex=request.GET.get('modelindex'))) )
     elif operation == 'dataset_view':
-        print "############################################################",repr(Dataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex')))
         return HttpResponse( repr(Dataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex'))) )
     elif operation == 'oldataset_view':
+        print "############################################################",repr(Dataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex')))
         return HttpResponse( repr(OnlineDataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex'))) )
     else:
         return HttpResponse("")
@@ -113,10 +113,11 @@ def index(request, operation = "", *args, **kwargs):
                     ds = OnlineDataset()
                     ds.name = str(form.cleaned_data['name'])
                     ds.url = form.cleaned_data['url']
+                    ds.renewstrategy = str(form.cleaned_data['renewstrategy'])
                     ds.head = str(form.cleaned_data['head'])
                     ds.hashead = bool(form.cleaned_data['hashead'])
                     ds.location = 'table' if str(form.cleaned_data['location']) == '' else str(form.cleaned_data['location']).replace('\\n','\n').replace('\\t','\t')
-                    ds.search = '' if str(form.cleaned_data['location']) == '' else str(form.cleaned_data['location']).replace('\\n','\n').replace('\\t','\t')
+                    ds.search = '' if str(form.cleaned_data['search']) == '' else str(form.cleaned_data['search']).replace('\\n','\n').replace('\\t','\t')
                     ds.save()
                     return render(request,"success.html",{'title':'upload online dataset succeed!','description':str(form.cleaned_data['name']).decode('utf8')})
                 else:

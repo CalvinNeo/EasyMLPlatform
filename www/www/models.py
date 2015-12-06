@@ -43,17 +43,15 @@ class Dataset(models.Model):
         db_table = 'dataset'
 
     def __unicode__(self):
-        return  "{{ 'id':{}, 'name':'{}', 'path':'{}' , 'filetype':'{}', 'head':'{}', \
-                'attr_delim':'{}', 'record_delim':'{}', 'hashead':'{}' }}" \
+        return  "{{ 'id':{}, 'name':'{}', 'path':'{}' , 'filetype':'{}', 'head':'{}', 'attr_delim':'{}', 'record_delim':'{}', 'hashead':'{}' }}"\
             .format( str(self.id), str(self.name), str(self.path), str(self.filetype), str(self.head), 
-                str(self.attr_delim), str(self.record_delim) , str(self.hashead))        
+                str(self.attr_delim), str(self.record_delim).replace('\n','\\\\n') , str(self.hashead))        
         return "#{}: ({}) {} @ {} attr_delim: {} record_delim: {}".format(self.id,self.filetype,self.name,self.path,self.attr_delim,self.record_delim)
 
     def __repr__(self):
-        return  "{{ 'id':{}, 'name':'{}', 'path':'{}' , 'filetype':'{}', 'head':'{}', \
-                'attr_delim':'{}', 'record_delim':'{}', 'hashead':'{}' }}" \
+        return  "{{ 'id':{}, 'name':'{}', 'path':'{}' , 'filetype':'{}', 'head':'{}', 'attr_delim':'{}', 'record_delim':'{}', 'hashead':'{}' }}"\
             .format( str(self.id), str(self.name), str(self.path), str(self.filetype), str(self.head), 
-                str(self.attr_delim), str(self.record_delim) , str(self.hashead))
+                str(self.attr_delim), str(self.record_delim).replace('\n','\\\\n') , str(self.hashead))
 
     @staticmethod
     def GetDatasets(pageindex = 0, max_item = 10):
@@ -126,15 +124,13 @@ class OnlineDataset(models.Model):
         db_table = 'onlinefield'
 
     def __unicode__(self):
-        return  "{{ 'id':{}, 'name':'{}', 'head':'{}' , 'url':'{}', 'location':'{}', \
-                'search':'{}', 'renewstrategy':'{}', 'hashead':'{}' }}" \
+        return  "{{ 'id':{}, 'name':'{}', 'head':'{}' , 'url':'{}', 'location':'{}', 'search':'{}', 'renewstrategy':'{}', 'hashead':'{}' }}" \
             .format( str(self.id), str(self.name), str(self.head), str(self.url), str(self.location), 
                 str(self.search), str(self.renewstrategy) , str(self.hashead))
         return "#{}: {} @ {} location: {} search: {}".format(self.id,self.name,self.url,self.location,self.search)
 
     def __repr__(self):
-        return  "{{ 'id':{}, 'name':'{}', 'head':'{}' , 'url':'{}', 'location':'{}', \
-                'search':'{}', 'renewstrategy':'{}', 'hashead':'{}' }}" \
+        return  "{{ 'id':{}, 'name':'{}', 'head':'{}' , 'url':'{}', 'location':'{}', 'search':'{}', 'renewstrategy':'{}', 'hashead':'{}' }}" \
             .format( str(self.id), str(self.name), str(self.head), str(self.url), str(self.location), 
                 str(self.search), str(self.renewstrategy) , str(self.hashead))
 
@@ -157,12 +153,16 @@ class OnlineDataset(models.Model):
             if datasetindex >= 0:
                 try:
                     olds = OnlineDataset.objects.get(id = datasetindex)
+                    print "############################################################",olds
                     ds = datasets.localdata.LocalData(online = True)
-                    ds.SetURL(olds.url, olds.location, None)
-                    ds.OnlineRenew()
-                    return {'info':dsinfo, 'view':ds}
                 except:
                     return None
+                try:
+                    ds.SetURL(olds.url, olds.location, None)
+                    ds.OnlineRenew()
+                    return {'info':olds, 'view':ds}
+                except:
+                    return {'info':olds, 'view':{}}
         return None
 
     @staticmethod

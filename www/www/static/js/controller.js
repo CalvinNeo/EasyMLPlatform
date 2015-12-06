@@ -78,13 +78,12 @@ function switchDatasetController($scope, $http, $location){
 	$scope.onlineShow = function(){
 		return !$scope.uploadFormShow()
 	}
-	$scope.onlineForm = {}
-	$scope.uploadForm = {}
+	$scope.onlineForm = {}//{'olname':'', 'olhashead': false, 'olurl': '', 'ollocation':'', 'olsearch':'', 'olrenew':'', 'olhead':''}
+	$scope.uploadForm = {}//{'dsname':'', 'dshashead': false, 'dsattr_delim': '', 'dsrecord_delim':'', 'dshead':''}
 	$scope.uploadactiontype = 'new'
 	$scope.onlineactiontype = 'new'
 	$scope.setuploadactiontype = function(x){
 		if (x == 'new'){
-			$scope.uploadForm = {}
 			$scope.uploadactiontype = 'new'
 		}else{
 			$scope.uploadactiontype = 'change'
@@ -92,7 +91,6 @@ function switchDatasetController($scope, $http, $location){
 	}
 	$scope.setonlineactiontype = function(x){
 		if (x == 'new'){
-			$scope.onlineForm = {}
 			$scope.onlineactiontype = 'new'
 		}else{
 			$scope.onlineactiontype = 'change'
@@ -124,18 +122,18 @@ function switchDatasetController($scope, $http, $location){
 			url : '/api/dataset_view?datasetindex='+ datasetindex
 			,async : false
 			,success : function (data, textStatus) {
-				// data = jQuery.parseJSON(data)
-				data = eval( "(" + data + ")" )
-				$scope.uploadForm['name'] = data.name
-				$scope.uploadForm['hashead'] = data.hashead
-				$scope.uploadForm['attr_delim'] = data.attr_delim
-				$scope.uploadForm['record_delim'] = data.record_delim
-				$scope.uploadForm['head'] = data.head
+				ndata = eval( "(" + data + ")" )
+				$scope.uploadForm['dsname'] = ndata.info.name
+				$scope.uploadForm['dshashead'] = ndata.info.hashead
+				$scope.uploadForm['dsattr_delim'] = ndata.info.attr_delim
+				$scope.uploadForm['dsrecord_delim'] = ndata.info.record_delim
+				$scope.uploadForm['dshead'] = ndata.info.head
 			}
 		})
 	}
 
 	$scope.showOLDataset = function(datasetindex){
+		$scope.updateOLDataset(datasetindex)
 		$("#datasetviewframe").attr("src","/index/olds_view?datasetindex="+datasetindex)
 	}
 	$scope.deleteOLDataset = function(datasetindex){
@@ -167,13 +165,22 @@ function switchDatasetController($scope, $http, $location){
 			,success : function (data, textStatus) {
 				// data = jQuery.parseJSON(data)
 				data = eval( "(" + data + ")" )
-				$scope.onlineForm['name'] = data.name
-				$scope.onlineForm['url'] = data.url
-				$scope.onlineForm['location'] = data.location
-				$scope.onlineForm['search'] = data.search
-				$scope.onlineForm['renew'] = data.renew
-				$scope.onlineForm['hashead'] = data.hashead
-				$scope.onlineForm['head'] = data.head
+				$scope.onlineForm['olname'] = data.info.name
+				$scope.onlineForm['olurl'] = data.info.url
+				$scope.onlineForm['ollocation'] = data.info.location
+				$scope.onlineForm['olsearch'] = data.info.search
+				$scope.onlineForm['olrenew'] = data.info.renewstrategy
+				$scope.onlineForm['olhashead'] = data.info.hashead
+				$scope.onlineForm['olhead'] = data.info.head
+
+				// $("#olname").val(data.info.name)
+				// $("#olurl").val(data.info.url)
+				// $("#ollocation").val(data.info.location)
+				// $("#olsearch").val(data.info.search)
+				// $("#olrenew").val(data.info.renewstrategy)
+				// $("#olhashead").val(data.info.hashead)
+				// $("#olnolheadame").val(data.info.head)
+
 			}
 		})
 	}

@@ -10,12 +10,6 @@ import crawl
 import parse
 
 class LocalData:
-    def __unicode__(self):
-        return  "{{ 'head':{}, 'items':{}, 'online':'{}' , 'classfeatureindex':{}, 'mode':'{}', \
-                'dstype':'{}' }}" \
-            .format( str(self.head), str(self.items), str(self.online), str(self.classfeatureindex), str(self.mode), 
-                str(self.dstype))
-
     def __init__(self, datamapper = None, *args, **kwargs):
         if 'head' in kwargs.keys() and kwargs['head'] != None:
             self.head = kwargs['head']
@@ -76,15 +70,30 @@ class LocalData:
 
         self.crawl = None
 
-    def __str__(self):
-        return "DATASET: " + str(self.head) + " " + str(self.items) + " " + str(self.classfeatureindex)
-
     def __getitem__(self, i):
         return self.Item(i)
 
     def __len__(self):
         return self.Length()
 
+    def __repr__(self):
+        return  "{{ 'head':{}, 'items':{}, 'online':'{}' , 'classfeatureindex':{}, 'mode':'{}', \
+                'dstype':'{}' }}" \
+            .format( str(self.head), str(self.items), str(self.online), str(self.classfeatureindex), str(self.mode), 
+                str(self.dstype))
+
+    def __unicode__(self):
+        return  "{{ 'head':{}, 'items':{}, 'online':'{}' , 'classfeatureindex':{}, 'mode':'{}', \
+                'dstype':'{}' }}" \
+            .format( str(self.head), str(self.items), str(self.online), str(self.classfeatureindex), str(self.mode), 
+                str(self.dstype))
+
+    def __str__(self):
+        return  "{{ 'head':{}, 'items':{}, 'online':'{}' , 'classfeatureindex':{}, 'mode':'{}', \
+                'dstype':'{}' }}" \
+            .format( str(self.head), str(self.items), str(self.online), str(self.classfeatureindex), str(self.mode), 
+                str(self.dstype))
+            
     def default_datamapper(self, data, colindex, head):
         return parse.parsestr(data, [parse.extendboolean])
 

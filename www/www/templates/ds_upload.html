@@ -4,9 +4,9 @@
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
 			<p><label for="name">Name Your Dataset</label>
-				<input type="text" name="name" class="form-control" ng-model="uploadForm.name" ng-minlength=1 ng-maxlength=20 required></input>
-				<div class="error" ng-show="uploadForm.name.$dirty && uploadForm.name.$invalid">
-					<small class="error text-danger" ng-show="uploadForm.name.$error.required"> Name Required </small>
+				<input type="text" name="name" class="form-control" ng-model="uploadForm.dsname" ng-minlength=1 ng-maxlength=20 required></input>
+				<div class="error" ng-show="uploadForm.dsname.$dirty && uploadForm.dsname.$invalid">
+					<small class="error text-danger" ng-show="uploadForm.dsname.$error.required"> Name Required </small>
 				</div>
 			</p>
 		</div>
@@ -19,21 +19,21 @@
 	<div class="container-fluid npnm" >
 		<div class="col-md-4 npnm" >
 			<label for="hashead">Dataset Header</label>
-			<p><input name="hashead" type="checkbox" class="">Has Head</input></p>
+			<p><input name="hashead" type="checkbox" ng-model="uploadForm.dshashead">Has Head</input></p>
 		</div>
 		<div class="col-md-4 npnm" >
-			<label for="attr_delim">Attribute Delimeter</label>
-			<input name="attr_delim" type="text" class="form-control">
+			<label for="attr_delim" >Attribute Delimeter</label>
+			<input name="attr_delim" type="text" class="form-control" ng-model="uploadForm.dsattr_delim">
 		</div>
 		<div class="col-md-4 npnm" >
 			<label for="record_delim">Record Delimeter</label>
-			<input name="record_delim" type="text" class="form-control">
+			<input name="record_delim" type="text" class="form-control" ng-model="uploadForm.dsrecord_delim">
 		</div>
 	</div>
 	<div class="container-fluid npnm" >
 		<div class="col-md-8 npnm" >
 			<label for="head">Specified Types</label>
-			<input name="head" type="text" class="form-control"></input>
+			<input name="head" type="text" class="form-control" ng-model="uploadForm.dshead"></input>
 		</div>
 	</div>
 	<hr/>

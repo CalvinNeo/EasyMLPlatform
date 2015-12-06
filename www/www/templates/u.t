@@ -1,19 +1,19 @@
-<form method='post' enctype="multipart/form-data" autocomplete=off action="{% url 'index' 'onlinedataset_upload' %}" style="width:100%;"  id="onlineForm" ng-model="onlineForm">
+<form method='post' enctype="multipart/form-data" autocomplete=off action="{% url 'index' 'onlinedataset_upload' %}" style="width:100%;" id="onlineFrom" >
 	{% csrf_token %}
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
 			<p><label for="name">Name Your Online Dataset</label>
-				<input type="text" name="name" class="form-control" ng-model="onlineForm.olname" ng-minlength=1 ng-maxlength=20 required >
-				<div class="error" ng-show="onlineForm.olname.$dirty && onlineForm.olname.$invalid">
-					<small class="error text-danger" ng-show="onlineForm.olname.$error.required"> Name Required </small>
+				<input type="text" name="name" class="form-control" ng-model="onlineFrom.olname" ng-minlength=1 ng-maxlength=20 required id=" olname">
+				<div class="error" ng-show="onlineFrom.olname.$dirty && onlineFrom.olname.$invalid">
+					<small class="error text-danger" ng-show="onlineFrom.olname.$error.required"> Name Required </small>
 				</div>
 			</p>
 		</div>
 		<div class="col-md-6 npnm" >
 			<p><label for="url">URL</label>
-				<input name="url" type="text" class="form-control" ng-pattern="/^((http|https)://)?([\w-]+\.)+[\w-:]+(/[\w- ./?%&=_]*)?$/" required ng-model="onlineForm.olurl" >
-				<div class="error" ng-show="onlineForm.olurl.$dirty && onlineForm.olurl.$invalid">
-					<small class="error text-danger" ng-show="onlineForm.olurl.$error.required"> URL Required </small>
+				<input name="url" type="text" class="form-control" ng-pattern="/^((http|https)://)?([\w-]+\.)+[\w-:]+(/[\w- ./?%&=_]*)?$/" required ng-model="onlineFrom.olurl" id=" olurl">
+				<div class="error" ng-show="onlineFrom.olurl.$dirty && onlineFrom.olurl.$invalid">
+					<small class="error text-danger" ng-show="onlineFrom.olurl.$error.required"> URL Required </small>
 				</div>
 			</p>
 		</div>
@@ -21,27 +21,27 @@
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
 			<label for="location">Table Location (CSS Selector)</label>
-			<input name="location" type="text" class="form-control" ng-model="onlineForm.ollocation" >
+			<input name="location" type="text" class="form-control" ng-model="onlineFrom.ollocation" id="ollocation ">
 		</div>
 		<div class="col-md-6 npnm" >
 			<label for="search">Read</label>
-			<input name="search" type="text" class="form-control" ng-model="onlineForm.olsearch" >
+			<input name="search" type="text" class="form-control" ng-model="onlineFrom.olsearch" id="olsearch ">
 		</div>
 	</div>
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
-			<label for="renewstrategy">Renew Strategy</label>
-			<input name="renewstrategy" type="text" class="form-control" ng-model="onlineForm.olrenew" id="olrenew">
+			<label for="renew">Renew Strategy</label>
+			<input name="renew" type="text" class="form-control" ng-model="onlineFrom.olrenew" id=" olrenew">
 		</div>
 	</div>
 	<div class="container-fluid npnm" >
 		<div class="col-md-4 npnm" >
 			<label for="hashead">Dataset Header</label>
-			<p><input name="hashead" type="checkbox" ng-model="onlineForm.olhashead" >Has Head</input></p>
+			<p><input name="hashead" type="checkbox" ng-model="onlineFrom.olhashead" id=" olhashead">Has Head</input></p>
 		</div>
 		<div class="col-md-8 npnm" >
 			<label for="head">Specified Types</label>
-			<input name="head" type="text" class="form-control" ng-model="onlineForm.olhead" ></input>
+			<input name="head" type="text" class="form-control" ng-model="onlineFrom.olhead" id=" olhead"></input>
 		</div>
 	</div>
 	<hr/>
