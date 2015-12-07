@@ -13,7 +13,7 @@
 {% for model in models %}
 	<tr>
 		{% if select %}
-			<td><input type="checkbox" id="check_{{model.id}}"></input></td>
+			<td><input type="checkbox" id="modelcheck_{{model.id}}"></input></td>
 		{% endif %}
 			<td><a href="javascript:void(0)" ng-click="showModel({{model.id}})" >{{model.name}}</a></td>
 			<td>{{model.modeltype}}</td>

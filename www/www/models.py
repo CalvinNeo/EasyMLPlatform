@@ -311,6 +311,7 @@ class TrainingTask(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 20)
     modeltype = models.CharField(max_length = 32) 
+    createtime = models.DateTimeField(auto_now_add=True)
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
     class Meta:

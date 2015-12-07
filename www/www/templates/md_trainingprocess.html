@@ -1,0 +1,34 @@
+<table class="table table-striped">
+<thead>
+<tr>
+	{% if select %}
+		<td> 
+
+		</td>
+	{% endif %}
+	<td>Task ID</td><td>Type</td><td>Create Time</td><td>Status</td>
+</tr>
+</thead>
+<tbody>
+{% for model in models %}
+	<tr>
+		{% if select %}
+			<td><input type="checkbox" id="taskcheck_{{task.id}}"></input></td>
+		{% endif %}
+			<td><a href="javascript:void(0)" ng-click="showModel({{model.id}})" >{{model.id}}</a></td>
+			<td>{{model.modeltype}}</td>
+			<td>{{model.createtime}}</td>
+			<td>{{model.status}}</td>
+		{% if operation %}
+			<td><a href="javascript:void(0)" ng-click="deleteDataset({{model.id}})" class="label label-important">DELETE</a></td>
+			<td><a href="javascript:void(0)" ng-click="deleteModel({{model.id}})" class="label">DOWNLOAD</a></td>
+		{% endif %}
+	</tr>
+{% endfor%}
+
+</tbody>
+</table>
+
+<script>
+
+</script>
