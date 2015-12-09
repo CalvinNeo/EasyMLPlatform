@@ -42,16 +42,20 @@ def index(request, operation = "", *args, **kwargs):
     print "--------------------index:",operation,request.GET
     #特别注意一点,{}[p]这种选择方式,dict里面是全部求值的
     try:
-        return {'dataset': render(request,"dataset.html",{
+        return {
+        'dataset': render(request,"dataset.html",{
             'datasets':Dataset.GetDatasets()
             ,'oldatasets':OnlineDataset.GetDatasets()
             ,'renewstrategies':OnlineDataset.AllRenewStrategies()
             ,'select':True,'operation':True 
             })
-         ,'models': render(request,"trainmodel.html",{
-            'distributed_modeltypes':MLModel.AllDistributedModels()
+         ,'models': render(request,"trainmodel.html",{            
+            'datasets':Dataset.GetDatasets()
+            ,'oldatasets':OnlineDataset.GetDatasets()
+            ,'distributed_modeltypes':MLModel.AllDistributedModels()
             ,'modeltypes':MLModel.AllModels()
             ,'models': MLModel.GetModels()
+            ,'tasks':TrainingTask.GetTasks()
             ,'select':True,'operation':True
             })
          ,'apply': render(request,"applymodel.html",{

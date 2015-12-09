@@ -6,22 +6,24 @@
 
 		</td>
 	{% endif %}
-	<td>Task ID</td><td>Type</td><td>Create Time</td><td>Status</td>
+	<td>Task ID</td><td>Model Type</td><td>Dataset Type</td><td>Create Time</td><td>Status</td>
 </tr>
 </thead>
 <tbody>
-{% for model in models %}
+{% for task in tasks %}
 	<tr>
 		{% if select %}
 			<td><input type="checkbox" id="taskcheck_{{task.id}}"></input></td>
 		{% endif %}
-			<td><a href="javascript:void(0)" ng-click="showModel({{model.id}})" >{{model.id}}</a></td>
-			<td>{{model.modeltype}}</td>
-			<td>{{model.createtime}}</td>
-			<td>{{model.status}}</td>
+			<td><a href="javascript:void(0)" ng-click="showModel({{model.id}})" >{{task.id}}</a></td>
+			<td>{{task.modelprototype}}</td>
+			<td>{{task.datasetprototype}}</td>
+			<td>{{task.createtime}}</td>
+			<td>{{task.status}}</td>
 		{% if operation %}
-			<td><a href="javascript:void(0)" ng-click="deleteDataset({{model.id}})" class="label label-important">DELETE</a></td>
-			<td><a href="javascript:void(0)" ng-click="deleteModel({{model.id}})" class="label">DOWNLOAD</a></td>
+			<td><a href="javascript:void(0)" ng-click="startTrain({{model.id}})" class="label label-important">START</a></td>
+			<td><a href="javascript:void(0)" ng-click="pauseTrain({{model.id}})" class="label label-important">PAUSE</a></td>
+			<td><a href="javascript:void(0)" ng-click="abortTrain({{model.id}})" class="label label-important">ABORT</a></td>
 		{% endif %}
 	</tr>
 {% endfor%}

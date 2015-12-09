@@ -1,19 +1,21 @@
 {% include 'header.html' %}
 
 <div class="container-fluid" ng-controller="newModelController" >
-	<h3>New Training Task</h3>
 	<div class="col-md-4">
 		<p class="lead"> Model List</p>
 		<div>
 			{% include 'md_list.html' %}
 		</div>
+	</div>
+	<div class="col-md-4">
 		<p class="lead"> New Model </p>
 		<div>
 			{% include 'md_new.html' %}
 		</div>
 	</div>
-	<div class="col-md-8">
-
+	<div class="col-md-4">
+		<p class="lead"> Task List </p>
+		{% include 'md_trainingprocess.html' %}
 	</div>
 </div>
 

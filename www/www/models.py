@@ -38,6 +38,7 @@ class Dataset(models.Model):
     attr_delim = models.CharField(max_length=3)
     record_delim = models.CharField(max_length=3)
     hashead = models.BooleanField(default=True)
+    createtime = models.DateTimeField('create time', auto_now_add=True)
 
     class Meta:
         db_table = 'dataset'
@@ -119,6 +120,7 @@ class OnlineDataset(models.Model):
     search = models.CharField(max_length=1023)
     renewstrategy = models.CharField(max_length=32)
     hashead = models.BooleanField(default=True)
+    createtime = models.DateTimeField('create time', auto_now_add=True)
 
     class Meta:
         db_table = 'onlinefield'
@@ -234,13 +236,14 @@ class MLModel(models.Model):
         TRAINING
         TRAINED
     '''
-    ModelTypeChoices = (
+    ModelStatusChoices = (
         ('INITED', 'INITED'),
         ('TRAINING', 'TRAINING'),
         ('TRAINED', 'TRAINED'),
     )
-    modeltype = models.CharField(max_length = 32, choices = ModelTypeChoices)    
-    modelstatus = models.CharField(max_length = 32)
+    modeltype = models.CharField(max_length = 32)    
+    modelstatus = models.CharField(max_length = 32, choices = ModelStatusChoices)
+    createtime = models.DateTimeField('create time', auto_now_add=True)
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
     class Meta:
@@ -296,7 +299,6 @@ class MLModel(models.Model):
 
     def __unicode__(self):
         return  "{{ 'id':{}, 'modeltype':'{}', 'name':'{}' }}".format( str(self.id), str(self.modeltype), str(self.name) ) 
-        
         return "#{}: ({}) {} @ ".format(self.id,self.modeltype,self.name)
 
     def __repr__(self):
@@ -310,9 +312,39 @@ class MLModel(models.Model):
 class TrainingTask(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 20)
-    modeltype = models.CharField(max_length = 32) 
-    createtime = models.DateTimeField(auto_now_add=True)
+    modelprototype = models.CharField(max_length = 32) 
+    DatasetPrototypeChoices = (
+        ('LOCAL', 'LOCAL'),
+        ('ONLINE', 'ONLINE'),
+    )
+    datasetprototype = models.CharField(max_length = 16, choices = DatasetPrototypeChoices)
+    modelindex = models.IntegerField()
+    datasetindex = models.IntegerField()
+    createtime = models.DateTimeField('create time', auto_now_add=True)
+
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
     class Meta:
         db_table = 'trainingtask'
+
+    @staticmethod
+    def Train(unicodetaskindex):
+        pass
+
+    @staticmethod
+    def GetTasks(pageindex = 0, max_item = 10):
+        l = len(TrainingTask.objects.all())
+        if l > 0:
+            if max_item == -1:
+                return TrainingTask.objects.all()
+            else:
+                return TrainingTask.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
+        else:
+            return []
+
+    @staticmethod
+    def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
+        if unicodedatasetindex != None:
+            #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
+            datasetindex = int(unicodedatasetindex)
+        return None

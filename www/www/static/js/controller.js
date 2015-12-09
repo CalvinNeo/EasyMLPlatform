@@ -65,18 +65,18 @@ function switchDatasetController($scope, $http, $location){
 			$location.path('/online')
 		}
 	}
+	$scope.uploadFormShow = function(){
+		return $scope.datatype == "file"
+	}
+	$scope.onlineShow = function(){
+		return !$scope.uploadFormShow()
+	}
 	$scope.setactiontype = function(x){
 		if (x == 'new'){
 			$scope.datatype = 'new'
 		}else{
 			$scope.datatype = 'change'
 		}
-	}
-	$scope.uploadFormShow = function(){
-		return $scope.datatype == "file"
-	}
-	$scope.onlineShow = function(){
-		return !$scope.uploadFormShow()
 	}
 	$scope.onlineForm = {}//{'olname':'', 'olhashead': false, 'olurl': '', 'ollocation':'', 'olsearch':'', 'olrenew':'', 'olhead':''}
 	$scope.uploadForm = {}//{'dsname':'', 'dshashead': false, 'dsattr_delim': '', 'dsrecord_delim':'', 'dshead':''}
@@ -189,6 +189,20 @@ function switchDatasetController($scope, $http, $location){
 function newModelController($scope, $http){
 	$scope.actiontype = 'new'
 	$scope.modelForm = {}
+	$scope.datatype = 'file'
+	$scope.setdatatype = function(x){
+		if (x == 'file'){
+			$scope.datatype = 'file'
+		}else{
+			$scope.datatype = 'online'
+		}
+	}
+	$scope.uploadFormShow = function(){
+		return $scope.datatype == "file"
+	}
+	$scope.onlineShow = function(){
+		return !$scope.uploadFormShow()
+	}
 	$scope.setactiontype = function(x){
 		if (x == 'new'){
 			$scope.modelForm = {}
