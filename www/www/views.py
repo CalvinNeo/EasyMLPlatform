@@ -33,8 +33,18 @@ def api(request, operation = "", *args, **kwargs):
     elif operation == 'dataset_view':
         return HttpResponse( repr(Dataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex'))) )
     elif operation == 'oldataset_view':
-        print "############################################################",repr(Dataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex')))
         return HttpResponse( repr(OnlineDataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex'))) )
+    elif operation == 'hash_image':
+        imgname = str(request.POST.get('name'))
+        action = str(request.POST.get('id'))
+        if action in ['ROC']:
+            pass
+        elif action in ['Dataset']:
+            pass
+        else action == 'absolute':
+            return HttpResponse("true")
+    elif operation == 'image':
+        pass
     else:
         return HttpResponse("")
 
@@ -43,31 +53,6 @@ def index(request, operation = "", *args, **kwargs):
     #特别注意一点,{}[p]这种选择方式,dict里面是全部求值的
     try:
         return {
-        'dataset': render(request,"dataset.html",{
-            'datasets':Dataset.GetDatasets()
-            ,'oldatasets':OnlineDataset.GetDatasets()
-            ,'renewstrategies':OnlineDataset.AllRenewStrategies()
-            ,'select':True,'operation':True 
-            })
-         ,'models': render(request,"trainmodel.html",{            
-            'datasets':Dataset.GetDatasets()
-            ,'oldatasets':OnlineDataset.GetDatasets()
-            ,'distributed_modeltypes':MLModel.AllDistributedModels()
-            ,'modeltypes':MLModel.AllModels()
-            ,'models': MLModel.GetModels()
-            ,'tasks':TrainingTask.GetTasks()
-            ,'select':True,'operation':True
-            })
-         ,'apply': render(request,"applymodel.html",{
-            'distributed_modeltypes':MLModel.AllDistributedModels()
-            ,'modeltypes':MLModel.AllModels()
-            ,'models': MLModel.GetModels()
-            ,'datasets':Dataset.GetDatasets()
-            ,'oldatasets':OnlineDataset.GetDatasets()
-            ,'select':True,'operation':False
-            })
-         ,'assessment': render(request,"assessmodel.html",{})
-
          #util
          ,'302':render(request,"302.html",{'url':request.GET.get('url')
             ,'time':0 if request.GET.get('time')==None else request.GET.get('time')
@@ -76,7 +61,35 @@ def index(request, operation = "", *args, **kwargs):
         }[operation.decode('utf8')]
     except KeyError:
         #form action
-        if operation == "dataset_upload":
+        if operation == 'dataset':
+            return render(request,"dataset.html",{
+                'datasets':Dataset.GetDatasets()
+                ,'oldatasets':OnlineDataset.GetDatasets()
+                ,'renewstrategies':OnlineDataset.AllRenewStrategies()
+                ,'select':True,'operation':True 
+                })
+        elif operation == 'models':
+            return render(request,"trainmodel.html",{            
+                'datasets':Dataset.GetDatasets()
+                ,'oldatasets':OnlineDataset.GetDatasets()
+                ,'distributed_modeltypes':MLModel.AllDistributedModels()
+                ,'modeltypes':MLModel.AllModels()
+                ,'models': MLModel.GetModels()
+                ,'tasks':TrainingTask.GetTasks()
+                ,'select':True,'operation':True
+                })
+        elif operation == 'apply':
+            return render(request,"applymodel.html",{
+                'distributed_modeltypes':MLModel.AllDistributedModels()
+                ,'modeltypes':MLModel.AllModels()
+                ,'models': MLModel.GetModels()
+                ,'datasets':Dataset.GetDatasets()
+                ,'oldatasets':OnlineDataset.GetDatasets()
+                ,'select':True,'operation':False
+                })
+        elif operation == 'assessment':
+            return render(request,"assessmodel.html",{})
+        elif operation == "dataset_upload":
             if request.method == "POST":
                 form = UploadDatasetForm(request.POST,request.FILES)
                 print "-----------------------------aa"

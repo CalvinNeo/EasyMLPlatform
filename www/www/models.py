@@ -244,6 +244,7 @@ class MLModel(models.Model):
     modeltype = models.CharField(max_length = 32)    
     modelstatus = models.CharField(max_length = 32, choices = ModelStatusChoices)
     createtime = models.DateTimeField('create time', auto_now_add=True)
+    classfeatureindex = models.IntegerField(default = -1)
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
     class Meta:

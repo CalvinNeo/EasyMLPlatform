@@ -18,9 +18,20 @@
 				 autocomplete="off" ng-model="modelForm.modeltype" /></p>
 		</div>
 	</div>
+	<div class="container-fluid npnm" >
+		<div class="col-md-6 npnm" >
+			<p><label for="name">Class</label>
+				<input type="text" name="classfeatureindex" class="form-control" ng-model="modelForm.classfeatureindex"></input>
+			</p>
+		</div>
+		<div class="col-md-6 npnm" >
+
+		</div>
+	</div>
 	<hr/>
 	<!-- Train -->
 	<p><label>Select Dataset</label></p>
+	<div>
 		<ul class="nav nav-tabs">
 			<li ng-class="{true:'active',false:''}[datatype=='file']">
 				<a href="javascript:void(0)" data-toggle="tab" ng-click="setdatatype('file')">LOCAL</a></li>
@@ -36,6 +47,7 @@
 			<p class="lead"> Online Dataset List</p>
 			{% include 'olds_list.html' %}
 		</div>
+	</div>
 	<hr/>	
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >

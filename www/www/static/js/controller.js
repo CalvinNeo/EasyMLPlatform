@@ -236,3 +236,10 @@ function newModelController($scope, $http){
 	}
 
 }
+function applyModelController($scope, $http){
+
+}
+
+function assessModelController($scope, $http){
+
+}
