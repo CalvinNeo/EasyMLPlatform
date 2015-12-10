@@ -1,7 +1,7 @@
 <table class="table table-striped">
 <thead>
 <tr>
-	{% if select %}
+	{% if ds_select %}
 		<td> 
 
 		</td>
@@ -12,15 +12,17 @@
 <tbody>
 {% for dataset in oldatasets %}
 	<tr>
-		{% if select %}
+		{% if ds_select %}
 			<td><input type="checkbox" id="oldscheck_{{dataset.id}}"></input></td>
 		{% endif %}
 			<td><a href="javascript:void(0)" ng-click="showOLDataset({{dataset.id}})">{{dataset.name}}</a></td>
 			<td><a href="{{dataset.url}}">{{dataset.url}}</a></td>			
 			<td>{{dataset.location}}</td>
 			<td>{{dataset.renewstrategy}}</td>
-		{% if operation %}
+		{% if ds_operation %}
+			{% if ds_delete %}
 			<td><a href="javascript:void(0)" ng-click="deleteOLDataset({{dataset.id}})" class="label label-important">DELETE</a></td>
+			{% endif %}
 			<td><a href="javascript:void(0)" ng-click="dumpOLDataset({{dataset.id}})" class="label">LOCALIZE</a></td>
 			<td><a href="javascript:void(0)" ng-click="trainOLDataset({{dataset.id}})" class="label">TRAIN</a></td>
 		{% endif %}

@@ -73,7 +73,10 @@ class Assessment:
             if train:
                 pass
             elif len(models) == s - 1:
-                pass
+                #Split dataset
+                
+                for md_index in xrange(len(models)):
+                    models[md_index].Train()
 
         return None
 

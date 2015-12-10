@@ -48,12 +48,29 @@ var app = angular.module('mlApp',[],
 	}]
 );
 
-function bodyController($scope, $http){
+angular.module('mlApp').factory('hashimageService',['$http',function($http){
+	var getimage = function(img_elem, imgname, action, args){
+		$http({
+			method:'POST',
+			url:'/api/hash_image/',
+			data:{
+				imgname: imgname
+				,action: action
+				,args: args
+			}
+		}).success(function(data){
+			img_elem.attr("src", imgname)
+		});
+	}
+}])
+
+angular.module('mlApp').controller('bodyController', function($scope, $http, hashimageService){
 	$scope.bodystyle=navigator.platform.indexOf("Win32")!=-1?
 		{'padding-top':'55px','overflow-x':'hidden','background':'#f4f4f4'}:
 		{'padding-top':'0px','overflow-x':'hidden','background':'#f4f4f4'};
-}
-function switchDatasetController($scope, $http, $location){
+})
+
+angular.module('mlApp').controller('switchDatasetController', function($scope, $http, $location, hashimageService){
 	var cleanned_location = $location.path().replace('/','')
 	$scope.datatype = cleanned_location ==''? 'file' : cleanned_location
 	$scope.setdatatype = function(x){
@@ -172,21 +189,12 @@ function switchDatasetController($scope, $http, $location){
 				$scope.onlineForm['olrenew'] = data.info.renewstrategy
 				$scope.onlineForm['olhashead'] = data.info.hashead
 				$scope.onlineForm['olhead'] = data.info.head
-
-				// $("#olname").val(data.info.name)
-				// $("#olurl").val(data.info.url)
-				// $("#ollocation").val(data.info.location)
-				// $("#olsearch").val(data.info.search)
-				// $("#olrenew").val(data.info.renewstrategy)
-				// $("#olhashead").val(data.info.hashead)
-				// $("#olnolheadame").val(data.info.head)
-
 			}
 		})
 	}
-}
+})
 
-function newModelController($scope, $http){
+angular.module('mlApp').controller('newModelController', function($scope, $http, $location, hashimageService){
 	$scope.actiontype = 'new'
 	$scope.modelForm = {}
 	$scope.datatype = 'file'
@@ -235,11 +243,13 @@ function newModelController($scope, $http){
 
 	}
 
-}
-function applyModelController($scope, $http){
+})
 
-}
+angular.module('mlApp').controller('applyModelController', function($scope, $http, $location, hashimageService){
 
-function assessModelController($scope, $http){
+})
 
-}
+angular.module('mlApp').controller('assessModelController', function($scope, $http, $location, hashimageService){
+
+
+})

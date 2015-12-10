@@ -19,6 +19,7 @@ class DecisionTree(ModelBase):
         '''
         ModelBase.__init__(self, dataset, 'CLASSIFY', *args, **kwargs)
         self.Test = self.Classify
+        self.Train = self.CreateTree
         self.tree = {}
 
     #这两个函数相对"独立"

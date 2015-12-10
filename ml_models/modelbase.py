@@ -29,6 +29,9 @@ class ModelBase:
         else:
             self.Loss = ModelBase.QuadLoss
 
+    def Train(self, dataset):
+        pass
+
     def Test(self, inp):
         return inp
 

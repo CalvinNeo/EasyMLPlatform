@@ -1,7 +1,7 @@
 <table class="table table-striped">
 <thead>
 <tr>
-	{% if select %}
+	{% if md_select %}
 		<td> 
 
 		</td>
@@ -12,13 +12,15 @@
 <tbody>
 {% for model in models %}
 	<tr>
-		{% if select %}
+		{% if md_select %}
 			<td><input type="checkbox" id="modelcheck_{{model.id}}"></input></td>
 		{% endif %}
 			<td><a href="javascript:void(0)" ng-click="showModel({{model.id}})" >{{model.name}}</a></td>
 			<td>{{model.modeltype}}</td>
-		{% if operation %}
+		{% if md_operation %}
+			{% if md_delete %}
 			<td><a href="javascript:void(0)" ng-click="deleteDataset({{model.id}})" class="label label-important">DELETE</a></td>
+			{% endif %}
 			<td><a href="javascript:void(0)" ng-click="deleteModel({{model.id}})" class="label">DOWNLOAD</a></td>
 		{% endif %}
 	</tr>

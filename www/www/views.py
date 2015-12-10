@@ -38,10 +38,10 @@ def api(request, operation = "", *args, **kwargs):
         imgname = str(request.POST.get('name'))
         action = str(request.POST.get('id'))
         if action in ['ROC']:
-            pass
+            return HttpResponse("true")
         elif action in ['Dataset']:
-            pass
-        else action == 'absolute':
+            return HttpResponse("true")
+        elif action == 'absolute':
             return HttpResponse("true")
     elif operation == 'image':
         pass
@@ -54,7 +54,7 @@ def index(request, operation = "", *args, **kwargs):
     try:
         return {
          #util
-         ,'302':render(request,"302.html",{'url':request.GET.get('url')
+         '302':render(request,"302.html",{'url':request.GET.get('url')
             ,'time':0 if request.GET.get('time')==None else request.GET.get('time')
             })
          ,'':render(request,"index.html")
@@ -66,7 +66,8 @@ def index(request, operation = "", *args, **kwargs):
                 'datasets':Dataset.GetDatasets()
                 ,'oldatasets':OnlineDataset.GetDatasets()
                 ,'renewstrategies':OnlineDataset.AllRenewStrategies()
-                ,'select':True,'operation':True 
+                ,'ds_select':True, 'ds_operation':True, 'ds_delete':True
+                ,'md_select':True, 'md_operation':True, 'md_delete':True
                 })
         elif operation == 'models':
             return render(request,"trainmodel.html",{            
@@ -76,7 +77,8 @@ def index(request, operation = "", *args, **kwargs):
                 ,'modeltypes':MLModel.AllModels()
                 ,'models': MLModel.GetModels()
                 ,'tasks':TrainingTask.GetTasks()
-                ,'select':True,'operation':True
+                ,'ds_select':True, 'ds_operation':True, 'ds_delete':False
+                ,'md_select':True, 'md_operation':True, 'md_delete':True
                 })
         elif operation == 'apply':
             return render(request,"applymodel.html",{
@@ -85,7 +87,8 @@ def index(request, operation = "", *args, **kwargs):
                 ,'models': MLModel.GetModels()
                 ,'datasets':Dataset.GetDatasets()
                 ,'oldatasets':OnlineDataset.GetDatasets()
-                ,'select':True,'operation':False
+                ,'ds_select':True, 'ds_operation':True, 'ds_delete':False
+                ,'md_select':True, 'md_operation':True, 'md_delete':False
                 })
         elif operation == 'assessment':
             return render(request,"assessmodel.html",{})
