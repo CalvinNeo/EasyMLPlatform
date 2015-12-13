@@ -3,20 +3,16 @@ var app = angular.module('mlApp',[],
 		// Use x-www-form-urlencoded Content-Type
 		$httpProvider.defaults.headers
 			.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-
 		// tell the server it is ajax, otherwise Codeignitor won't say it is ajax
 		// common set for all angular ajax requests
 		$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
 		// Override $http service's default transformRequest
 		$httpProvider.defaults.transformRequest = [function (data) {
 			var param = function (obj) {
 				var query = '';
 				var name, value, fullSubName, subName, subValue, innerObj, i;
-
 				for (name in obj) {
 					value = obj[name];
-
 					if (value instanceof Array) {
 						for (i = 0; i < value.length; ++i) {
 							subValue = value[i];
@@ -39,10 +35,8 @@ var app = angular.module('mlApp',[],
 						query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
 					}
 				}
-
 				return query.length ? query.substr(0, query.length - 1) : query;
 			};
-
 			return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
 		}];
 	}]
@@ -73,6 +67,14 @@ angular.module('mlApp').controller('bodyController', function($scope, $http, has
 angular.module('mlApp').controller('switchDatasetController', function($scope, $http, $location, hashimageService){
 	var cleanned_location = $location.path().replace('/','')
 	$scope.datatype = cleanned_location ==''? 'file' : cleanned_location
+	$scope.onlineForm = {}
+	$scope.uploadForm = {}
+	$scope.uploadactiontype = 'new'
+	$scope.onlineactiontype = 'new'
+	$scope.selecteddataset = -1
+	$scope.selectedoldataset = -1
+	$scope.selectedmodel = -1
+
 	$scope.setdatatype = function(x){
 		if (x == 'file'){
 			$scope.datatype = 'file'
@@ -95,10 +97,6 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
 			$scope.datatype = 'change'
 		}
 	}
-	$scope.onlineForm = {}//{'olname':'', 'olhashead': false, 'olurl': '', 'ollocation':'', 'olsearch':'', 'olrenew':'', 'olhead':''}
-	$scope.uploadForm = {}//{'dsname':'', 'dshashead': false, 'dsattr_delim': '', 'dsrecord_delim':'', 'dshead':''}
-	$scope.uploadactiontype = 'new'
-	$scope.onlineactiontype = 'new'
 	$scope.setuploadactiontype = function(x){
 		if (x == 'new'){
 			$scope.uploadactiontype = 'new'
@@ -198,6 +196,10 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 	$scope.actiontype = 'new'
 	$scope.modelForm = {}
 	$scope.datatype = 'file'
+	$scope.selecteddataset = -1
+	$scope.selectedoldataset = -1
+	$scope.selectedmodel = -1
+
 	$scope.setdatatype = function(x){
 		if (x == 'file'){
 			$scope.datatype = 'file'
@@ -246,10 +248,13 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 })
 
 angular.module('mlApp').controller('applyModelController', function($scope, $http, $location, hashimageService){
-
+	$scope.selecteddataset = -1
+	$scope.selectedoldataset = -1
+	$scope.selectedmodel = -1
 })
 
 angular.module('mlApp').controller('assessModelController', function($scope, $http, $location, hashimageService){
-
-
+	$scope.selecteddataset = -1
+	$scope.selectedoldataset = -1
+	$scope.selectedmodel = -1
 })

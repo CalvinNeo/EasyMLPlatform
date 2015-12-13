@@ -24,3 +24,6 @@ class NewModelForm(forms.Form):
     name = forms.CharField(max_length = 20)
     modeltype = forms.CharField(max_length= 32) 
     classfeatureindex = forms.IntegerField(required=False) 
+    oldatasetindex = forms.IntegerField(required=False)
+    datasetindex = forms.IntegerField(required=False)
+

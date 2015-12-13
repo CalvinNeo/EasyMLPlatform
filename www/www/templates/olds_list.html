@@ -15,7 +15,7 @@
 		{% if ds_select %}
 			<td><input type="checkbox" id="oldscheck_{{dataset.id}}"></input></td>
 		{% endif %}
-			<td><a href="javascript:void(0)" ng-click="showOLDataset({{dataset.id}})">{{dataset.name}}</a></td>
+			<td><a href="javascript:void(0)" ng-click="{% if md_show %} showOLDataset({{dataset.id}}) {% endif %} {% if md_choose %} ;selectedoldataset = {{dataset.id}} {% endif %}">{{dataset.name}}</a></td>
 			<td><a href="{{dataset.url}}">{{dataset.url}}</a></td>			
 			<td>{{dataset.location}}</td>
 			<td>{{dataset.renewstrategy}}</td>
@@ -24,7 +24,7 @@
 			<td><a href="javascript:void(0)" ng-click="deleteOLDataset({{dataset.id}})" class="label label-important">DELETE</a></td>
 			{% endif %}
 			<td><a href="javascript:void(0)" ng-click="dumpOLDataset({{dataset.id}})" class="label">LOCALIZE</a></td>
-			<td><a href="javascript:void(0)" ng-click="trainOLDataset({{dataset.id}})" class="label">TRAIN</a></td>
+			<!-- <td><a href="javascript:void(0)" ng-click="trainOLDataset({{dataset.id}})" class="label">TRAIN</a></td> -->
 		{% endif %}
 	</tr>
 {% endfor%}

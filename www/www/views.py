@@ -66,8 +66,8 @@ def index(request, operation = "", *args, **kwargs):
                 'datasets':Dataset.GetDatasets()
                 ,'oldatasets':OnlineDataset.GetDatasets()
                 ,'renewstrategies':OnlineDataset.AllRenewStrategies()
-                ,'ds_select':True, 'ds_operation':True, 'ds_delete':True
-                ,'md_select':True, 'md_operation':True, 'md_delete':True
+                ,'ds_select':True, 'ds_operation':True, 'ds_delete':True, 'ds_choose':False, 'ds_show':True
+                ,'md_select':True, 'md_operation':True, 'md_delete':True, 'md_choose':False, 'md_show':False
                 })
         elif operation == 'models':
             return render(request,"trainmodel.html",{            
@@ -77,8 +77,8 @@ def index(request, operation = "", *args, **kwargs):
                 ,'modeltypes':MLModel.AllModels()
                 ,'models': MLModel.GetModels()
                 ,'tasks':TrainingTask.GetTasks()
-                ,'ds_select':True, 'ds_operation':True, 'ds_delete':False
-                ,'md_select':True, 'md_operation':True, 'md_delete':True
+                ,'ds_select':False, 'ds_operation':True, 'ds_delete':False, 'ds_choose':True, 'ds_show':False
+                ,'md_select':True, 'md_operation':True, 'md_delete':True, 'md_choose':True, 'md_show':True
                 })
         elif operation == 'apply':
             return render(request,"applymodel.html",{
@@ -87,8 +87,8 @@ def index(request, operation = "", *args, **kwargs):
                 ,'models': MLModel.GetModels()
                 ,'datasets':Dataset.GetDatasets()
                 ,'oldatasets':OnlineDataset.GetDatasets()
-                ,'ds_select':True, 'ds_operation':True, 'ds_delete':False
-                ,'md_select':True, 'md_operation':True, 'md_delete':False
+                ,'ds_select':False, 'ds_operation':True, 'ds_delete':False, 'ds_choose':True, 'ds_show':False
+                ,'md_select':False, 'md_operation':True, 'md_delete':False, 'md_choose':True, 'md_show':False
                 })
         elif operation == 'assessment':
             return render(request,"assessmodel.html",{})
@@ -163,6 +163,17 @@ def index(request, operation = "", *args, **kwargs):
                     mm = MLModel()
                     mm.name = str(form.cleaned_data['name'])
                     mm.modeltype = str(form.cleaned_data['modeltype'])
+                    mm.classfeatureindex = int(form.cleaned_data['classfeatureindex'])
+                    datasetindex, oldatasetindex = int(form.cleaned_data['datasetindex']), int(form.cleaned_data['oldatasetindex'])
+                    if datasetindex != -1:
+                        mm.datasetprototype = 'LOCAL'
+                        mm.datasetindex = int(form.cleaned_data['datasetindex'])
+                    elif oldatasetindex !=  1:
+                        mm.datasetprototype = 'ONLINE'
+                        mm.datasetindex = int(form.cleaned_data['oldatasetindex'])
+                    else:
+                        pass
+                    modelstatus = 'INITED'
                     mm.save()
                     return render(request,"success.html",{'title':'create new model succeed!','description':str(form.cleaned_data['name']).decode('utf8')})
                 else:
