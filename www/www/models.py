@@ -199,7 +199,6 @@ class OnlineDataset(models.Model):
             filepath = 'dataset/' + random_file_name(None, 'txt')
             # DB
             olds = OnlineDataset.objects.get(id = datasetindex)
-            print '-----------------------', olds
             ds = Dataset()
             ds.name = olds.name
             ds.path = filepath
@@ -211,7 +210,6 @@ class OnlineDataset(models.Model):
             ds.save()
             #file
             output = open(settings.MEDIA_ROOT + filepath, 'w')
-            print '-----------------------', ds
             ds = OnlineDataset.ViewDataset(datasetindex)
             if ds == None:
                 return 'false'
@@ -284,9 +282,8 @@ class MLModel(models.Model):
             return {}
             
     @staticmethod
-    def ViewModel(unicodemodelindex = None, maximum_items = 100):
+    def ViewModel(unicodemodelindex = None):
         if unicodemodelindex != None:
-            #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
             modelindex = int(unicodemodelindex)
             try:
                 md = MLModel.objects.get(id = modelindex)
@@ -322,7 +319,6 @@ class TrainingTask(models.Model):
     modelprototype = models.CharField(max_length = 32) 
     modelindex = models.IntegerField()
     createtime = models.DateTimeField('create time', auto_now_add=True)
-
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
     class Meta:
@@ -344,8 +340,15 @@ class TrainingTask(models.Model):
             return []
 
     @staticmethod
-    def ViewDataset(unicodedatasetindex = None, maximum_items = 100):
-        if unicodedatasetindex != None:
-            #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
-            datasetindex = int(unicodedatasetindex)
-        return None
+    def CreateTrain(unicodemodelindex = None):
+        if unicodemodelindex != None:
+            modelindex = int(unicodemodelindex)
+            md = MLModel.ViewModel(modelindex)
+            if md != None:
+                tt = TrainingTask()
+                tt.name = ''
+                tt.modelprototype = md.modeltype
+                tt.modelindex = modelindex
+                tt.save()
+                return 'true'
+            return 'false'

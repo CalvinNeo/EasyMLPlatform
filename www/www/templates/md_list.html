@@ -22,6 +22,7 @@
 			<td><a href="javascript:void(0)" ng-click="deleteDataset({{model.id}})" class="label label-important">DELETE</a></td>
 			{% endif %}
 			<td><a href="javascript:void(0)" ng-click="deleteModel({{model.id}})" class="label">DOWNLOAD</a></td>
+			<td><a href="javascript:void(0)" ng-click="trainModel({{model.id}})" class="label">TRAIN</a></td>
 		{% endif %}
 	</tr>
 {% endfor%}

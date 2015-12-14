@@ -28,6 +28,8 @@ def api(request, operation = "", *args, **kwargs):
         return HttpResponse(OnlineDataset.DeleteDataset(unicodedatasetindex=request.GET.get('datasetindex')))
     elif operation == 'onlinedataset_dump':
         return HttpResponse(OnlineDataset.DumpDataset(unicodedatasetindex=request.GET.get('datasetindex')))
+    elif operation == 'model_delete':
+        return HttpResponse(MLModel.DeleteModel(unicodemodelindex=request.GET.get('modelindex'))) 
     elif operation == 'model_view':
         return HttpResponse( repr(MLModel.ViewModel(unicodemodelindex=request.GET.get('modelindex'))) )
     elif operation == 'dataset_view':
@@ -45,6 +47,8 @@ def api(request, operation = "", *args, **kwargs):
             return HttpResponse("true")
     elif operation == 'image':
         pass
+    elif operation == 'model_train':
+        return HttpResponse(TrainingTask.CreateTrain(unicodemodelindex=request.GET.get('modelindex'))) 
     else:
         return HttpResponse("")
 

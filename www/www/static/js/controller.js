@@ -128,9 +128,6 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
 				}
 			})
 	}
-	$scope.trainDataset = function(datasetindex){
-		
-	}
 	$scope.updateDataset = function(datasetindex){
 		$scope.setuploadactiontype('change')
 		$.ajax({
@@ -168,9 +165,6 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
 				location.reload(true)
 				}
 			})
-	}
-	$scope.trainOLDataset = function(datasetindex){
-		
 	}
 	$scope.updateOLDataset = function(datasetindex){
 		$scope.setonlineactiontype('change')
@@ -243,6 +237,15 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 	}
 	$scope.deleteModel = function(modelindex){
 
+	}
+	$scope.trainModel = function(modelindex){
+		$.ajax({
+			url : '/api/model_train?modelindex='+ modelindex
+			,async : false
+			,success : function (data, textStatus) {
+				alert(data)
+			}
+		})
 	}
 
 })
