@@ -193,6 +193,7 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 	$scope.selecteddataset = -1
 	$scope.selectedoldataset = -1
 	$scope.selectedmodel = -1
+	$scope.showwhich = 'list'
 
 	$scope.setdatatype = function(x){
 		if (x == 'file'){
@@ -206,6 +207,19 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 	}
 	$scope.onlineShow = function(){
 		return !$scope.uploadFormShow()
+	}
+	$scope.setshowwhich = function(x){
+		if (x == 'list'){
+			$scope.showwhich = 'list'
+		}else{
+			$scope.showwhich = 'new'
+		}
+	}
+	$scope.newModelShow = function(){
+		return !$scope.listShow()
+	}
+	$scope.listShow = function(){
+		return $scope.showwhich == 'list'
 	}
 	$scope.setactiontype = function(x){
 		if (x == 'new'){

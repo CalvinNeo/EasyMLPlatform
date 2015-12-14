@@ -13,3 +13,4 @@ import itertools
 
 if __name__ == '__main__':
 	print range(0,2) + range(3,10)
+	print [x.upper() for x in ['aaaa','bbbb']]

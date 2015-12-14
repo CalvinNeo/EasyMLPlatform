@@ -2,13 +2,12 @@
 import sys
 sys.path.append('..')
 
-from modelbase import *
+from modelbase import ModelBase
 import math
 import datasets.localdata
 from datasets.monads import *
 import operator
 import numpy as np
-import sys
 from collections import defaultdict, namedtuple
 import itertools
 

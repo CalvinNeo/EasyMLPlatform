@@ -1,7 +1,14 @@
+#coding:utf8
+import sys
+sys.path.append('..')
+
+import itertools
+
 class ModelBase:
     def __init__(self, dataset, prototype, *args, **kwargs):
         self.dataset = dataset
         '''
+            AUTO SET IF USE DERIVED CLASS
             prototype in ['boosting','bp','crf','decision_tree','em',...]
         '''
         self.prototype = prototype
@@ -245,4 +252,4 @@ if __name__ == '__main__':
         # def Test(self):
         #     print "oHO"
     d = Derived([1,2,3], positive="FFFFFFFFFFFFFFFFFFFFFFFF")
-    print ModelBase.AllModelInfo()
+    print ModelBase.AllModelInfo().keys()

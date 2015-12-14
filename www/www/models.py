@@ -10,6 +10,8 @@ from www.utils import random_file_name
 from www import settings
 import datasets.localdata
 from ml_models.modelbase import *
+from ml_models.model_task import *
+from ml_models import *
 
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "www.settings") 
 def get_upload_to(instance, filename):
@@ -345,10 +347,25 @@ class TrainingTask(models.Model):
             modelindex = int(unicodemodelindex)
             md = MLModel.ViewModel(modelindex)
             if md != None:
+                # New Task
                 tt = TrainingTask()
                 tt.name = ''
                 tt.modelprototype = md.modeltype
                 tt.modelindex = modelindex
                 tt.save()
+                # Modify Model Record
+
+                # Open dataset
+
+                # Create Machine Learning Instance
+                taskid = 0
+                mlmd = ModelRunTask(taskid, md, ds)
+
+
                 return 'true'
             return 'false'
+
+    @staticmethod
+    def StartTrain(unicodetaskindex = None):
+        pass
+

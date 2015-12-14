@@ -1,19 +1,27 @@
 {% include 'header.html' %}
 
 <div class="container-fluid" ng-controller="newModelController" >
-	<div class="col-md-4">
-		<p class="lead"> New Model </p>
-		<div>
-			{% include 'md_new.html' %}
+	<div class="col-md-6">
+		<ul class="nav nav-tabs">
+			<li ng-class="{true:'',false:'active'}[showwhich!='list']">
+				<a href="javascript:void(0)" data-toggle="tab" ng-click="setshowwhich('list')">LIST</a></li>
+			<li ng-class="{true:'',false:'active'}[showwhich=='list']">
+				<a href="javascript:void(0)" data-toggle="tab" ng-click="setshowwhich('new')">NEW</a></li>
+		</ul>
+		<div ng-show="newModelShow()">
+			<p class="lead"> New Model </p>
+			<div>
+				{% include 'md_new.html' %}
+			</div>
+		</div>
+		<div ng-show="listShow()">
+			<p class="lead"> Model List</p>
+			<div>
+				{% include 'md_list.html' %}
+			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
-		<p class="lead"> Model List</p>
-		<div>
-			{% include 'md_list.html' %}
-		</div>
-	</div>
-	<div class="col-md-4">
+	<div class="col-md-6">
 		<p class="lead"> Task List </p>
 		{% include 'md_trainingprocess.html' %}
 	</div>
