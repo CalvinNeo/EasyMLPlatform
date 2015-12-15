@@ -25,7 +25,21 @@
 			</p>
 		</div>
 		<div class="col-md-6 npnm" >
-
+			<p><label for="name">Loss</label>
+				<input type="text" name="loss" class="form-control" ng-model="modelForm.loss"></input>
+			</p>
+		</div>
+	</div>
+	<div class="container-fluid npnm" >
+		<div class="col-md-6 npnm" >
+			<p><label for="name">Positive</label>
+				<input type="text" name="positive" class="form-control" ng-model="modelForm.positive"></input>
+			</p>
+		</div>
+		<div class="col-md-6 npnm" >
+			<p><label for="name">Negative</label>
+				<input type="text" name="negative" class="form-control" ng-model="modelForm.negative"></input>
+			</p>
 		</div>
 	</div>
 	<hr/>
@@ -49,6 +63,8 @@
 	<hr/>
 	<input type="hidden" name="oldatasetindex" value="-1"></input>
 	<input type="hidden" name="datasetindex" value="-1"></input>
+	<input type="hidden" name="modelindex" value="-1"></input>
+
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
 			<input type="submit" class="btn btn-success btn-block" value="{% templatetag openvariable %} {true:'Create New Model', false:'Modify This Model'}[actiontype=='new'] {% templatetag closevariable %}">

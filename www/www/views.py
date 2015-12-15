@@ -177,7 +177,7 @@ def index(request, operation = "", *args, **kwargs):
                         mm.datasetindex = int(form.cleaned_data['oldatasetindex'])
                     else:
                         pass
-                    modelstatus = 'INITED'
+                    mm.modelstatus = 'INITED'
                     mm.save()
                     return render(request,"success.html",{'title':'create new model succeed!','description':str(form.cleaned_data['name']).decode('utf8')})
                 else:

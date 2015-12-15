@@ -92,7 +92,7 @@ class Dataset(models.Model):
                 try:
                     datasetfile = Dataset.objects.get(id = datasetindex)
                     #open local dataset
-                    lcdt = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data))
+                    lcdt = datasets.localdata.LocalData(datamapper = None)
                     lcdt.ReadString(open(settings.MEDIA_ROOT+str(datasetfile.path),"r").read(), hasHead=True, getValue=True)
                     return lcdt
                 except:
@@ -157,14 +157,13 @@ class OnlineDataset(models.Model):
             if datasetindex >= 0:
                 try:
                     olds = OnlineDataset.objects.get(id = datasetindex)
-                    print "############################################################",olds
-                    ds = datasets.localdata.LocalData(online = True)
+                    lcdt = datasets.localdata.LocalData(datamapper = None, online = True)
                 except:
                     return None
                 try:
-                    ds.SetURL(olds.url, olds.location, None)
-                    ds.OnlineRenew()
-                    return {'info':olds, 'view':ds}
+                    lcdt.SetURL(olds.url, olds.location, None)
+                    lcdt.OnlineRenew()
+                    return {'info':olds, 'view':lcdt}
                 except:
                     return {'info':olds, 'view':{}}
         return None
@@ -231,6 +230,8 @@ class OnlineDataset(models.Model):
 class MLModel(models.Model):
     id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 20)
+    createtime = models.DateTimeField('create time', auto_now_add=True)
+
     '''
         INITED
         TRAINING
@@ -243,14 +244,25 @@ class MLModel(models.Model):
     )
     modeltype = models.CharField(max_length = 32)    
     modelstatus = models.CharField(max_length = 32, choices = ModelStatusChoices)
-    createtime = models.DateTimeField('create time', auto_now_add=True)
-    classfeatureindex = models.IntegerField(default = -1)
+
     DatasetPrototypeChoices = (
         ('LOCAL', 'LOCAL'),
         ('ONLINE', 'ONLINE'),
     )
     datasetprototype = models.CharField(max_length = 16, choices = DatasetPrototypeChoices)
     datasetindex = models.IntegerField()
+
+    LossChoices = (
+        ('QUAD','QUAD'),
+        ('BIN','BIN'),
+        ('ABS','ABS'),
+        ('LOG','LOG'),
+    )
+    classfeatureindex = models.IntegerField(required=False) 
+    loss = models.CharField(required=False) 
+    positive = models.FloatField(required=False)
+    negative = models.FloatField(required=False)
+
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
     class Meta:
@@ -309,11 +321,8 @@ class MLModel(models.Model):
 
     def __repr__(self):
         return  "{{ 'id':{}, 'modeltype':'{}', 'name':'{}' }}".format( str(self.id), str(self.modeltype), str(self.name) ) 
-
         # return "#{}: ({}) {} @ ".format(self.id,self.modeltype,self.name)
 
-    # def __repr__(self):
-    #     return "{ 'id':{}, 'modeltype':{}, 'name':{} }".format(self.id, self.modeltype, self.name)
 
 class TrainingTask(models.Model):
     id = models.AutoField(primary_key = True)
@@ -325,10 +334,6 @@ class TrainingTask(models.Model):
 
     class Meta:
         db_table = 'trainingtask'
-
-    @staticmethod
-    def Train(unicodetaskindex):
-        pass
 
     @staticmethod
     def GetTasks(pageindex = 0, max_item = 10):
@@ -343,9 +348,14 @@ class TrainingTask(models.Model):
 
     @staticmethod
     def CreateTrain(unicodemodelindex = None):
+        '''
+            md: MLModel
+            tt: TrainingTask
+            mlmd: ModelRunTask
+        '''
         if unicodemodelindex != None:
             modelindex = int(unicodemodelindex)
-            md = MLModel.ViewModel(modelindex)
+            md = MLModel.objects.get(id = modelindex)
             if md != None:
                 # New Task
                 tt = TrainingTask()
@@ -354,14 +364,13 @@ class TrainingTask(models.Model):
                 tt.modelindex = modelindex
                 tt.save()
                 # Modify Model Record
-
+                md.modelstatus = 'TRAINING'
+                md.save()
                 # Open dataset
-
                 # Create Machine Learning Instance
-                taskid = 0
-                mlmd = ModelRunTask(taskid, md, ds)
-
-
+                # Get TrainingTask id
+                mlmd = ModelRunTask(TrainingTask.objects.all()[-1].id, md)
+                
                 return 'true'
             return 'false'
 

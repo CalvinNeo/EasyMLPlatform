@@ -6,12 +6,27 @@ import itertools
 
 class ModelBase:
     def __init__(self, dataset, prototype, *args, **kwargs):
+        '''
+            dataset
+            prototype
+            extra
+            >positive negative
+            <classfeatureindex loss
+        '''
         self.dataset = dataset
         '''
             AUTO SET IF USE DERIVED CLASS
             prototype in ['boosting','bp','crf','decision_tree','em',...]
         '''
         self.prototype = prototype
+
+        '''
+            extra metadata of the model(JSON)
+        '''
+        if 'extra' in kwargs.keys() and kwargs['extra'] != None:
+            self.extra = kwargs['extra']
+        else:
+            self.extra = self.dataset.extra
 
         '''
             Classify

@@ -45,6 +45,8 @@
 		</div>
 	</div>
 	<hr/>
+	<input type="hidden" name="oldatasetindex" value="-1"></input>
+
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
 			<input type="submit" class="btn btn-success btn-block" value="{% templatetag openvariable %} {true:'Create Online Dataset', false:'Modify Online Dataset'}[onlineactiontype=='new'] {% templatetag closevariable %}">

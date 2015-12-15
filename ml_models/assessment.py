@@ -2,7 +2,6 @@
 import sys
 sys.path.append('..')
 
-import math
 import datasets.localdata
 import operator
 import numpy as np

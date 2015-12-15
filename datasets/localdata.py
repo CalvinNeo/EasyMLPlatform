@@ -11,6 +11,15 @@ import parse
 
 class LocalData:
     def __init__(self, datamapper = None, *args, **kwargs):
+        '''
+            head
+            items
+            online
+            classfeatureindex
+            mode
+            dstype
+            datamapper
+        '''
         if 'head' in kwargs.keys() and kwargs['head'] != None:
             self.head = kwargs['head']
         else:
