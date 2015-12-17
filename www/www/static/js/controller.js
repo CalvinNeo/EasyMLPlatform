@@ -190,10 +190,10 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 	$scope.actiontype = 'new'
 	$scope.modelForm = {}
 	$scope.datatype = 'file'
+	$scope.showwhich = 'list'
 	$scope.selecteddataset = -1
 	$scope.selectedoldataset = -1
 	$scope.selectedmodel = -1
-	$scope.showwhich = 'list'
 
 	$scope.setdatatype = function(x){
 		if (x == 'file'){
@@ -224,6 +224,9 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 	$scope.setactiontype = function(x){
 		if (x == 'new'){
 			$scope.modelForm = {}
+			$scope.selecteddataset = -1
+			$scope.selectedoldataset = -1
+			$scope.selectedmodel = -1
 			$scope.actiontype = 'new'
 		}else{
 			$scope.actiontype = 'change'
@@ -255,9 +258,9 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 	$scope.trainModel = function(modelindex){
 		$.ajax({
 			url : '/api/model_train?modelindex='+ modelindex
-			,async : false
+			,async : true
 			,success : function (data, textStatus) {
-				alert(data)
+				location.reload(true)
 			}
 		})
 	}

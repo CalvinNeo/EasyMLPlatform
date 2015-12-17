@@ -6,7 +6,7 @@
 
 		</td>
 	{% endif %}
-	<td>Task ID</td><td>Model Type</td><td>Dataset Type</td><td>Create Time</td><td>Status</td>
+	<td>Task ID</td><td>Model Type</td><td>Model ID</td><td>Create Time</td><td>Status</td>
 </tr>
 </thead>
 <tbody>
@@ -17,7 +17,7 @@
 		{% endif %}
 			<td><a href="javascript:void(0)" ng-click="showModel({{model.id}})" >{{task.id}}</a></td>
 			<td>{{task.modelprototype}}</td>
-			<td>{{task.datasetprototype}}</td>
+			<td>{{task.modelindex}}</td>
 			<td>{{task.createtime}}</td>
 			<td>{{task.status}}</td>
 		{% if operation %}

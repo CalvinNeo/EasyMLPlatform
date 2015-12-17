@@ -11,11 +11,11 @@
 </thead>
 <tbody>
 {% for dataset in oldatasets %}
-	<tr>
+	<tr ng-class="{true:'success',false:''}[{{dataset.id}}==selectedoldataset]">
 		{% if ds_select %}
 			<td><input type="checkbox" id="oldscheck_{{dataset.id}}"></input></td>
 		{% endif %}
-			<td><a href="javascript:void(0)" ng-click="{% if md_show %} showOLDataset({{dataset.id}}) {% endif %} {% if md_choose %} ;selectedoldataset = {{dataset.id}} {% endif %}">{{dataset.name}}</a></td>
+			<td><a href="javascript:void(0)" ng-click="{% if ds_show %} showOLDataset({{dataset.id}}) {% endif %} {% if ds_choose %} ;selectedoldataset = {true:-1,false:{{dataset.id}}}[selectedoldataset=={{dataset.id}}] {% endif %}">{{dataset.name}}</a></td>
 			<td><a href="{{dataset.url}}">{{dataset.url}}</a></td>			
 			<td>{{dataset.location}}</td>
 			<td>{{dataset.renewstrategy}}</td>

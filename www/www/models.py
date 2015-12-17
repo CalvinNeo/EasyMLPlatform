@@ -258,10 +258,11 @@ class MLModel(models.Model):
         ('ABS','ABS'),
         ('LOG','LOG'),
     )
-    classfeatureindex = models.IntegerField(required=False) 
-    loss = models.CharField(required=False) 
-    positive = models.FloatField(required=False)
-    negative = models.FloatField(required=False)
+    classfeatureindex = models.IntegerField() 
+    loss = models.CharField(max_length = 20,default = 'QUAD',choices = LossChoices)
+    # set default like this so that it can work with -1/1 and 0/1 
+    positive = models.FloatField(default = 1.0)
+    negative = models.FloatField(default = -0.5)
 
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
@@ -369,7 +370,7 @@ class TrainingTask(models.Model):
                 # Open dataset
                 # Create Machine Learning Instance
                 # Get TrainingTask id
-                mlmd = ModelRunTask(TrainingTask.objects.all()[-1].id, md)
+                mlmd = ModelRunTask(TrainingTask.objects.all()[len(TrainingTask.objects.all())-1].id, md)
                 
                 return 'true'
             return 'false'

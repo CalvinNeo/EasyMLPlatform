@@ -6,23 +6,27 @@
 
 		</td>
 	{% endif %}
-	<td>Name</td><td>Model Type</td>
+	<td>Name</td><td>Model Type</td><td>  Create Time  </td><td>Dataset</td><td>Status</td>
 </tr>
 </thead>
 <tbody>
 {% for model in models %}
-	<tr>
+	<tr ng-class="{true:'success',false:''}[{{model.id}}==selectedmodel]">
 		{% if md_select %}
-			<td><input type="checkbox" id="modelcheck_{{model.id}}"></input></td>
+			<td><input type="checkbox" id="modelcheck_{{model.id}}" ></input></td>
 		{% endif %}
-			<td><a href="javascript:void(0)" ng-click="{% if md_show %} showModel({{model.id}}) {% endif %} {% if md_choose %} ;selectedmodel = {{model.id}} {% endif %}" >{{model.name}}</a></td>
+			<td><a href="javascript:void(0)" ng-click="{% if md_show %} showModel({{model.id}}) {% endif %} {% if md_choose %} ;selectedmodel = {true:-1,false:{{model.id}}}[selectedmodel=={{model.id}}]  {% endif %}" >{{model.name}}</a></td>
 			<td>{{model.modeltype}}</td>
+			<td>{{model.createtime}}</td>
+			<td>{{model.datasetprototype}}:{{model.datasetindex}}</td>
+			<td>{{model.modelstatus}}</td>
 		{% if md_operation %}
 			{% if md_delete %}
-			<td><a href="javascript:void(0)" ng-click="deleteDataset({{model.id}})" class="label label-important">DELETE</a></td>
+				<td><a href="javascript:void(0)" ng-click="deleteModel({{model.id}})" class="label label-important">DELETE</a></td>
 			{% endif %}
-			<td><a href="javascript:void(0)" ng-click="deleteModel({{model.id}})" class="label">DOWNLOAD</a></td>
-			<td><a href="javascript:void(0)" ng-click="trainModel({{model.id}})" class="label">TRAIN</a></td>
+			{% if md_train %}
+				<td><a href="javascript:void(0)" ng-click="trainModel({{model.id}})" class="label">TRAIN</a></td>
+			{% endif %}
 		{% endif %}
 	</tr>
 {% endfor%}

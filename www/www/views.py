@@ -71,7 +71,7 @@ def index(request, operation = "", *args, **kwargs):
                 ,'oldatasets':OnlineDataset.GetDatasets()
                 ,'renewstrategies':OnlineDataset.AllRenewStrategies()
                 ,'ds_select':True, 'ds_operation':True, 'ds_delete':True, 'ds_choose':False, 'ds_show':True
-                ,'md_select':True, 'md_operation':True, 'md_delete':True, 'md_choose':False, 'md_show':False
+                ,'md_select':True, 'md_operation':True, 'md_delete':True, 'md_choose':False, 'md_show':False, 'md_train':False
                 })
         elif operation == 'models':
             return render(request,"trainmodel.html",{            
@@ -82,7 +82,7 @@ def index(request, operation = "", *args, **kwargs):
                 ,'models': MLModel.GetModels()
                 ,'tasks':TrainingTask.GetTasks()
                 ,'ds_select':False, 'ds_operation':True, 'ds_delete':False, 'ds_choose':True, 'ds_show':False
-                ,'md_select':True, 'md_operation':True, 'md_delete':True, 'md_choose':True, 'md_show':True
+                ,'md_select':True, 'md_operation':True, 'md_delete':True, 'md_choose':True, 'md_show':True, 'md_train':True
                 })
         elif operation == 'apply':
             return render(request,"applymodel.html",{
@@ -92,7 +92,7 @@ def index(request, operation = "", *args, **kwargs):
                 ,'datasets':Dataset.GetDatasets()
                 ,'oldatasets':OnlineDataset.GetDatasets()
                 ,'ds_select':False, 'ds_operation':True, 'ds_delete':False, 'ds_choose':True, 'ds_show':False
-                ,'md_select':False, 'md_operation':True, 'md_delete':False, 'md_choose':True, 'md_show':False
+                ,'md_select':False, 'md_operation':True, 'md_delete':False, 'md_choose':True, 'md_show':False, 'md_train':False
                 })
         elif operation == 'assessment':
             return render(request,"assessmodel.html",{})

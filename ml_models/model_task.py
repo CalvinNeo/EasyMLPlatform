@@ -24,12 +24,12 @@ class ModelRunTask:
             possibles.update(locals())
             if clsname in possibles.keys():
                 # dataset
-                if db_model.datasetprototype = 'LOCAL':
+                if db_model.datasetprototype == 'LOCAL':
                     dbds = Dataset.GetDataset(db_model.datasetindex)
                 else:
                     dbds = OnlineDataset.GetDataset(db_model.datasetindex)
                 dbds.classfeatureindex = db_model.classfeatureindex
-                
+
                 # need to set args to __init__
                 md = possibles.get(clsname)(dataset = dataset['view'])
                 md.positive = db_model.positive
@@ -37,9 +37,9 @@ class ModelRunTask:
                 md.classfeatureindex = db_model.classfeatureindex
                 md.loss = {
                     'QUAD': ModelBase.QuadLoss
-                    'BIN': ModelBase.BinLoss
-                    'ABS': ModelBase.AbsLoss
-                    'LOG': ModelBase.LogLoss
+                    ,'BIN': ModelBase.BinLoss
+                    ,'ABS': ModelBase.AbsLoss
+                    ,'LOG': ModelBase.LogLoss
                 }[db_model.loss]
 
 if __name__ == '__main__':
