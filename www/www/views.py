@@ -168,11 +168,11 @@ def index(request, operation = "", *args, **kwargs):
                     mm.name = str(form.cleaned_data['name'])
                     mm.modeltype = str(form.cleaned_data['modeltype'])
                     mm.classfeatureindex = int(form.cleaned_data['classfeatureindex'])
-                    datasetindex, oldatasetindex = int(form.cleaned_data['datasetindex']), int(form.cleaned_data['oldatasetindex'])
-                    if datasetindex != -1:
+                    selectwhichdatasettype = str(form.cleaned_data['selectwhichdatasettype'])
+                    if selectwhichdatasettype == 'ds':
                         mm.datasetprototype = 'LOCAL'
                         mm.datasetindex = int(form.cleaned_data['datasetindex'])
-                    elif oldatasetindex !=  1:
+                    elif selectwhichdatasettype == 'ol':
                         mm.datasetprototype = 'ONLINE'
                         mm.datasetindex = int(form.cleaned_data['oldatasetindex'])
                     else:

@@ -71,9 +71,10 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
 	$scope.uploadForm = {}
 	$scope.uploadactiontype = 'new'
 	$scope.onlineactiontype = 'new'
-	$scope.selecteddataset = -1
-	$scope.selectedoldataset = -1
-	$scope.selectedmodel = -1
+	// $scope.selecteddataset = -1
+	// $scope.selectedoldataset = -1
+	// $scope.selectedmodel = -1
+	// $scope.selectwhichdatasettype = 'ds'
 
 	$scope.setdatatype = function(x){
 		if (x == 'file'){
@@ -194,12 +195,15 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 	$scope.selecteddataset = -1
 	$scope.selectedoldataset = -1
 	$scope.selectedmodel = -1
+	$scope.selectwhichdatasettype = 'ds'
 
 	$scope.setdatatype = function(x){
 		if (x == 'file'){
 			$scope.datatype = 'file'
+			$scope.selectwhichdatasettype = 'ds'
 		}else{
 			$scope.datatype = 'online'
+			$scope.selectwhichdatasettype = 'ol'
 		}
 	}
 	$scope.uploadFormShow = function(){
@@ -253,7 +257,13 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 		
 	}
 	$scope.deleteModel = function(modelindex){
-
+		$.ajax({
+			url : '/api/model_delete?modelindex='+modelindex
+			,async : false
+			,success : function (data, textStatus) {
+				location.reload(true)
+				}
+			})
 	}
 	$scope.trainModel = function(modelindex){
 		$.ajax({

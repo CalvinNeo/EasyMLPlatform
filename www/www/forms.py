@@ -36,6 +36,7 @@ class NewModelForm(forms.Form):
     modeltype = forms.CharField(max_length= 32) 
     oldatasetindex = forms.IntegerField(required=False)
     datasetindex = forms.IntegerField(required=False)
+    selectwhichdatasettype = forms.CharField(max_length = 20)
 
     classfeatureindex = forms.IntegerField(required=False) 
     loss = forms.CharField(required=False) 

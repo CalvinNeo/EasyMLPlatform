@@ -5,11 +5,12 @@ sys.path.append('..')
 from modelbase import ModelBase
 import datasets.localdata
 from datasets.monads import *
+from datasets.localdata import *
 import itertools
 from ml_models import *
 
 class ModelRunTask:
-    def __init__(self, taskid, db_model):
+    def __init__(self, taskid, db_model, dataset):
         '''
             Instance and run Model according to given `model` and `dataset`
 
@@ -19,28 +20,34 @@ class ModelRunTask:
                 lcdt is datasets.localdata.LocalData object
         '''
         clsname = db_model.modeltype
-        if clsname.upper in ModelBase.AllModelInfo().keys():
-            possibles = globals()
-            possibles.update(locals())
-            if clsname in possibles.keys():
-                # dataset
-                if db_model.datasetprototype == 'LOCAL':
-                    dbds = Dataset.GetDataset(db_model.datasetindex)
-                else:
-                    dbds = OnlineDataset.GetDataset(db_model.datasetindex)
-                dbds.classfeatureindex = db_model.classfeatureindex
+        print ")))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))0",db_model.modeltype, clsname.upper(),clsname.upper() in ModelBase.AllModelInfo().keys()
+        # possibles = globals()
+        # possibles.update(locals())
+        if (clsname.upper() in ModelBase.AllModelInfo().keys()): # and (clsname in possibles.keys()):
+            # dataset
+            dataset['view'].classfeatureindex = db_model.classfeatureindex
 
-                # need to set args to __init__
-                md = possibles.get(clsname)(dataset = dataset['view'])
-                md.positive = db_model.positive
-                md.negative = db_model.negative
-                md.classfeatureindex = db_model.classfeatureindex
-                md.loss = {
-                    'QUAD': ModelBase.QuadLoss
-                    ,'BIN': ModelBase.BinLoss
-                    ,'ABS': ModelBase.AbsLoss
-                    ,'LOG': ModelBase.LogLoss
-                }[db_model.loss]
+            # need to set args to __init__
+            # md = possibles.get(clsname)(dataset = dataset['view'])
+            print ModelBase.AllModelInfo()[clsname.upper()]
+            md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = dataset['view'])
+            md.positive = db_model.positive
+            md.negative = db_model.negative
+            md.classfeatureindex = db_model.classfeatureindex
+            md.loss = {
+                'QUAD': ModelBase.QuadLoss
+                ,'BIN': ModelBase.BinLoss
+                ,'ABS': ModelBase.AbsLoss
+                ,'LOG': ModelBase.LogLoss
+            }[db_model.loss]
+
+            self.dataset = dataset['view']
+            self.model = md
+
+            print dataset,md
+
+    def Start(self):
+        self.model.Train(self.dataset)
 
 if __name__ == '__main__':
     possibles = globals()

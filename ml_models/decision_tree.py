@@ -80,6 +80,7 @@ class DecisionTree(ModelBase):
             dataset part of self.dataset
             classfeatures is a list of class-feature values in each item
         '''
+        print "*********************************START_CREATETREE"
         classfeatures = dataset.Column(dataset.classfeatureindex)
         if len(classfeatures) == 0:
             #empty dataset

@@ -3,6 +3,7 @@ import sys
 sys.path.append('..')
 
 import itertools
+import model_list
 
 class ModelBase:
     def __init__(self, dataset, prototype, *args, **kwargs):
@@ -23,10 +24,11 @@ class ModelBase:
         '''
             extra metadata of the model(JSON)
         '''
-        if 'extra' in kwargs.keys() and kwargs['extra'] != None:
-            self.extra = kwargs['extra']
-        else:
-            self.extra = self.dataset.extra
+        if self.dataset.dstype == "JSON":
+            if 'extra' in kwargs.keys() and kwargs['extra'] != None:
+                self.extra = kwargs['extra']
+            else:
+                self.extra = self.dataset.extra
 
         '''
             Classify
@@ -156,6 +158,7 @@ class ModelBase:
     @staticmethod
     def AllModelInfo():
         # return eval(open('./models.json','r').read())
+        import naive_bayes
         return {
             'MATRIX_ADD':{
                 'ndataset': 2
@@ -200,6 +203,7 @@ class ModelBase:
                 ,'distributed': True
                 ,'nontraining': False
                 ,'modeltype': 'CLASSIFY'
+                ,'cls': naive_bayes.NaiveBayes
             },
             'K_MEANS':{
                 'ndataset': 1
@@ -245,7 +249,6 @@ class ModelBase:
                 ,'modeltype': None
             },
         }
-
 if __name__ == '__main__':
     class Base():
         def __init__(self, dataset, *args, **kwargs):

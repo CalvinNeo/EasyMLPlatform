@@ -368,10 +368,15 @@ class TrainingTask(models.Model):
                 md.modelstatus = 'TRAINING'
                 md.save()
                 # Open dataset
+                if md.datasetprototype == 'LOCAL':
+                    dbds = Dataset.GetDataset(md.datasetindex)
+                else:
+                    dbds = OnlineDataset.GetDataset(md.datasetindex)
                 # Create Machine Learning Instance
                 # Get TrainingTask id
-                mlmd = ModelRunTask(TrainingTask.objects.all()[len(TrainingTask.objects.all())-1].id, md)
-                
+                mlmd = ModelRunTask(TrainingTask.objects.all()[len(TrainingTask.objects.all())-1].id, md, dbds)
+                mlmd.Start()
+
                 return 'true'
             return 'false'
 
