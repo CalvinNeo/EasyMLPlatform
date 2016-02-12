@@ -99,7 +99,6 @@ def index(request, operation = "", *args, **kwargs):
         elif operation == "dataset_upload":
             if request.method == "POST":
                 form = UploadDatasetForm(request.POST,request.FILES)
-                print "-----------------------------aa"
                 # print "request.META", request.META
                 print "files", form.files
                 print "form.data",form.data

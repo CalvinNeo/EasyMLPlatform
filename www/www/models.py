@@ -377,6 +377,11 @@ class TrainingTask(models.Model):
                 mlmd = ModelRunTask(TrainingTask.objects.all()[len(TrainingTask.objects.all())-1].id, md, dbds)
                 mlmd.Start()
 
+                # now Training is over
+                md.modelstatus = 'TRAINED'
+                md.save()
+                tt.delete()
+                
                 return 'true'
             return 'false'
 
