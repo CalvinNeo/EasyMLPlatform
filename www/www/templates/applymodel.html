@@ -16,18 +16,35 @@
 						<a href="javascript:void(0)" data-toggle="tab" ng-click="setdatatype('online')">ONLINE</a></li>
 				</ul>
 			
-			<div ng-show="uploadFormShow()">
-				{% include 'ds_list.html' %}
+				<div ng-show="uploadFormShow()">
+					{% include 'ds_list.html' %}
+				</div>
+				<div ng-show="onlineShow()">
+					{% include 'olds_list.html' %}
+				</div>
 			</div>
-			<div ng-show="onlineShow()">
-				{% include 'olds_list.html' %}
-			</div>
-		
+<!-- 			<div class="container-fluid">
+				<div class="col-md-1 npnm"></div>
+				<div class="col-md-3 npnm"><label for="from">From</label>
+				<p><input name="from" type="text" class="form-control" ng-model="applyForm.from"></input></p></div>
+				<div class="col-md-4 npnm"></div>
+				<div class="col-md-3 npnm"><label for="to">To</label>
+				<p><input name="to" type="text" class="form-control" ng-model="applyForm.to"></input></p></div>
+				<div class="col-md-1 npnm"></div>
+			</div> -->
 		</div>
+		<div class="container-fluid npnm">
+			<div class="col-md-4 npnm">
+			<p><input name="from" type="text" class="form-control" placeholder="From" ng-model="applyForm.from" autocomplete=off></input></p></div>
+			<div class="col-md-4 npnm">
+			<p><input name="to" type="text" class="form-control" placeholder="To" ng-model="applyForm.to" autocomplete=off></input></p></div>
+			<div class="col-md-4 npnm">
+			<input type="submit" class="btn btn-success btn-block" value="Next"></input></div>
 		</div>
 	</div>
 	<div class="col-md-6">
 		<div>
+			<iframe frameborder=0 width="100%" height="200%"  scrolling="auto" id="datasetviewframe" ></iframe>
 		</div>
 	</div>
 </div>

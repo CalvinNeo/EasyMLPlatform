@@ -49,6 +49,11 @@ def api(request, operation = "", *args, **kwargs):
         pass
     elif operation == 'model_train':
         return HttpResponse(TrainingTask.CreateTrain(unicodemodelindex=request.GET.get('modelindex'))) 
+    elif operation == 'model_apply':
+        return HttpResponse(ApplyTask.CreateApply(unicodemodelindex=request.GET.get('modelindex')
+            , unicodedatasetindex=request.GET.get('datasetindex')
+            , unicodeoldatasetindex=request.GET.get('oldatasetindex')
+            , unicodeselectwhichdatasettype=request.GET.get('selectwhichdatasettype') )) 
     else:
         return HttpResponse("")
 
@@ -70,6 +75,7 @@ def index(request, operation = "", *args, **kwargs):
                 'datasets':Dataset.GetDatasets()
                 ,'oldatasets':OnlineDataset.GetDatasets()
                 ,'renewstrategies':OnlineDataset.AllRenewStrategies()
+                ,'operation':operation
                 ,'ds_select':True, 'ds_operation':True, 'ds_delete':True, 'ds_choose':False, 'ds_show':True
                 ,'md_select':True, 'md_operation':True, 'md_delete':True, 'md_choose':False, 'md_show':False, 'md_train':False
                 })
@@ -81,6 +87,7 @@ def index(request, operation = "", *args, **kwargs):
                 ,'modeltypes':MLModel.AllModels()
                 ,'models': MLModel.GetModels()
                 ,'tasks':TrainingTask.GetTasks()
+                ,'operation':operation
                 ,'ds_select':False, 'ds_operation':True, 'ds_delete':False, 'ds_choose':True, 'ds_show':False
                 ,'md_select':True, 'md_operation':True, 'md_delete':True, 'md_choose':True, 'md_show':True, 'md_train':True
                 })
@@ -91,7 +98,8 @@ def index(request, operation = "", *args, **kwargs):
                 ,'models': MLModel.GetModels()
                 ,'datasets':Dataset.GetDatasets()
                 ,'oldatasets':OnlineDataset.GetDatasets()
-                ,'ds_select':False, 'ds_operation':True, 'ds_delete':False, 'ds_choose':True, 'ds_show':False
+                ,'operation':operation
+                ,'ds_select':False, 'ds_operation':True, 'ds_delete':False, 'ds_choose':True, 'ds_show':True
                 ,'md_select':False, 'md_operation':True, 'md_delete':False, 'md_choose':True, 'md_show':False, 'md_train':False
                 })
         elif operation == 'assessment':

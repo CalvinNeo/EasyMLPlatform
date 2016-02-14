@@ -6,7 +6,8 @@
 
 		</td>
 	{% endif %}
-	<td>Name</td><td>URL</td><td>Location</td><td>Renew</td>
+	<td>Name</td><td>URL</td><td>Location</td>
+	{% if operation != 'apply' and operation != 'models' %} <td>Renew</td> {% endif %}
 </tr>
 </thead>
 <tbody>
@@ -18,7 +19,7 @@
 			<td><a href="javascript:void(0)" ng-click="{% if ds_show %} showOLDataset({{dataset.id}}) {% endif %} {% if ds_choose %} ;selectedoldataset = {true:-1,false:{{dataset.id}}}[selectedoldataset=={{dataset.id}}];selectwhichdatasettype = 'ol' {% endif %}">{{dataset.name}}</a></td>
 			<td><a href="{{dataset.url}}">{{dataset.url}}</a></td>			
 			<td>{{dataset.location}}</td>
-			<td>{{dataset.renewstrategy}}</td>
+			{% if operation != 'apply' and operation != 'models' %}<td>{{dataset.renewstrategy}}</td>{% endif %}
 		{% if ds_operation %}
 			{% if ds_delete %}
 			<td><a href="javascript:void(0)" ng-click="deleteOLDataset({{dataset.id}})" class="label label-important">DELETE</a></td>

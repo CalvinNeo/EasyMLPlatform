@@ -7,7 +7,7 @@
 		</td>
 	{% endif %}
 	<td>Name</td><td>Model Type</td><td>  Create Time  </td>
-	<td>Dataset</td>
+	{% if operation != 'apply'%} <td>Dataset</td> {% endif %}
 	<td>Status</td>
 </tr>
 </thead>
@@ -20,7 +20,7 @@
 			<td><a href="javascript:void(0)" ng-click="{% if md_show %} showModel({{model.id}}) {% endif %} {% if md_choose %} ;selectedmodel = {true:-1,false:{{model.id}}}[selectedmodel=={{model.id}}]  {% endif %}" >{{model.name}}</a></td>
 			<td>{{model.modeltype}}</td>
 			<td>{{model.createtime}}</td>
-			<td>{{model.datasetprototype}}:{{model.datasetindex}}</td>
+			{% if operation != 'apply'%}<td>{{model.datasetprototype}}:{{model.datasetindex}}</td>{% endif %}
 			<td>{{model.modelstatus}}</td>
 		{% if md_operation %}
 			{% if md_delete %}

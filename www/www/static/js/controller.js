@@ -278,9 +278,18 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
 })
 
 angular.module('mlApp').controller('applyModelController', function($scope, $http, $location, hashimageService){
+	$scope.actiontype = 'new'
+	$scope.applyForm = {}
+	$scope.datatype = 'file'
+	$scope.showwhich = 'list'
 	$scope.selecteddataset = -1
 	$scope.selectedoldataset = -1
 	$scope.selectedmodel = -1
+	$scope.selectwhichdatasettype = 'ds'
+
+	$scope.showDataset = function(datasetindex){
+		$("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
+	}
 })
 
 angular.module('mlApp').controller('assessModelController', function($scope, $http, $location, hashimageService){

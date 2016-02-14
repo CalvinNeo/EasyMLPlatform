@@ -263,6 +263,7 @@ class MLModel(models.Model):
     # set default like this so that it can work with -1/1 and 0/1 
     positive = models.FloatField(default = 1.0)
     negative = models.FloatField(default = -0.5)
+    result = models.CharField(max_length = 255)
 
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
@@ -379,6 +380,8 @@ class TrainingTask(models.Model):
 
                 # now Training is over
                 md.modelstatus = 'TRAINED'
+                # save training result
+                mlmd.Save()
                 md.save()
                 tt.delete()
                 
@@ -388,4 +391,21 @@ class TrainingTask(models.Model):
     @staticmethod
     def StartTrain(unicodetaskindex = None):
         pass
+
+class ApplyTask(models.Model):
+    class Meta:
+        db_table = 'applyingtask'
+
+    @staticmethod
+    def CreateApply(unicodemodelindex = None, unicodedatasetindex = None, unicodeoldatasetindex = None, unicodeselectwhichdatasettype = None):
+        if unicodemodelindex != None:
+            modelindex = int(unicodemodelindex)
+            md = MLModel.objects.get(id = modelindex)
+        if unicodedatasetindex != None:
+            modelindex = int(unicodedatasetindex)
+            md = MLModel.objects.get(id = unicodedatasetindex)
+        if unicodedatasetindex != None:
+            modelindex = int(unicodedatasetindex)
+            md = MLModel.objects.get(id = unicodedatasetindex)
+
 
