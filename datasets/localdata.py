@@ -106,8 +106,8 @@ class LocalData:
     def default_datamapper(self, data, colindex, head):
         return parse.parsestr(data, [parse.extendboolean])
 
-    def GenerateHead(self, ncol):
-        self.head = range(len(ncol))
+    # def GenerateHead(self, ncol):
+    #     self.head = range(len(ncol))
 
     def Iter(self):
         if self.online:
@@ -156,6 +156,15 @@ class LocalData:
         elif self.mode == 'sfold':
             return [self.items[index][i] for index in xrange(0, len(self.items), self.nsplit)] 
 
+    def HeadIndex(self, i, head_col):
+        if self.online:
+            self.OnlineRenew()
+
+        if self.mode == 'all':
+            return self.items[i][self.head.index(head_col)]
+        elif self.mode == 'sfold':
+            return [self.items[index][i] for index in xrange(0, len(self.items), self.nsplit)] 
+
     def RealIndex(self, index):
         '''
             in: -1
@@ -169,13 +178,20 @@ class LocalData:
             newitems = list(kwargs['items'])
         else:
             newitems = [[self.items[i][j] for j in colindexs] for i in kwargs['linindexs']]
-        print "classfeatureindex", self.classfeatureindex, colindexs
+        # print "classfeatureindex", self.classfeatureindex, colindexs
         positiveindex = self.RealIndex(self.classfeatureindex)
         newclassfeatureindex = colindexs.index(positiveindex) if positiveindex in colindexs else -1
         return LocalData(self.datamapper, head = newhead, items = newitems, classfeatureindex = newclassfeatureindex)
     
-    def SpawnRect(self, x1, y1, x2, y2, cpy=True):
+    def SpawnRect(self, col1, col2, row1, row2, cpy=True):
         pass
+
+    def Trim(self, col1, col2, row1, row2):
+        if self.mode == 'all':
+            self.items = self.items[x1:x2]
+        elif self.mode == 'sfold':
+            for index in xrange(0, len(self.items), self.nsplit):
+                yield self.items[index]
 
     def ReadString(self, data, hasHead = False, attr_delim = ",", record_delim = "\n", getValue=True):
         '''
@@ -188,7 +204,6 @@ class LocalData:
         else:
             self.head = []
         self.items = []
-
         if getValue:
             for record in records:
                 if record == "":
@@ -198,7 +213,9 @@ class LocalData:
                 if not hasHead: #if no head set head as 0,1,2,3,4,5,6...
                     self.head = range(len(data_col))
                     hasHead = True
-                self.items.append(map(self.datamapper,data_col,range(len(data_col)),self.head))
+                # self.items.append(map(self.datamapper, data_col, range(len(data_col)), self.head))
+                # self.items.append( self.datamapper( data_col, range(len(data_col)), self.head ) )
+                self.items.append(map(lambda x:self.datamapper(x[0],x[1],x[2]), zip(data_col, range(len(data_col)), self.head)))
 
     def ReadCSV(self, path, hasHead=False, getValue=True):
         self.ReadString(open(path, 'r'), hasHead, getValue)

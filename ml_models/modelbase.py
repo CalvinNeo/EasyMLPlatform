@@ -6,6 +6,14 @@ import itertools
 import model_list
 
 class ModelBase:
+    '''
+        -- below are to be implemented
+        Test 
+        Train 
+        Save
+        Read
+        Graph
+    '''
     def __init__(self, dataset, prototype, *args, **kwargs):
         '''
             dataset
@@ -56,8 +64,20 @@ class ModelBase:
     def Train(self, dataset):
         pass
 
+    def Save(self, name):
+        pass
+
+    def Read(self, name):
+        pass
+
     def Test(self, inp):
         return inp
+
+    def Apply(self, dataset, remove_item):
+        return dataset
+
+    def Graph(self, op):
+        pass
 
     def T(self, inp):
         return inp[classfeatureindex]
@@ -159,6 +179,7 @@ class ModelBase:
     def AllModelInfo():
         # return eval(open('./models.json','r').read())
         import naive_bayes
+        import decision_tree
         return {
             'MATRIX_ADD':{
                 'ndataset': 2
@@ -223,6 +244,7 @@ class ModelBase:
                 ,'distributed': False
                 ,'nontraining': False
                 ,'modeltype': 'CLASSIFY'
+                ,'cls': decision_tree.DecisionTree
             },
             'ADABOOST':{
                 'ndataset': 1

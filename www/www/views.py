@@ -53,12 +53,14 @@ def api(request, operation = "", *args, **kwargs):
         return HttpResponse(ApplyTask.CreateApply(unicodemodelindex=request.GET.get('modelindex')
             , unicodedatasetindex=request.GET.get('datasetindex')
             , unicodeoldatasetindex=request.GET.get('oldatasetindex')
-            , unicodeselectwhichdatasettype=request.GET.get('selectwhichdatasettype') )) 
+            , unicodeselectwhichdatasettype=request.GET.get('selectwhichdatasettype') 
+            , unicodefrom=request.GET.get('from')
+            , unicodeto=request.GET.get('to')
+            )) 
     else:
         return HttpResponse("")
 
 def index(request, operation = "", *args, **kwargs):
-    print "--------------------index:",operation,request.GET
     #特别注意一点,{}[p]这种选择方式,dict里面是全部求值的
     try:
         return {

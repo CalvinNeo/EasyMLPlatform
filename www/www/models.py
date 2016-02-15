@@ -13,6 +13,7 @@ from ml_models.modelbase import *
 from ml_models.model_task import *
 from ml_models import *
 
+
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "www.settings") 
 def get_upload_to(instance, filename):
     # paths = { 'I':'images/', 'V':'videos/', 'A':'audio/', 'D':'documents'/ }
@@ -76,7 +77,7 @@ class Dataset(models.Model):
                 try:
                     dsinfo = Dataset.objects.get(id = datasetindex)
                     #open local dataset
-                    lcdt = datasets.localdata.LocalData(datamapper = lambda data,colindex,head:int(data))
+                    lcdt = datasets.localdata.LocalData(datamapper = None)
                     lcdt.ReadString(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
                     return {'info':dsinfo, 'view':lcdt}
                 except:
@@ -263,7 +264,7 @@ class MLModel(models.Model):
     # set default like this so that it can work with -1/1 and 0/1 
     positive = models.FloatField(default = 1.0)
     negative = models.FloatField(default = -0.5)
-    result = models.CharField(max_length = 255)
+    model_path = models.CharField(max_length = 255)
 
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
@@ -381,7 +382,8 @@ class TrainingTask(models.Model):
                 # now Training is over
                 md.modelstatus = 'TRAINED'
                 # save training result
-                mlmd.Save()
+                md.model_path = 'cache/models/'+random_file_name(None,'trd')
+                mlmd.Save(md.model_path)
                 md.save()
                 tt.delete()
                 
@@ -393,19 +395,22 @@ class TrainingTask(models.Model):
         pass
 
 class ApplyTask(models.Model):
+
+    id = models.AutoField(primary_key = True)
+
     class Meta:
         db_table = 'applyingtask'
 
     @staticmethod
-    def CreateApply(unicodemodelindex = None, unicodedatasetindex = None, unicodeoldatasetindex = None, unicodeselectwhichdatasettype = None):
+    def CreateApply(unicodemodelindex = None, unicodedatasetindex = None
+        , unicodeoldatasetindex = None, unicodeselectwhichdatasettype = 'ds'
+        , unicoderemove = ''):
         if unicodemodelindex != None:
             modelindex = int(unicodemodelindex)
             md = MLModel.objects.get(id = modelindex)
-        if unicodedatasetindex != None:
-            modelindex = int(unicodedatasetindex)
-            md = MLModel.objects.get(id = unicodedatasetindex)
-        if unicodedatasetindex != None:
-            modelindex = int(unicodedatasetindex)
-            md = MLModel.objects.get(id = unicodedatasetindex)
-
-
+        if str(unicodeselectwhichdatasettype) == 'ds':
+            dbds = Dataset.GetDataset(int(unicodedatasetindex))
+        else:
+            dbds = OnlineDataset.GetDataset(int(unicodeoldatasetindex))
+        mlmd = ModelApplyTask(ApplyTask.objects.all()[len(ApplyTask.objects.all())-1].id, 
+            md, dbds, None if str(unicoderemove)=='' else int(unicoderemove))

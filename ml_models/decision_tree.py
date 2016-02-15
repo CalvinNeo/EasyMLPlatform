@@ -19,7 +19,10 @@ class DecisionTree(ModelBase):
         '''
         ModelBase.__init__(self, dataset, 'CLASSIFY', *args, **kwargs)
         self.Test = self.Classify
+        self.Apply = self.ClassifyDataset
         self.Train = self.CreateTree
+        self.Save = self.DumpTree
+        self.Read = self.LoadTree
         self.tree = {}
 
     #这两个函数相对"独立"
@@ -61,7 +64,6 @@ class DecisionTree(ModelBase):
             if infomation_gain > best_gain:
                 best_gain = infomation_gain
                 best_featureid = i
-        print "best_featureid", best_featureid
         return best_featureid
 
     def MajorityCount(self, classfeatures):
@@ -80,7 +82,6 @@ class DecisionTree(ModelBase):
             dataset part of self.dataset
             classfeatures is a list of class-feature values in each item
         '''
-        print "*********************************START_CREATETREE"
         classfeatures = dataset.Column(dataset.classfeatureindex)
         if len(classfeatures) == 0:
             #empty dataset
@@ -96,7 +97,6 @@ class DecisionTree(ModelBase):
         featurevalues, shentr = self.SplitDataset(dataset, bestfeature)
         for value in featurevalues.keys():
             newdataset = dataset.Spawn(range(0,bestfeature)+range(bestfeature+1,dataset.ColumnLength()), items = featurevalues[value])
-            print dataset
             mytree[dataset.head[bestfeature]][value] = self.CreateTree(newdataset)
         return mytree
 
@@ -113,12 +113,16 @@ class DecisionTree(ModelBase):
             featureindex = tree.keys()[0]
             branch_dict = tree[featureindex]
             for key in branch_dict.keys():
-                if test[featureindex] == key:
+                if test[self.dataset.head.index(featureindex)] == key:
                     if type(branch_dict[key]).__name__ == 'dict':
                         tree = branch_dict[key]
                         break #jump out of for-loop, compare the next feature
                     else:
                         return branch_dict[key]
+
+    def ClassifyDataset(self, dataset, remove_item):
+        for item in dataset.Iter():
+            pass
 
     def DumpTree(self, filename):
         fw = open(filename, 'w')
@@ -145,9 +149,14 @@ if __name__ == '__main__':
     ld = datasets.localdata.LocalData(datamapper=my_mapper)
     ld.ReadString(open("dat_cls.txt","r").read(),True)
     dt = DecisionTree(ld)
-    print dt.BuildTree()
+    # for x in dt.dataset.items:
+    #     print x, type(x)
+    # print dt.dataset
+    # print [item for item in dt.dataset.items]
+    dt.BuildTree()
+    print dt.tree
 
     
-    # print dt.Classify([1,1])
-    # print dt.Classify([0,0])
+    print dt.Classify([1,1])
+    print dt.Classify([0,0])
     # print dt.BestFeature(dt.dataset.items)
