@@ -67,7 +67,7 @@ class ModelBase:
     def Save(self, name):
         pass
 
-    def Read(self, name):
+    def Load(self, name):
         pass
 
     def Test(self, inp):

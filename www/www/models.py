@@ -318,6 +318,20 @@ class MLModel(models.Model):
             return 'true'
         return 'false'
 
+    @staticmethod
+    def GetImage(unicodemodelindex = None):
+        mlmd = None
+        if unicodemodelindex != None:
+            modelindex = int(unicodemodelindex)
+            mlmd = MLModel.objects.get(id = modelindex)
+        if mlmd != None:
+            clsname = mlmd.modeltype
+            if (clsname.upper() in ModelBase.AllModelInfo().keys()):
+                md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = dataset['view'])
+                image = md.Graph('')
+                return 'true'
+        return 'false'
+
     def __unicode__(self):
         return  "{{ 'id':{}, 'modeltype':'{}', 'name':'{}' }}".format( str(self.id), str(self.modeltype), str(self.name) ) 
         return "#{}: ({}) {} @ ".format(self.id,self.modeltype,self.name)
@@ -412,5 +426,7 @@ class ApplyTask(models.Model):
             dbds = Dataset.GetDataset(int(unicodedatasetindex))
         else:
             dbds = OnlineDataset.GetDataset(int(unicodeoldatasetindex))
-        mlmd = ModelApplyTask(ApplyTask.objects.all()[len(ApplyTask.objects.all())-1].id, 
-            md, dbds, None if str(unicoderemove)=='' else int(unicoderemove))
+        mlmd = ModelApplyTask(0, 
+            md, dbds)
+            #, None if str(unicoderemove)=='' else int(unicoderemove))
+        return mlmd

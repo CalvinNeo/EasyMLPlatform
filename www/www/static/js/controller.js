@@ -135,6 +135,8 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
 			url : '/api/dataset_view?datasetindex='+ datasetindex
 			,async : false
 			,success : function (data, textStatus) {
+				data = data.replace(/True/g, "true")
+				data = data.replace(/False/g, "false")
 				ndata = eval( "(" + data + ")" )
 				$scope.uploadForm['dsname'] = ndata.info.name
 				$scope.uploadForm['dshashead'] = ndata.info.hashead
@@ -174,6 +176,9 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
 			,async : false
 			,success : function (data, textStatus) {
 				// data = jQuery.parseJSON(data)
+				data = data.replace(/True/g, "true")
+				data = data.replace(/False/g, "false")
+				// data = data.replace(/True/, "true").replace(/False/, "false")
 				data = eval( "(" + data + ")" )
 				$scope.onlineForm['olname'] = data.info.name
 				$scope.onlineForm['olurl'] = data.info.url
@@ -290,6 +295,77 @@ angular.module('mlApp').controller('applyModelController', function($scope, $htt
 	$scope.showDataset = function(datasetindex){
 		$("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
 	}
+        // return HttpResponse(ApplyTask.CreateApply(unicodemodelindex=request.GET.get('modelindex')
+        //     , unicodedatasetindex=request.GET.get('datasetindex')
+        //     , unicodeoldatasetindex=request.GET.get('oldatasetindex')
+        //     , unicodeselectwhichdatasettype=request.GET.get('selectwhichdatasettype') 
+        //     , unicoderemove=request.GET.get('removeitem')
+        //     )) 
+	$scope.runapply = function(){
+		$.ajax({
+			url : '/api/model_apply'
+			,data : {
+				modelindex : $scope.selectedmodel
+				,datasetindex : $scope.selecteddataset
+				,oldatasetindex : $scope.selectedoldataset
+				,selectwhichdatasettype : $scope.selectwhichdatasettype
+				,removeitem : $scope.applyForm.removeitem
+			}
+			,async : true
+			,success : function (data, textStatus) {
+				// $("#datasetviewframe").attr("src",data.toString())
+				document.getElementById('datasetviewframe').contentWindow.document.body.innerHTML = data
+				// $("#datasetviewframe").attr("src",data.toString())
+			}
+		})
+	}
+
+	// below are copied from switchDatasetController
+	$scope.setdatatype = function(x){
+		if (x == 'file'){
+			$scope.datatype = 'file'
+			$location.path('/file')
+		}else{
+			$scope.datatype = 'online'
+			$location.path('/online')
+		}
+	}
+	$scope.uploadFormShow = function(){
+		return $scope.datatype == "file"
+	}
+	$scope.onlineShow = function(){
+		return !$scope.uploadFormShow()
+	}
+	$scope.setactiontype = function(x){
+		if (x == 'new'){
+			$scope.datatype = 'new'
+		}else{
+			$scope.datatype = 'change'
+		}
+	}
+	$scope.setuploadactiontype = function(x){
+		if (x == 'new'){
+			$scope.uploadactiontype = 'new'
+		}else{
+			$scope.uploadactiontype = 'change'
+		}
+	}
+	$scope.setonlineactiontype = function(x){
+		if (x == 'new'){
+			$scope.onlineactiontype = 'new'
+		}else{
+			$scope.onlineactiontype = 'change'
+		}
+	}
+
+	$scope.showDataset = function(datasetindex){
+		$("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
+	}
+
+	$scope.showOLDataset = function(datasetindex){
+		$("#datasetviewframe").attr("src","/index/olds_view?datasetindex="+datasetindex)
+	}
+
 })
 
 angular.module('mlApp').controller('assessModelController', function($scope, $http, $location, hashimageService){

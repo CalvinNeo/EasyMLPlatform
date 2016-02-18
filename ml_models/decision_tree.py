@@ -10,6 +10,7 @@ from datasets.monads import *
 import operator
 import json
 import pickle
+from graphic.tree import *
 
 class DecisionTree(ModelBase):
     def __init__(self, dataset, *args, **kwargs):
@@ -20,9 +21,10 @@ class DecisionTree(ModelBase):
         ModelBase.__init__(self, dataset, 'CLASSIFY', *args, **kwargs)
         self.Test = self.Classify
         self.Apply = self.ClassifyDataset
-        self.Train = self.CreateTree
+        self.Train = self.BuildTree
         self.Save = self.DumpTree
-        self.Read = self.LoadTree
+        self.Load = self.LoadTree
+        self.Graph = self.ShowImage
         self.tree = {}
 
     #这两个函数相对"独立"
@@ -120,9 +122,11 @@ class DecisionTree(ModelBase):
                     else:
                         return branch_dict[key]
 
-    def ClassifyDataset(self, dataset, remove_item):
+    def ClassifyDataset(self, dataset, remove_item = None):
+        resultdataset = LocalData(None, head = self.dataset.head+['result'], classfeatureindex = -1)
         for item in dataset.Iter():
-            pass
+            resultdataset.items.append(item+[self.Classify(item)])
+        return resultdataset
 
     def DumpTree(self, filename):
         fw = open(filename, 'w')
@@ -131,7 +135,13 @@ class DecisionTree(ModelBase):
 
     def LoadTree(self, filename):
         fr = open(filename)
-        return pickle.load(filename)
+        self.tree = pickle.load(fr)
+
+    def ShowImage(self, op):
+        tr = GraphTree()
+        # JSON can't have non-string key
+        tr.load(self.tree)
+        tr.createPlot()
 
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):
@@ -159,4 +169,5 @@ if __name__ == '__main__':
     
     print dt.Classify([1,1])
     print dt.Classify([0,0])
+    dt.ShowImage('')
     # print dt.BestFeature(dt.dataset.items)

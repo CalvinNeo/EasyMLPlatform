@@ -50,7 +50,7 @@ class ModelRunTask:
         '''
             Called by /www/models.py
         '''
-        self.model.Train(self.dataset)
+        self.model.Train()
 
     def Save(self, name):
         '''
@@ -64,6 +64,7 @@ class ModelRunTask:
         '''
         self.model.Load(name)
 
+
 class ModelApplyTask:
     def __init__(self, taskid, db_model, dataset):
         clsname = db_model.modeltype
@@ -75,6 +76,8 @@ class ModelApplyTask:
 
             self.dataset = dataset['view']
             self.model = md
+            print db_model.model_path
+            self.Load(db_model.model_path)
 
             print dataset,md
 
@@ -82,7 +85,7 @@ class ModelApplyTask:
         '''
             Called by /www/models.py
         '''
-        self.model.Test(self.dataset)
+        return self.model.Apply(self.dataset)
 
     def Save(self, name):
         '''

@@ -20,7 +20,6 @@ from www.models import *
 
 def api(request, operation = "", *args, **kwargs):
     print "api:",operation
-    print request.GET.get('datasetindex')
     operation = str(operation)
     if operation == "dataset_delete":
         return HttpResponse(Dataset.DeleteDataset(unicodedatasetindex=request.GET.get('datasetindex')))
@@ -46,17 +45,19 @@ def api(request, operation = "", *args, **kwargs):
         elif action == 'absolute':
             return HttpResponse("true")
     elif operation == 'image':
-        pass
+        return HttpResponse(MLModel.GetImage(unicodemodelindex=request.GET.get('modelindex'))) 
     elif operation == 'model_train':
         return HttpResponse(TrainingTask.CreateTrain(unicodemodelindex=request.GET.get('modelindex'))) 
     elif operation == 'model_apply':
-        return HttpResponse(ApplyTask.CreateApply(unicodemodelindex=request.GET.get('modelindex')
+        applytask = ApplyTask.CreateApply(unicodemodelindex=request.GET.get('modelindex')
             , unicodedatasetindex=request.GET.get('datasetindex')
             , unicodeoldatasetindex=request.GET.get('oldatasetindex')
             , unicodeselectwhichdatasettype=request.GET.get('selectwhichdatasettype') 
-            , unicodefrom=request.GET.get('from')
-            , unicodeto=request.GET.get('to')
-            )) 
+            , unicoderemove=request.GET.get('removeitem')
+            )
+        resultdataset = applytask.Start()
+        # save dataset and print out
+        return render(request,"ds_view.html",{'dataset':resultdataset})
     else:
         return HttpResponse("")
 

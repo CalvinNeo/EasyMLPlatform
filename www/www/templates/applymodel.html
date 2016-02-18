@@ -1,6 +1,6 @@
 {% include 'header.html' %}
 
-<div class="container-fluid" ng-controller="applyModelController">
+<div class="container-fluid" ng-controller="applyModelController"><div >
 	<div class="col-md-6">
 		<p class="lead"> Model List</p>
 		<div>
@@ -8,7 +8,7 @@
 		</div>
 		<p class="lead"> Dataset List </p>
 		<div>
-			<div ng-controller="switchDatasetController">
+			<div >
 				<ul id="mytab" class="nav nav-tabs">
 					<li ng-class="{true:'active',false:''}[datatype=='file']">
 						<a href="javascript:void(0)" data-toggle="tab" ng-click="setdatatype('file')">LOCAL</a></li>
@@ -41,17 +41,18 @@
 			<div class="col-md-4 npnm">
 			<input type="submit" class="btn btn-success btn-block" value="Next"></input></div> -->
 			<div class="col-md-4 npnm">
-			<p><input name="removeitem" type="text" class="form-control" placeholder="To" ng-model="applyForm.removeitem" autocomplete=off></input></p></div>
+			<p><input name="removeitem" type="text" class="form-control" placeholder="Remove Item" ng-model="applyForm.removeitem" autocomplete=off></input></p></div>
+			<div class="col-md-4 npnm"></div>
 			<div class="col-md-4 npnm">
-			<input type="submit" class="btn btn-success btn-block" value="Next"></input></div>
+			<input type="submit" class="btn btn-success btn-block" value="Next" ng-click="runapply()"></input></div>
 		</div>
 	</div>
 	<div class="col-md-6">
 		<div>
-			<iframe frameborder=0 width="100%" height="200%"  scrolling="auto" id="datasetviewframe" ></iframe>
+			<iframe frameborder=0 width="100%" height="300%"  scrolling="auto" id="datasetviewframe" ></iframe>
 		</div>
 	</div>
-</div>
+</div></div>
 
 <script>
 
