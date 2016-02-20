@@ -291,6 +291,7 @@ angular.module('mlApp').controller('applyModelController', function($scope, $htt
 	$scope.selectedoldataset = -1
 	$scope.selectedmodel = -1
 	$scope.selectwhichdatasettype = 'ds'
+	$scope.currentshow = 'ds'
 
 	$scope.showDataset = function(datasetindex){
 		$("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
@@ -315,6 +316,7 @@ angular.module('mlApp').controller('applyModelController', function($scope, $htt
 			,success : function (data, textStatus) {
 				// $("#datasetviewframe").attr("src",data.toString())
 				document.getElementById('datasetviewframe').contentWindow.document.body.innerHTML = data
+				$("#modelimage").hide()
 				// $("#datasetviewframe").attr("src",data.toString())
 			}
 		})
@@ -359,11 +361,33 @@ angular.module('mlApp').controller('applyModelController', function($scope, $htt
 	}
 
 	$scope.showDataset = function(datasetindex){
+		$scope.currentshow = 'ds'
+		$("#modelimage").hide()
+		$("#datasetviewframe").show()
 		$("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
 	}
 
 	$scope.showOLDataset = function(datasetindex){
+		$scope.currentshow = 'ds'
+		$("#modelimage").hide()
+		$("#datasetviewframe").show()
 		$("#datasetviewframe").attr("src","/index/olds_view?datasetindex="+datasetindex)
+	}
+
+	$scope.showModel = function(modelindex){
+		$scope.currentshow = 'md'
+		$("#datasetviewframe").hide()
+		$("#modelimage").show()
+		$.ajax({
+			url : '/api/image'
+			,data : {
+				modelindex : modelindex
+			}
+			,async : true
+			,success : function (data, textStatus) {
+				$("#modelimage").attr("src", data)
+			}
+		})
 	}
 
 })

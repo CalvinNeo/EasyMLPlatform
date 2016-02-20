@@ -141,7 +141,7 @@ class DecisionTree(ModelBase):
         tr = GraphTree()
         # JSON can't have non-string key
         tr.load(self.tree)
-        tr.createPlot()
+        return tr.createPlot(show = False)
 
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):

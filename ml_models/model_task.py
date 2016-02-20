@@ -76,7 +76,6 @@ class ModelApplyTask:
 
             self.dataset = dataset['view']
             self.model = md
-            print db_model.model_path
             self.Load(db_model.model_path)
 
             print dataset,md

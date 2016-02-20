@@ -103,7 +103,7 @@ def index(request, operation = "", *args, **kwargs):
                 ,'oldatasets':OnlineDataset.GetDatasets()
                 ,'operation':operation
                 ,'ds_select':False, 'ds_operation':True, 'ds_delete':False, 'ds_choose':True, 'ds_show':True
-                ,'md_select':False, 'md_operation':True, 'md_delete':False, 'md_choose':True, 'md_show':False, 'md_train':False
+                ,'md_select':False, 'md_operation':True, 'md_delete':False, 'md_choose':True, 'md_show':True, 'md_train':False
                 })
         elif operation == 'assessment':
             return render(request,"assessmodel.html",{})

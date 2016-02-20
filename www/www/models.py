@@ -318,6 +318,16 @@ class MLModel(models.Model):
             return 'true'
         return 'false'
 
+        # if (clsname.upper() in ModelBase.AllModelInfo().keys()): 
+        #     # dataset
+        #     dataset['view'].classfeatureindex = db_model.classfeatureindex
+
+        #     md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](LocalData())
+
+        #     self.dataset = dataset['view']
+        #     self.model = md
+        #     self.Load(db_model.model_path)
+
     @staticmethod
     def GetImage(unicodemodelindex = None):
         mlmd = None
@@ -326,11 +336,14 @@ class MLModel(models.Model):
             mlmd = MLModel.objects.get(id = modelindex)
         if mlmd != None:
             clsname = mlmd.modeltype
+            print clsname
             if (clsname.upper() in ModelBase.AllModelInfo().keys()):
-                md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = dataset['view'])
+                md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](LocalData())
+                md.Load(mlmd.model_path)
                 image = md.Graph('')
-                return 'true'
-        return 'false'
+                print image
+                return image
+        return ''
 
     def __unicode__(self):
         return  "{{ 'id':{}, 'modeltype':'{}', 'name':'{}' }}".format( str(self.id), str(self.modeltype), str(self.name) ) 

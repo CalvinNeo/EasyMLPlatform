@@ -24,7 +24,7 @@ class GraphTree:
         branch_dict = root[current_node]
         maxdepth, thisdepth, thisleafcount = 0,0,0
         for current_node in branch_dict.keys():
-            print current_node,type(branch_dict[current_node]).__name__ 
+            # print current_node,type(branch_dict[current_node]).__name__ 
             if type(branch_dict[current_node]).__name__ == 'dict':
                 temp = self.get_depth_leafcount(branch_dict[current_node])
                 thisdepth = 1 + temp[0]
@@ -73,12 +73,17 @@ class GraphTree:
         self.ax1 = plt.subplot(111,frameon = False, **axprops)
         self.xOff, self.yOff = -0.5 / self.leafcount, 1.0
         self.plotTree(self.jsonobj, (0.5,1.0), '')
+        import StringIO, urllib, base64
         if show:
             plt.show()
         else:
-            pass
+            imgdata = StringIO.StringIO()
+            fig.savefig(imgdata, format='png')
+            imgdata.seek(0)  # rewind the data
+            uri = 'data:image/png;base64,' + urllib.quote(base64.b64encode(imgdata.buf))
+            return uri
 
-    def showPlot(self)
+    def showPlot(self):
         plt.show()
 
 if __name__ == '__main__':
@@ -87,10 +92,10 @@ if __name__ == '__main__':
     # tr.load(json.loads(aa))
     #JSON can't have non-string key
     aa = {"aged":{"0":"no","1":{"male":{"0":"no","1":"yes"}}}}
-    aa = {'water': {0: 1, 1: {'foot': {0: "'no'", 1: "'yes'"}}}}
+    # aa = {'water': {0: 1, 1: {'foot': {0: "'no'", 1: "'yes'"}}}}
     print dict(aa)
     # aa = {"no surfacing":{0:"no",1:{"flippers":{0:"no",1:"yes"}}}}
     # print dict(aa)
     tr.load(aa)
     print tr.leafcount,tr.depth
-    tr.createPlot()
+    tr.createPlot(show=False)
