@@ -11,7 +11,7 @@
 		</div>
 		<div class="col-md-6 npnm" >
 			<p><label for="url">URL</label>
-				<input name="url" type="text" class="form-control" ng-pattern="/^((http|https)://)?([\w-]+\.)+[\w-:]+(/[\w- ./?%&=_]*)?$/" required ng-model="onlineForm.olurl" >
+				<input name="url" type="text" class="form-control" ng-pattern="/^((http|https)://)?([\w-]+\.)+[\w-:]+(/[\w- ./?%&=_]*)?$/" required ng-model="onlineForm.olurl" placeholder='http://'>
 				<div class="error" ng-show="onlineForm.olurl.$dirty && onlineForm.olurl.$invalid">
 					<small class="error text-danger" ng-show="onlineForm.olurl.$error.required"> URL Required </small>
 				</div>
@@ -21,7 +21,7 @@
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
 			<label for="location">Table Location (CSS Selector)</label>
-			<input name="location" type="text" class="form-control" ng-model="onlineForm.ollocation" >
+			<input name="location" type="text" class="form-control" ng-model="onlineForm.ollocation" placeholder='body > table'>
 		</div>
 		<div class="col-md-6 npnm" >
 			<label for="search">Read</label>
@@ -31,7 +31,7 @@
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
 			<label for="renewstrategy">Renew Strategy</label>
-			<input name="renewstrategy" type="text" class="form-control" ng-model="onlineForm.olrenew" id="olrenew">
+			<input name="renewstrategy" type="text" class="form-control" ng-model="onlineForm.olrenew" id="olrenew" placeholder="APPEND">
 		</div>
 	</div>
 	<div class="container-fluid npnm" >

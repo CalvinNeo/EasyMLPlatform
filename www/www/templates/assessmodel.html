@@ -1,7 +1,7 @@
 {% include 'header.html' %}
 
 <div class="container-fluid" ng-controller="assessModelController" >
-	<div class="col-md-4">
+	<div class="col-md-6">
 		<p class="lead"> Model List</p>
 		<div>
 			{% include 'md_list.html' %}
@@ -24,13 +24,36 @@
 				{% include 'olds_list.html' %}
 			</div>
 		</div>
+		<div class="container-fluid npnm">
+			<div class="col-md-4 npnm">
+			<p><input name="assessmethod" type="text" class="form-control" placeholder="sfold" ng-model="assessForm.assessmethod" autocomplete=off id="chooseassessmethod"></input></p></div>
+			<div class="col-md-4 npnm">
+<!-- 			<input name="classfeatureindex" type="text" class="form-control" placeholder="-1" ng-model="assessForm.classfeatureindex" autocomplete=off></input> -->
+			</div>
+			<div class="col-md-4 npnm">
+			<input type="submit" class="btn btn-success btn-block" value="Next" ng-click="runassess()"></input></div>
+		</div>
 	</div>
-	<div class="col-md-8">
+	<div class="col-md-6">
 	</div>
 
 </div>
 
 <script>
-
+	$("#chooseassessmethod").typeahead({
+	    source: [{% for method in assessmethods %}'{{method}}',{% endfor%}],//数据源
+	    items: 8,//最多显示个数
+	    updater: function (item) {
+	        return item;//这里一定要return，否则选中不显示，外加调用display的时候null reference错误。
+	    },
+	    displayText: function (item) {
+	        return item;//返回字符串
+	    },
+	    afterSelect: function (item) {
+	        //选择项之后的事件 ，item是当前选中的。
+	        return item;
+	    },
+	    delay: 500//延迟时间
+	});
 </script>
 {% include 'footer.html' %}

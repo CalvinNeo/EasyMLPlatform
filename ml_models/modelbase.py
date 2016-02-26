@@ -7,12 +7,13 @@ import model_list
 
 class ModelBase:
     '''
-        -- below are to be implemented
+        -- below should be implemented
         Test 
         Train 
         Save
         Read
         Graph
+        T ()
     '''
     def __init__(self, dataset, prototype, *args, **kwargs):
         '''
@@ -44,11 +45,11 @@ class ModelBase:
         if 'positive' in kwargs.keys() and kwargs['positive'] != None:
             self.Positive = kwargs['positive']
         else:
-            self.Positive = 1        
+            self.Positive = 1
         if 'negative' in kwargs.keys() and kwargs['negative'] != None:
             self.Negative = kwargs['negative']
         else:
-            self.Negative = -1 
+            self.Negative = -1
         '''
             Regress
         '''
@@ -80,7 +81,7 @@ class ModelBase:
         pass
 
     def T(self, inp):
-        return inp[classfeatureindex]
+        return inp[self.classfeatureindex]
 
     @staticmethod
     def QuadLoss(t, a):

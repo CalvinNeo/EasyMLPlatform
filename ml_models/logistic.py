@@ -10,18 +10,29 @@ import operator
 import numpy as np
 from collections import defaultdict, namedtuple
 import itertools
+import pickle
 
-class LogisticRegression:
+class LogisticRegression(ModelBase):
     '''
         simple Logistic Regression is linear
     '''
     def __init__(self, dataset, classfeatureindex = -1, alpha = 0.01, maxiter = 500):
-        self.dataset = dataset
+        ModelBase.__init__(self, dataset, 'LOGISTIC', *args, **kwargs)
         self.classfeatureindex = classfeatureindex #index of the column which defines the feature in dataset
+        self.Test = self.Classify
+        self.Apply = self.ClassifyDataset
+        self.Train = self.Regress
+        self.Save = self.DumpLogistic
+        self.Load = self.LoadLogistic
+        self.Graph = self.ShowImage
+        self.T = self.RealValue
+        self.tree = {}
+
         self.sigmoid = lambda input_n:np.vectorize(lambda n: 1.0/(1.0+math.e**(-n)))(input_n)
         self.alpha = alpha
         self.maxiter = maxiter
         self.weights = np.ones((len(self.dataset.head),1))
+        self.classfeatureindex = self.dataset.classfeatureindex
 
     def Regress(self):
         data = np.matrix([item[:self.classfeatureindex] + item[self.classfeatureindex+1:] + [1] if self.classfeatureindex > -1 else item[:len(item)-1] + [1] for item in self.dataset.items])
@@ -37,6 +48,30 @@ class LogisticRegression:
         p = np.matrix(test + [1] )
         print self.sigmoid(np.dot(p , self.weights))
         return 1.0 if self.sigmoid(np.dot(p, self.weights)) > 0.5 else 0.0
+
+    def ClassifyDataset(self, dataset, remove_item = None):
+        '''
+            predict a series sample inputs from a dataset
+        '''
+        resultdataset = LocalData(None, head = self.dataset.head+['result'], classfeatureindex = -1)
+        for item in dataset.Iter():
+            resultdataset.items.append(item+[self.Classify(item)])
+        return resultdataset
+
+    def DumpLogistic(self):
+        fw = open(filename, 'w')
+        pickle.dump(self.weights, fw)
+        fw.close()
+
+    def LoadLogistic(self):
+        fr = open(filename)
+        self.weights = pickle.load(fr)
+
+    def ShowImage(self):
+        pass
+
+    def RealValue(self):
+        pass
 
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):

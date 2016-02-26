@@ -52,12 +52,20 @@ def api(request, operation = "", *args, **kwargs):
         applytask = ApplyTask.CreateApply(unicodemodelindex=request.GET.get('modelindex')
             , unicodedatasetindex=request.GET.get('datasetindex')
             , unicodeoldatasetindex=request.GET.get('oldatasetindex')
-            , unicodeselectwhichdatasettype=request.GET.get('selectwhichdatasettype') 
+            , unicodeselectwhichdatasettype=request.GET.get('selectwhichdatasettype')
             , unicoderemove=request.GET.get('removeitem')
             )
         resultdataset = applytask.Start()
         # save dataset and print out
         return render(request,"ds_view.html",{'dataset':resultdataset})
+    elif operation == 'model_assess':
+        assesstask = AssessTask.CreateAssess(unicodemodelindex=request.GET.get('modelindex')
+            , unicodedatasetindex=request.GET.get('datasetindex')
+            , unicodeoldatasetindex=request.GET.get('oldatasetindex')
+            , unicodeselectwhichdatasettype=request.GET.get('selectwhichdatasettype')
+            , unicodeclassfeatureindex=request.GET.get('classfeatureindex')
+            , unicodeassessmethod=request.GET.get('assessmethod')
+            )
     else:
         return HttpResponse("")
 
@@ -106,7 +114,17 @@ def index(request, operation = "", *args, **kwargs):
                 ,'md_select':False, 'md_operation':True, 'md_delete':False, 'md_choose':True, 'md_show':True, 'md_train':False
                 })
         elif operation == 'assessment':
-            return render(request,"assessmodel.html",{})
+            return render(request,"assessmodel.html",{
+                'distributed_modeltypes':MLModel.AllDistributedModels()
+                ,'modeltypes':MLModel.AllModels()
+                ,'models': MLModel.GetModels()
+                ,'datasets':Dataset.GetDatasets()
+                ,'oldatasets':OnlineDataset.GetDatasets()
+                ,'operation':operation
+                ,'assessmethods':[]
+                ,'ds_select':False, 'ds_operation':True, 'ds_delete':False, 'ds_choose':True, 'ds_show':False
+                ,'md_select':False, 'md_operation':True, 'md_delete':False, 'md_choose':True, 'md_show':False, 'md_train':False
+                })
         elif operation == "dataset_upload":
             if request.method == "POST":
                 form = UploadDatasetForm(request.POST,request.FILES)

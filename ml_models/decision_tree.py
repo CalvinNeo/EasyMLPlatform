@@ -18,13 +18,14 @@ class DecisionTree(ModelBase):
             dataset: (datasets.localdata) 
             classfeatureindex: index of the column which defines the feature in dataset 
         '''
-        ModelBase.__init__(self, dataset, 'CLASSIFY', *args, **kwargs)
+        ModelBase.__init__(self, dataset, 'DECISION_TREE', *args, **kwargs)
         self.Test = self.Classify
         self.Apply = self.ClassifyDataset
         self.Train = self.BuildTree
         self.Save = self.DumpTree
         self.Load = self.LoadTree
         self.Graph = self.ShowImage
+        self.T = self.RealValue
         self.tree = {}
 
     #这两个函数相对"独立"
@@ -108,7 +109,7 @@ class DecisionTree(ModelBase):
 
     def Classify(self, test):
         '''
-            predict new samples with trained tree
+            predict a single new sample input with trained tree
         '''
         tree = self.tree
         while True:
@@ -123,6 +124,9 @@ class DecisionTree(ModelBase):
                         return branch_dict[key]
 
     def ClassifyDataset(self, dataset, remove_item = None):
+        '''
+            predict a series sample inputs from a dataset
+        '''
         resultdataset = LocalData(None, head = self.dataset.head+['result'], classfeatureindex = -1)
         for item in dataset.Iter():
             resultdataset.items.append(item+[self.Classify(item)])
@@ -142,6 +146,9 @@ class DecisionTree(ModelBase):
         # JSON can't have non-string key
         tr.load(self.tree)
         return tr.createPlot(show = False)
+
+    def RealValue(self, op):
+        pass
 
 if __name__ == '__main__':
     def my_mapper(data, colindex, head):

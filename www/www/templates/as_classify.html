@@ -1,0 +1,17 @@
+
+<table class="table table-striped">
+<thead>
+<tr>
+	<td>Index</td><td>Value</td>
+</tr>
+</thead>
+<tbody>
+{% for item in items %}
+	<tr>
+		<td>{{item.name}}</td>
+		<td>{{item.value}}</td>
+	</tr>
+{% endfor%}
+
+</tbody>
+</table>

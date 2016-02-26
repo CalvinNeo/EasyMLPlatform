@@ -20,7 +20,6 @@ class ModelRunTask:
                 lcdt is datasets.localdata.LocalData object
         '''
         clsname = db_model.modeltype
-        # print ")))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))0",db_model.modeltype, clsname.upper(),clsname.upper() in ModelBase.AllModelInfo().keys()
         # possibles = globals()
         # possibles.update(locals())
         if (clsname.upper() in ModelBase.AllModelInfo().keys()): # and (clsname in possibles.keys()):
@@ -93,6 +92,53 @@ class ModelApplyTask:
         self.model.Save(name)
 
     def Load(self, name):
+        '''
+            Called by /www/models.py
+        '''
+        self.model.Load(name)
+
+class ModelAssessTask:
+    def __init__(self, taskid, db_model, dataset, method, classfeatureindex = None):
+        '''
+            classfeatureindex和训练得到的模型是紧密相关的，对classfeatureindex的改动会牵涉到对模型的改动，因此classfeatureindex一定要去db_model的classfeatureindex
+        '''
+        clsname = db_model.modeltype
+        if (clsname.upper() in ModelBase.AllModelInfo().keys()): 
+            # dataset is load from Dataset.GetDataset
+            # db_model is model in MySQL
+            dataset['view'].classfeatureindex = db_model.classfeatureindex
+
+            md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = dataset['view'])
+
+            self.dataset = dataset['view']
+            self.model = md
+            self.Load(db_model.model_path)
+
+            assessmodel = assessment.Assessment(self.model, self.dataset)
+
+            print dataset,md
+
+    def Start(self):
+        '''
+            Called by /www/models.py
+        '''
+        prototype = ModelBase.AllModelInfo()[self.model.prototype]['modeltype']
+        if prototype=="CLASSIFY":
+            self.TFPN()
+        elif prototype=="REGRESS"::
+            self.Loss()
+        elif prototype=="CLUSTER":
+            pass
+        else:
+            pass
+            
+    def Save(self, name):
+        '''
+            Called by /www/models.py
+        '''
+        self.model.Save(name)
+
+    def Load(self, name):passpass
         '''
             Called by /www/models.py
         '''

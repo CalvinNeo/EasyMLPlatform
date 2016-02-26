@@ -19,6 +19,7 @@ class LocalData:
             mode
             dstype
             datamapper
+            crawl
         '''
         if 'head' in kwargs.keys() and kwargs['head'] != None:
             self.head = kwargs['head']
@@ -154,6 +155,9 @@ class LocalData:
             return [self.items[index][i] for index in xrange(0, len(self.items), self.nsplit)] 
 
     def HeadIndex(self, i, head_col):
+        '''
+            get head index(in col start from 0) from head name(string)
+        '''
         if self.online:
             self.OnlineRenew()
 
@@ -181,7 +185,16 @@ class LocalData:
         return LocalData(self.datamapper, head = newhead, items = newitems, classfeatureindex = newclassfeatureindex)
     
     def SpawnRect(self, col1, col2, row1, row2, cpy=True):
-        pass
+        '''
+            head
+            items
+            online
+            classfeatureindex
+            mode
+            dstype
+            datamapper
+            crawl
+        '''
 
     def Trim(self, col1, col2, row1, row2):
         if self.mode == 'all':
@@ -214,12 +227,15 @@ class LocalData:
                 # self.items.append( self.datamapper( data_col, range(len(data_col)), self.head ) )
                 self.items.append(map(lambda x:self.datamapper(x[0],x[1],x[2]), zip(data_col, range(len(data_col)), self.head)))
 
-    def ReadCSV(self, path, hasHead=False, getValue=True):
+    def ReadCSV(self, path, hasHead=False, getValue=True, attr_delim = ","):
         self.ReadString(open(path, 'r'), hasHead, getValue)
+
     def ReadXML(self, path, hasHead=False, getValue=True):
         pass
+
     def ReadXLS(self, path, hasHead=False, getValue=True):
         pass
+
     def ReadTXT(self, path, hasHead=False, getValue=True):
         self.ReadString(open(path, 'r'), hasHead, getValue)
 
@@ -246,6 +262,7 @@ class TestClass:
     def __init__(self):
         self.d = [1,2,3,4,5,6]
         self.mode = 'haha'
+
     def Iter(self):
         if self.mode == 'haha':
             for i in self.d:
@@ -253,6 +270,7 @@ class TestClass:
         else:
             for i in self.d:
                 yield 'i'
+
 if __name__ == '__main__':
     ld = LocalData()
     ld.ReadString(open("1.txt","r").read(),True)

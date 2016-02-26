@@ -176,7 +176,7 @@ class OnlineDataset(models.Model):
             datasetindex = int(unicodedatasetindex)
             try:
                 olds = OnlineDataset.objects.get(id = datasetindex)
-                ds = datasets.localdata.LocalData(online = True)
+                ds = datasets.localdata.LocalData(datamapper = None, online = True)
                 ds.SetURL(olds.url, olds.location, None)
                 ds.OnlineRenew()
                 return ds
@@ -259,6 +259,10 @@ class MLModel(models.Model):
         ('ABS','ABS'),
         ('LOG','LOG'),
     )
+    '''
+        注意到Dataset和MLModel都有classfeatureindex字段，区别如下：
+        Dataset里面的classfeature字段是在训练阶段取的MLModel的classfeatureindex值
+    '''
     classfeatureindex = models.IntegerField() 
     loss = models.CharField(max_length = 20,default = 'QUAD',choices = LossChoices)
     # set default like this so that it can work with -1/1 and 0/1 
@@ -317,16 +321,6 @@ class MLModel(models.Model):
             item.delete()
             return 'true'
         return 'false'
-
-        # if (clsname.upper() in ModelBase.AllModelInfo().keys()): 
-        #     # dataset
-        #     dataset['view'].classfeatureindex = db_model.classfeatureindex
-
-        #     md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](LocalData())
-
-        #     self.dataset = dataset['view']
-        #     self.model = md
-        #     self.Load(db_model.model_path)
 
     @staticmethod
     def GetImage(unicodemodelindex = None):
@@ -442,4 +436,25 @@ class ApplyTask(models.Model):
         mlmd = ModelApplyTask(0, 
             md, dbds)
             #, None if str(unicoderemove)=='' else int(unicoderemove))
+        return mlmd
+
+class AssessTask(models.Model):
+
+    id = models.AutoField(primary_key = True)
+
+    class Meta:
+        db_table = 'assesstask'
+
+    @staticmethod
+    def CreateAssess(unicodemodelindex = None, unicodedatasetindex = None
+        , unicodeoldatasetindex = None, unicodeselectwhichdatasettype = 'ds'
+        , unicodeclassfeatureindex = -1, unicodeassessmethod = 'sfold'):
+        if unicodemodelindex != None:
+            modelindex = int(unicodemodelindex)
+            md = MLModel.objects.get(id = modelindex)
+        if str(unicodeselectwhichdatasettype) == 'ds':
+            dbds = Dataset.GetDataset(int(unicodedatasetindex))
+        else:
+            dbds = OnlineDataset.GetDataset(int(unicodeoldatasetindex))
+        mlmd = ModelAssessTask(0, md, dbds, str(unicodeassessmethod), int(unicodeclassfeatureindex))
         return mlmd

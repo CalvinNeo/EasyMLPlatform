@@ -40,15 +40,15 @@ class Crawl:
         elif self.locate_css != None:
             location = soup.select(self.locate_css)[0]
         if(type(location).__name__ != 'NoneType'):
-            if self.search_lmda == None:#默认table
+            if self.search_lmda == None:# 默认table
                 thead = location.find("thead")
                 tbody = location.find("tbody")
                 if thead==None or tbody==None:
                     return {'head':None , 
-                        'items':[[td.string.strip().decode(self.code) for td in tr.findAll("td")] for tr in location.findAll('tr')]}
+                        'items':[[str(td.string.strip().decode(self.code)) for td in tr.findAll("td")] for tr in location.findAll('tr')]}
                 else:
-                    return {'head':[td.string.strip().decode(self.code) for td in thead.findAll("td")] , 
-                        'items':[[td.string.strip().decode(self.code) for td in tr.findAll("td")] for tr in tbody.findAll('tr')]}
+                    return {'head':[str(td.string.strip().decode(self.code)) for td in thead.findAll("td")] , 
+                        'items':[[str(td.string.strip().decode(self.code)) for td in tr.findAll("td")] for tr in tbody.findAll('tr')]}
             else:
                 return self.search_lmda(soup)
 if __name__ == '__main__':
