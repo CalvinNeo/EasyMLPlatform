@@ -5,12 +5,9 @@
 </tr>
 </thead>
 <tbody>
-{% for item in items %}
-    <tr ng-repeat="item in ans">
-        <td>{{item.name}}</td>
-        <td>{{item.value}}</td>
-    </tr>
-{% endfor%}
-
+	<tr ng-repeat="item in ans">
+		<td>{% templatetag openvariable %} item['name'] {% templatetag closevariable %}</td>
+		<td>{% templatetag openvariable %} item['value'] {% templatetag closevariable %}</td>
+	</tr>
 </tbody>
 </table>

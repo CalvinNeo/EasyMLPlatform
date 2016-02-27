@@ -402,11 +402,39 @@ angular.module('mlApp').controller('assessModelController', function($scope, $ht
     $scope.currentshow = 'ds'
     $scope.classfeatureindex = -1
     $scope.ans = [] //[{'name':xxx, 'value':yyy}, {...}]
-
+    $scope.safeApply = function(fn) {
+        var phase = this.$root.$$phase;
+        if(phase == '$apply' || phase == '$digest') {
+            if(fn && (typeof(fn) === 'function')) {
+              fn();
+            }
+        } else {
+           this.$apply(fn);
+        }
+    };
+    // $scope.runassess = function(){
+    //     $.ajax({
+    //         url : '/api/model_assess'
+    //         ,data : {
+    //             modelindex : $scope.selectedmodel
+    //             ,datasetindex : $scope.selecteddataset
+    //             ,oldatasetindex : $scope.selectedoldataset
+    //             ,selectwhichdatasettype : $scope.selectwhichdatasettype
+    //             ,classfeatureindex : $scope.assessForm.classfeatureindex
+    //             ,assessmethod : $scope.assessForm.assessmethod
+    //         }
+    //         ,async : true
+    //         ,success : function (data, textStatus) {
+    //             $scope.safeApply(function(){
+    //                 $scope.ans = data
+    //             })
+    //         }
+    //     })
+    // }
     $scope.runassess = function(){
-        $.ajax({
-            url : '/api/model_assess'
-            ,data : {
+        $http({
+            url: '/api/model_assess',
+            params: {
                 modelindex : $scope.selectedmodel
                 ,datasetindex : $scope.selecteddataset
                 ,oldatasetindex : $scope.selectedoldataset
@@ -414,11 +442,9 @@ angular.module('mlApp').controller('assessModelController', function($scope, $ht
                 ,classfeatureindex : $scope.assessForm.classfeatureindex
                 ,assessmethod : $scope.assessForm.assessmethod
             }
-            ,async : true
-            ,success : function (data, textStatus) {
-                $scope.ans = eval("(" + data + ")")
-            }
-        })
+        }).success(function(response, status, headers, config){
+          $scope.ans = response
+        });
     }
 
     // below are copied from switchDatasetController

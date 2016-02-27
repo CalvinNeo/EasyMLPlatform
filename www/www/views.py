@@ -66,13 +66,13 @@ def api(request, operation = "", *args, **kwargs):
             , unicodeclassfeatureindex=request.GET.get('classfeatureindex')
             , unicodeassessmethod=request.GET.get('assessmethod')
             )
-        assessmodel = assesstask.start()
+        assessmodel = assesstask.Start()
         if assessmodel.Protoclass == 'REGRESS':
             pass
         elif assessmodel.Protoclass == 'CLUSTER':
             pass
         elif assessmodel.Protoclass == 'CLASSIFY':
-            return [
+            json_stuff = json.dumps([
                 {'name':'TP', 'value':assessmodel.TP}
                 ,{'name':'TN', 'value':assessmodel.TN}
                 ,{'name':'FP', 'value':assessmodel.FP}
@@ -80,7 +80,8 @@ def api(request, operation = "", *args, **kwargs):
                 ,{'name':'P', 'value':assessmodel.P}
                 ,{'name':'R', 'value':assessmodel.R}
                 ,{'name':'F1', 'value':assessmodel.F1}
-            ]
+            ])
+            return HttpResponse(json_stuff, content_type ="application/json")
         else:
             pass
     else:

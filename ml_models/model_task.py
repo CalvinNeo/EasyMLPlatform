@@ -76,10 +76,6 @@ class ModelApplyTask:
             self.dataset = dataset['view']
             self.model = md
             self.Load(db_model.model_path)
-            '''
-                Protoclass in ['REGRESS', 'CLASSFY', 'CLUASTER']
-            '''
-            self.Protoclass = ModelBase.AllModelInfo()[self.model.prototype]['modeltype']
 
             print dataset,md
 
@@ -108,6 +104,7 @@ class ModelAssessTask:
         '''
         clsname = db_model.modeltype
         if (clsname.upper() in ModelBase.AllModelInfo().keys()): 
+
             # dataset is load from Dataset.GetDataset
             # db_model is model in MySQL
             dataset['view'].classfeatureindex = db_model.classfeatureindex
@@ -120,17 +117,15 @@ class ModelAssessTask:
 
             self.assessmodel = assessment.Assessment(self.model, self.dataset)
 
-            print dataset,md
-
     def Start(self):
         '''
             Called by /www/models.py
         '''
-        if self.Protoclass == "CLASSIFY":
-            self.TFPN()
+        if self.assessmodel.Protoclass == "CLASSIFY":
+            self.assessmodel.TFPN()
         elif self.Protoclass == "REGRESS":
-            self.Loss()
-        elif self.Protoclass == "CLUSTER":
+            self.assessmodel.assessmodel.Loss()
+        elif self.assessmodel.Protoclass == "CLUSTER":
             pass
         else:
             pass

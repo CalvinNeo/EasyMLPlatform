@@ -7,7 +7,11 @@ import operator
 import numpy as np
 import sys
 from collections import defaultdict, namedtuple
+import datasets.localdata
+from datasets.monads import *
+from datasets.localdata import *
 import itertools
+from modelbase import ModelBase
 
        
 class Assessment:
@@ -16,6 +20,10 @@ class Assessment:
         self.dataset = dataset
         self.TP, self.TN, self.FP, self.FN = 0, 0, 0, 0
         self.Losses = [0.0] * self.dataset.Length()
+        '''
+            Protoclass in ['REGRESS', 'CLASSFY', 'CLUASTER']
+        '''
+        self.Protoclass = ModelBase.AllModelInfo()[self.model.prototype]['modeltype']
 
     def TFPN(self):
         '''
@@ -40,7 +48,7 @@ class Assessment:
                 self.TN += 1
         self.P = self.TP / (self.TP + self.FP)
         self.R = self.TP / (self.TP + self.FN)
-        self.F1 = 2.0 / (1.0 / self.P() + 1.0 / self.R())
+        self.F1 = 2.0 / (1.0 / self.P + 1.0 / self.R)
 
     def Loss(self):
         '''

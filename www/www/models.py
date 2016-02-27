@@ -335,7 +335,6 @@ class MLModel(models.Model):
                 md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](LocalData())
                 md.Load(mlmd.model_path)
                 image = md.Graph('')
-                print image
                 return image
         return ''
 
