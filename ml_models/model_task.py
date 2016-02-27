@@ -76,6 +76,10 @@ class ModelApplyTask:
             self.dataset = dataset['view']
             self.model = md
             self.Load(db_model.model_path)
+            '''
+                Protoclass in ['REGRESS', 'CLASSFY', 'CLUASTER']
+            '''
+            self.Protoclass = ModelBase.AllModelInfo()[self.model.prototype]['modeltype']
 
             print dataset,md
 
@@ -114,7 +118,7 @@ class ModelAssessTask:
             self.model = md
             self.Load(db_model.model_path)
 
-            assessmodel = assessment.Assessment(self.model, self.dataset)
+            self.assessmodel = assessment.Assessment(self.model, self.dataset)
 
             print dataset,md
 
@@ -122,23 +126,23 @@ class ModelAssessTask:
         '''
             Called by /www/models.py
         '''
-        prototype = ModelBase.AllModelInfo()[self.model.prototype]['modeltype']
-        if prototype=="CLASSIFY":
+        if self.Protoclass == "CLASSIFY":
             self.TFPN()
-        elif prototype=="REGRESS"::
+        elif self.Protoclass == "REGRESS":
             self.Loss()
-        elif prototype=="CLUSTER":
+        elif self.Protoclass == "CLUSTER":
             pass
         else:
             pass
-            
+        return self.assessmodel
+        
     def Save(self, name):
         '''
             Called by /www/models.py
         '''
         self.model.Save(name)
 
-    def Load(self, name):passpass
+    def Load(self, name):
         '''
             Called by /www/models.py
         '''

@@ -53,8 +53,12 @@ class ModelBase:
         '''
             Regress
         '''
+        # if classfeatureindex is set by args
         if 'classfeatureindex' in kwargs.keys() and kwargs['classfeatureindex'] != None:
             self.classfeatureindex = kwargs['classfeatureindex']
+        # else use dataset.classfeatureindex as defualt
+        # HOWEVER dataset.classfeatureindex is always set previously in model_task.py
+        # SO, dataset.classfeatureindex according to db_model(model infomation recorded in database)
         else:
             self.classfeatureindex = self.dataset.classfeatureindex
         if 'loss' in kwargs.keys() and kwargs['loss'] != None:
@@ -181,6 +185,7 @@ class ModelBase:
         # return eval(open('./models.json','r').read())
         import naive_bayes
         import decision_tree
+        import logistic
         return {
             'MATRIX_ADD':{
                 'ndataset': 2
@@ -258,6 +263,7 @@ class ModelBase:
                 ,'distributed': False
                 ,'nontraining': False
                 ,'modeltype': 'CLASSIFY'
+                ,'cls': logistic.LogisticRegression
             },
             'CRF':{
                 'ndataset': 1

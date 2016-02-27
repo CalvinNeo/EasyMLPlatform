@@ -60,3 +60,4 @@ www/upload
 www/www/migrations
 nouse/
 *.lnk
+*.trd

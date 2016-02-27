@@ -25,7 +25,8 @@ class DecisionTree(ModelBase):
         self.Save = self.DumpTree
         self.Load = self.LoadTree
         self.Graph = self.ShowImage
-        self.T = self.RealValue
+        # use default
+        # self.T = self.RealValue
         self.tree = {}
 
     #这两个函数相对"独立"

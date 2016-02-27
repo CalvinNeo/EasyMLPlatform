@@ -25,7 +25,8 @@ class LogisticRegression(ModelBase):
         self.Save = self.DumpLogistic
         self.Load = self.LoadLogistic
         self.Graph = self.ShowImage
-        self.T = self.RealValue
+        # use default
+        # self.T = self.RealValue
         self.tree = {}
 
         self.sigmoid = lambda input_n:np.vectorize(lambda n: 1.0/(1.0+math.e**(-n)))(input_n)

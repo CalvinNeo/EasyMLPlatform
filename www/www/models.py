@@ -456,5 +456,5 @@ class AssessTask(models.Model):
             dbds = Dataset.GetDataset(int(unicodedatasetindex))
         else:
             dbds = OnlineDataset.GetDataset(int(unicodeoldatasetindex))
-        mlmd = ModelAssessTask(0, md, dbds, str(unicodeassessmethod), int(unicodeclassfeatureindex))
+        mlmd = ModelAssessTask(0, md, dbds, str(unicodeassessmethod), -1) # unicodeclassfeatureindex is deprecated
         return mlmd

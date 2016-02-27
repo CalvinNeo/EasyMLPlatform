@@ -66,6 +66,23 @@ def api(request, operation = "", *args, **kwargs):
             , unicodeclassfeatureindex=request.GET.get('classfeatureindex')
             , unicodeassessmethod=request.GET.get('assessmethod')
             )
+        assessmodel = assesstask.start()
+        if assessmodel.Protoclass == 'REGRESS':
+            pass
+        elif assessmodel.Protoclass == 'CLUSTER':
+            pass
+        elif assessmodel.Protoclass == 'CLASSIFY':
+            return [
+                {'name':'TP', 'value':assessmodel.TP}
+                ,{'name':'TN', 'value':assessmodel.TN}
+                ,{'name':'FP', 'value':assessmodel.FP}
+                ,{'name':'FN', 'value':assessmodel.FN}
+                ,{'name':'P', 'value':assessmodel.P}
+                ,{'name':'R', 'value':assessmodel.R}
+                ,{'name':'F1', 'value':assessmodel.F1}
+            ]
+        else:
+            pass
     else:
         return HttpResponse("")
 

@@ -1,4 +1,3 @@
-
 <table class="table table-striped">
 <thead>
 <tr>
@@ -7,10 +6,10 @@
 </thead>
 <tbody>
 {% for item in items %}
-	<tr>
-		<td>{{item.name}}</td>
-		<td>{{item.value}}</td>
-	</tr>
+    <tr ng-repeat="item in ans">
+        <td>{{item.name}}</td>
+        <td>{{item.value}}</td>
+    </tr>
 {% endfor%}
 
 </tbody>

@@ -401,6 +401,7 @@ angular.module('mlApp').controller('assessModelController', function($scope, $ht
     $scope.selectwhichdatasettype = 'ds'
     $scope.currentshow = 'ds'
     $scope.classfeatureindex = -1
+    $scope.ans = [] //[{'name':xxx, 'value':yyy}, {...}]
 
     $scope.runassess = function(){
         $.ajax({
@@ -415,7 +416,7 @@ angular.module('mlApp').controller('assessModelController', function($scope, $ht
             }
             ,async : true
             ,success : function (data, textStatus) {
-
+                $scope.ans = eval("(" + data + ")")
             }
         })
     }

@@ -38,6 +38,9 @@ class Assessment:
                 self.FN += 1
             elif ja == False and jt == False:
                 self.TN += 1
+        self.P = self.TP / (self.TP + self.FP)
+        self.R = self.TP / (self.TP + self.FN)
+        self.F1 = 2.0 / (1.0 / self.P() + 1.0 / self.R())
 
     def Loss(self):
         '''
@@ -51,15 +54,6 @@ class Assessment:
             self.Losses[index] = loss
             index += 1
 
-    def P(self):
-        return self.TP / (self.TP + self.FP)
-
-    def R(self):
-        return self.TP / (self.TP + self.FN)
-
-    def F1(self):
-        return 2.0 / (1.0 / self.P() + 1.0 / self.R())
-
     def ROC(self):
         pass
 
@@ -72,7 +66,7 @@ class Assessment:
             if train:
                 pass
             elif len(models) == s - 1:
-                #Split dataset
+                # Split dataset
                 
                 for md_index in xrange(len(models)):
                     models[md_index].Train()
