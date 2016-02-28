@@ -51,6 +51,7 @@ class Crawl:
                         'items':[[str(td.string.strip().decode(self.code)) for td in tr.findAll("td")] for tr in tbody.findAll('tr')]}
             else:
                 return self.search_lmda(soup)
+                
 if __name__ == '__main__':
     # cr = Crawl("http://127.0.0.1:8091/index/1/",lambda soup:soup.find("table"))
     # cr.start()

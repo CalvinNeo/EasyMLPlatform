@@ -4,7 +4,7 @@ sys.path.append('..')
 
 from modelbase import ModelBase
 import math
-import datasets.localdata
+from datasets.localdata import *
 from datasets.monads import *
 import operator
 import numpy as np
@@ -16,7 +16,7 @@ class LogisticRegression(ModelBase):
     '''
         simple Logistic Regression is linear
     '''
-    def __init__(self, dataset, classfeatureindex = -1, alpha = 0.01, maxiter = 500):
+    def __init__(self, dataset, classfeatureindex = -1, alpha = 0.01, maxiter = 50, *args, **kwargs):
         ModelBase.__init__(self, dataset, 'LOGISTIC', *args, **kwargs)
         self.classfeatureindex = classfeatureindex #index of the column which defines the feature in dataset
         self.Test = self.Classify
@@ -36,17 +36,20 @@ class LogisticRegression(ModelBase):
         self.classfeatureindex = self.dataset.classfeatureindex
 
     def Regress(self):
-        data = np.matrix([item[:self.classfeatureindex] + item[self.classfeatureindex+1:] + [1] if self.classfeatureindex > -1 else item[:len(item)-1] + [1] for item in self.dataset.items])
+        data = np.matrix([item[:self.classfeatureindex] + item[self.classfeatureindex+1:] + [0] if self.classfeatureindex > -1 else item[:len(item)-1] + [0] for item in self.dataset.items])
         t = np.matrix([item[self.classfeatureindex] for item in self.dataset.items]).T
         itemcount, featurecount = data.shape
         self.weights = np.ones((featurecount,1)) * 1 # featurecount 个 feature + 1 个常量
+
         for itertime in xrange(self.maxiter):
             a = self.sigmoid(np.dot(data, self.weights))
             e = t - a
             self.weights += self.alpha * np.dot(data.T, e)
 
     def Classify(self, test):
-        p = np.matrix(test + [1] )
+        # p = np.matrix(test[:self.classfeatureindex] + test[self.classfeatureindex+1:] + [1] if self.classfeatureindex > -1 else test + [1] )
+        # p = np.matrix(test + [1] )
+        p = np.matrix(test)
         print self.sigmoid(np.dot(p , self.weights))
         return 1.0 if self.sigmoid(np.dot(p, self.weights)) > 0.5 else 0.0
 
@@ -56,15 +59,15 @@ class LogisticRegression(ModelBase):
         '''
         resultdataset = LocalData(None, head = self.dataset.head+['result'], classfeatureindex = -1)
         for item in dataset.Iter():
-            resultdataset.items.append(item+[self.Classify(item)])
+            resultdataset.items.append(item+[self.Classify(item + [1])])
         return resultdataset
 
-    def DumpLogistic(self):
+    def DumpLogistic(self, filename):
         fw = open(filename, 'w')
         pickle.dump(self.weights, fw)
         fw.close()
 
-    def LoadLogistic(self):
+    def LoadLogistic(self, filename):
         fr = open(filename)
         self.weights = pickle.load(fr)
 

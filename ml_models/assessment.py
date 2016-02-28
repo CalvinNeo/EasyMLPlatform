@@ -48,7 +48,10 @@ class Assessment:
                 self.TN += 1
         self.P = self.TP / (self.TP + self.FP)
         self.R = self.TP / (self.TP + self.FN)
-        self.F1 = 2.0 / (1.0 / self.P + 1.0 / self.R)
+        if self.P == 0 or self.R == 0:
+            self.F1 = 0
+        else:
+            self.F1 = 2.0 / (1.0 / self.P + 1.0 / self.R)
 
     def Loss(self):
         '''

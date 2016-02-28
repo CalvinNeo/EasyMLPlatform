@@ -355,6 +355,9 @@ class TrainingTask(models.Model):
     createtime = models.DateTimeField('create time', auto_now_add=True)
     #if you use lambda here you can't pass migration, 因为lambda不能被序列化! 
 
+    # def __unicode__(self):
+    #     return  "{{ 'id':{}, 'modeltype':'{}', 'name':'{}', 'createtime':'{}', 'modelindex':'{}' }}".format( str(self.id), str(self.modelprototype), str(self.name), str(self.createtime), str(self.modelindex) ) 
+
     class Meta:
         db_table = 'trainingtask'
 
@@ -368,6 +371,16 @@ class TrainingTask(models.Model):
                 return TrainingTask.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
         else:
             return []
+
+    @staticmethod
+    def DeleteTask(unicodetaskindex = None):
+        if unicodetaskindex != None:
+            taskindex = int(unicodetaskindex)
+            item = TrainingTask.objects.get(id = taskindex)
+            item.delete()
+            return 'true'
+        return 'false'
+
 
     @staticmethod
     def CreateTrain(unicodemodelindex = None):

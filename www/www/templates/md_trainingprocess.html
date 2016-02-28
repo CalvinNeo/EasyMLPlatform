@@ -23,7 +23,7 @@
 		{% if operation %}
 			<td><a href="javascript:void(0)" ng-click="startTrain({{model.id}})" class="label label-important">START</a></td>
 			<td><a href="javascript:void(0)" ng-click="pauseTrain({{model.id}})" class="label label-important">PAUSE</a></td>
-			<td><a href="javascript:void(0)" ng-click="abortTrain({{model.id}})" class="label label-important">ABORT</a></td>
+			<td><a href="javascript:void(0)" ng-click="abortTrain({{task.id}})" class="label label-important">ABORT</a></td>
 		{% endif %}
 	</tr>
 {% endfor%}

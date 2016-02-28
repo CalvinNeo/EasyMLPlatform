@@ -35,6 +35,8 @@ def api(request, operation = "", *args, **kwargs):
         return HttpResponse( repr(Dataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex'))) )
     elif operation == 'oldataset_view':
         return HttpResponse( repr(OnlineDataset.GetDataset(unicodedatasetindex=request.GET.get('datasetindex'))) )
+    elif operation == 'task_delete':
+        return HttpResponse( repr(TrainingTask.DeleteTask(unicodetaskindex=request.GET.get('taskindex'))) )
     elif operation == 'hash_image':
         imgname = str(request.POST.get('name'))
         action = str(request.POST.get('id'))

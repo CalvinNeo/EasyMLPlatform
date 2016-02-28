@@ -257,6 +257,9 @@ class LocalData:
         if self.crawl != None:
             crawl_fetch = self.crawl.start()
             self.head, self.items = crawl_fetch['head'], crawl_fetch['items']
+        for rec_id in xrange(len(self.items)):
+            # (value,column,head)
+            self.items[rec_id] = map(lambda x: self.datamapper(x[0],x[1],x[2]), zip(self.items[rec_id], range(len(self.items[rec_id])), self.head))
 
 class TestClass:
     def __init__(self):

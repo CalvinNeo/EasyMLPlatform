@@ -278,6 +278,15 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
         })
     }
 
+    $scope.abortTrain = function(taskindex){
+        $.ajax({
+            url : '/api/task_delete?taskindex=' + taskindex
+            ,async : true
+            ,success : function(data, testStatus){
+                location.reload(true)
+            }
+        })
+    }
 })
 
 angular.module('mlApp').controller('applyModelController', function($scope, $http, $location, hashimageService){
