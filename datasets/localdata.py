@@ -261,6 +261,12 @@ class LocalData:
             # (value,column,head)
             self.items[rec_id] = map(lambda x: self.datamapper(x[0],x[1],x[2]), zip(self.items[rec_id], range(len(self.items[rec_id])), self.head))
 
+    def Encrypt(self, x):
+        return x
+
+    def DeCrypt(self):
+        return x
+
 class TestClass:
     def __init__(self):
         self.d = [1,2,3,4,5,6]

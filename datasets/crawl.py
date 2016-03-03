@@ -8,7 +8,9 @@ import re
 import os
 from bs4 import BeautifulSoup
 
-
+'''
+    注意检查翻墙软件是不是在全局代理
+'''
 def getHtml(url):
     req = urllib2.Request(url)
     req.add_header('User-Agent','Mozilla/5.0 (Windows NT 6.2; rv:16.0) Gecko/20100101 Firefox/16.0')
@@ -55,7 +57,7 @@ class Crawl:
 if __name__ == '__main__':
     # cr = Crawl("http://127.0.0.1:8091/index/1/",lambda soup:soup.find("table"))
     # cr.start()
-    print type('lambda x:x + 2')
+    print getHtml('http://127.0.0.1:8091')
 
 # def ddu(tmp):
 #     return eval(repr(tmp)[1:])

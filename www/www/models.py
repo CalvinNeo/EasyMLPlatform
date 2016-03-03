@@ -158,13 +158,13 @@ class OnlineDataset(models.Model):
             if datasetindex >= 0:
                 try:
                     olds = OnlineDataset.objects.get(id = datasetindex)
-                    lcdt = datasets.localdata.LocalData(datamapper = None, online = True)
+                    ds = datasets.localdata.LocalData(datamapper = None, online = True)
                 except:
                     return None
                 try:
-                    lcdt.SetURL(olds.url, olds.location, None)
-                    lcdt.OnlineRenew()
-                    return {'info':olds, 'view':lcdt}
+                    ds.SetURL(olds.url, olds.location, None)
+                    ds.OnlineRenew()
+                    return {'info':olds, 'view':ds}
                 except:
                     return {'info':olds, 'view':{}}
         return None
@@ -215,9 +215,9 @@ class OnlineDataset(models.Model):
             ds = OnlineDataset.ViewDataset(datasetindex)
             if ds == None:
                 return 'false'
-            output.write(','.join(ds.head) + '\n')
+            output.write(','.join(map(str, ds.head)) + '\n')
             for line in ds.items:
-                output.write(','.join(line) + '\n')
+                output.write(','.join(map(str, line)) + '\n')
             output.close()
             return 'true'
             # except:
@@ -470,3 +470,4 @@ class AssessTask(models.Model):
             dbds = OnlineDataset.GetDataset(int(unicodeoldatasetindex))
         mlmd = ModelAssessTask(0, md, dbds, str(unicodeassessmethod), -1) # unicodeclassfeatureindex is deprecated
         return mlmd
+

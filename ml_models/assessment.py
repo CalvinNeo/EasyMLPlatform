@@ -46,8 +46,14 @@ class Assessment:
                 self.FN += 1
             elif ja == False and jt == False:
                 self.TN += 1
-        self.P = self.TP / (self.TP + self.FP)
-        self.R = self.TP / (self.TP + self.FN)
+        if self.TP + self.FP == 0:
+            self.P = 0
+        else:
+            self.P = self.TP / (self.TP + self.FP)
+        if self.TP + self.FN == 0:
+            self.R = 0
+        else:
+            self.R = self.TP / (self.TP + self.FN)
         if self.P == 0 or self.R == 0:
             self.F1 = 0
         else:
