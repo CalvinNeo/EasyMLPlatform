@@ -10,13 +10,18 @@ import datasets.localdata
 from www.forms import *
 from www.models import *
 
-# def first_page(request):
-#     db = MySQLdb.connect(user='root', db='mlplatform', passwd='80868086', host='localhost')
-#     cursor = db.cursor()
-#     cursor.execute('SELECT * FROM dataset ORDER BY id')
-#     names = [row[0] for row in cursor.fetchall()]
-#     db.close()
-#     return render_to_response('list.html', {'names': names})
+from django.http import HttpResponseRedirect
+   
+def secure_required(view_func):
+    """Decorator makes sure URL is accessed over https."""
+    def _wrapped_view_func(request, *args, **kwargs):
+        if not request.is_secure():
+            if getattr(settings, 'HTTPS_SUPPORT', True):
+                request_url = request.build_absolute_uri(request.get_full_path())
+                secure_url = request_url.replace('http://', 'https://')
+                return HttpResponseRedirect(secure_url)
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view_func
 
 def api(request, operation = "", *args, **kwargs):
     print "api:",operation

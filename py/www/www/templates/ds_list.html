@@ -14,7 +14,10 @@
 		{% if ds_select %}
 			<td><input type="checkbox" id="dscheck_{{dataset.id}}"></input></td>
 		{% endif %}
-		<td><a href="javascript:void(0)" ng-click="{% if ds_show %} showDataset({{dataset.id}}) {% endif %} {% if ds_choose %} ;selecteddataset = {true:-1,false:{{dataset.id}}}[selecteddataset=={{dataset.id}}];selectwhichdatasettype = 'ds' {% endif %}">{{dataset.name}}</a></td><td>{{dataset.filetype}}</td><td>{{dataset.head}}</td>
+		<td><a href="javascript:void(0)" ng-click="{% if ds_show %} showDataset({{dataset.id}}) {% endif %} 
+			{% if ds_choose %} ;selecteddataset = {true:-1,false:{{dataset.id}}}[selecteddataset=={{dataset.id}}];selectwhichdatasettype = 'ds' {% endif %}
+			;ondatasetselected({{dataset.id}})"
+			>{{dataset.name}}</a></td><td>{{dataset.filetype}}</td><td>{{dataset.head}}</td>
 		{% if ds_operation %}
 			{% if ds_delete %}
 			<td><a href="javascript:void(0)" ng-click="deleteDataset({{dataset.id}})" class="label label-important">DELETE</a></td>

@@ -52,6 +52,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pagination.middleware.PaginationMiddleware',
+    'www.middlewares.SecureRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'www.urls'
@@ -132,6 +133,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+HTTPS_SUPPORT = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
@@ -141,3 +143,8 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = 'upload/'
 
 # DEFAULT_FILE_STORAGE = "www.storage.FileStorage"
+
+SECURE_REQUIRED_PATHS = (
+    '/admin/',
+    '/index/',
+)

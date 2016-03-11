@@ -13,6 +13,17 @@ from ml_models.modelbase import *
 from ml_models.model_task import *
 from ml_models import *
 
+'''
+    变量名解释：
+    ds: 包含dsinfo和dsview/dataset两部分，结构为{'info': dsinfo, 'view': dataset}
+    dataset(oldataset): 是一个LocalDataset
+    dsinfo(oldsinfo): 是Table里面的一个Record，记录数据集信息
+    mdinfo: 是Table里面的一个Record，记录模型信息
+    md: 一个ModelBase对象
+    datasets: 是一个模块，里面有LocalData等类
+    Dataset: 是www.models.Dataset
+    MLModel: 是www.models.MLModel
+'''
 
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "www.settings") 
 def get_upload_to(instance, filename):
@@ -77,9 +88,9 @@ class Dataset(models.Model):
                 try:
                     dsinfo = Dataset.objects.get(id = datasetindex)
                     #open local dataset
-                    ds = datasets.localdata.LocalData(datamapper = None)
-                    ds.ReadString(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
-                    return {'info':dsinfo, 'view':ds}
+                    dataset = datasets.localdata.LocalData(datamapper = None)
+                    dataset.ReadString(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+                    return {'info':dsinfo, 'view':dataset}
                 except:
                     return None
         return None
@@ -93,9 +104,9 @@ class Dataset(models.Model):
                 try:
                     datasetfile = Dataset.objects.get(id = datasetindex)
                     #open local dataset
-                    ds = datasets.localdata.LocalData(datamapper = None)
-                    ds.ReadString(open(settings.MEDIA_ROOT+str(datasetfile.path),"r").read(), hasHead=True, getValue=True)
-                    return ds
+                    dataset = datasets.localdata.LocalData(datamapper = None)
+                    dataset.ReadString(open(settings.MEDIA_ROOT+str(datasetfile.path),"r").read(), hasHead=True, getValue=True)
+                    return dataset
                 except:
                     return None
         return None
@@ -157,16 +168,16 @@ class OnlineDataset(models.Model):
             datasetindex = int(unicodedatasetindex)
             if datasetindex >= 0:
                 try:
-                    olds = OnlineDataset.objects.get(id = datasetindex)
-                    ds = datasets.localdata.LocalData(datamapper = None, online = True)
+                    oldsinfo = OnlineDataset.objects.get(id = datasetindex)
+                    oldataset = datasets.localdata.LocalData(datamapper = None, online = True)
                 except:
                     return None
                 try:
-                    ds.SetURL(olds.url, olds.location, None)
-                    ds.OnlineRenew()
-                    return {'info':olds, 'view':ds}
+                    oldataset.SetURL(oldsinfo.url, oldsinfo.location, None)
+                    oldataset.OnlineRenew()
+                    return {'info':oldsinfo, 'view':oldataset}
                 except:
-                    return {'info':olds, 'view':{}}
+                    return {'info':oldsinfo, 'view':{}}
         return None
 
     @staticmethod
@@ -175,11 +186,11 @@ class OnlineDataset(models.Model):
             #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
             datasetindex = int(unicodedatasetindex)
             try:
-                olds = OnlineDataset.objects.get(id = datasetindex)
-                ds = datasets.localdata.LocalData(datamapper = None, online = True)
-                ds.SetURL(olds.url, olds.location, None)
-                ds.OnlineRenew()
-                return ds
+                oldsinfo = OnlineDataset.objects.get(id = datasetindex)
+                oldataset = datasets.localdata.LocalData(datamapper = None, online = True)
+                oldataset.SetURL(oldsinfo.url, oldsinfo.location, None)
+                oldataset.OnlineRenew()
+                return oldataset
             except:
                 return None
         return None
@@ -200,23 +211,23 @@ class OnlineDataset(models.Model):
             datasetindex = int(unicodedatasetindex)
             filepath = 'dataset/' + random_file_name(None, 'txt')
             # DB
-            olds = OnlineDataset.objects.get(id = datasetindex)
-            ds = Dataset()
-            ds.name = olds.name
-            ds.path = filepath
-            ds.filetype = 'TXT'
-            ds.head = olds.head
-            ds.hashead = olds.hashead
-            ds.attr_delim = ',' 
-            ds.record_delim = '\n' 
-            ds.save()
+            oldsinfo = OnlineDataset.objects.get(id = datasetindex)
+            dsinfo = Dataset()
+            dsinfo.name = olds.name
+            dsinfo.path = filepath
+            dsinfo.filetype = 'TXT'
+            dsinfo.head = olds.head
+            dsinfo.hashead = olds.hashead
+            dsinfo.attr_delim = ',' 
+            dsinfo.record_delim = '\n' 
+            dsinfo.save()
             #file
             output = open(settings.MEDIA_ROOT + filepath, 'w')
-            ds = OnlineDataset.ViewDataset(datasetindex)
-            if ds == None:
+            oldataset = OnlineDataset.ViewDataset(datasetindex)
+            if oldataset == None:
                 return 'false'
-            output.write(','.join(map(str, ds.head)) + '\n')
-            for line in ds.items:
+            output.write(','.join(map(str, oldataset.head)) + '\n')
+            for line in oldataset.items:
                 output.write(','.join(map(str, line)) + '\n')
             output.close()
             return 'true'
@@ -307,8 +318,8 @@ class MLModel(models.Model):
         if unicodemodelindex != None:
             modelindex = int(unicodemodelindex)
             try:
-                md = MLModel.objects.get(id = modelindex)
-                return md
+                mdinfo = MLModel.objects.get(id = modelindex)
+                return mdinfo
             except:
                 return None
         return None
@@ -385,40 +396,40 @@ class TrainingTask(models.Model):
     @staticmethod
     def CreateTrain(unicodemodelindex = None):
         '''
-            md: MLModel
-            tt: TrainingTask
-            mlmd: ModelRunTask
+            mdinfo: MLModel
+            traintask: TrainingTask
+            mdruntask: ModelRunTask
         '''
         if unicodemodelindex != None:
             modelindex = int(unicodemodelindex)
-            md = MLModel.objects.get(id = modelindex)
-            if md != None:
-                # New Task
-                tt = TrainingTask()
-                tt.name = ''
-                tt.modelprototype = md.modeltype
-                tt.modelindex = modelindex
-                tt.save()
+            mdinfo = MLModel.objects.get(id = modelindex)
+            if mdinfo != None:
+                # New Task in DB model
+                traintask = TrainingTask()
+                traintask.name = ''
+                traintask.modelprototype = mdinfo.modeltype
+                traintask.modelindex = modelindex
+                traintask.save()
                 # Modify Model Record
-                md.modelstatus = 'TRAINING'
-                md.save()
-                # Open dataset
-                if md.datasetprototype == 'LOCAL':
-                    dbds = Dataset.GetDataset(md.datasetindex)
+                mdinfo.modelstatus = 'TRAINING'
+                mdinfo.save()
+                # Open dataset on db
+                if mdinfo.datasetprototype == 'LOCAL':
+                    dsinfo = Dataset.GetDataset(mdinfo.datasetindex) 
                 else:
-                    dbds = OnlineDataset.GetDataset(md.datasetindex)
+                    dsinfo = OnlineDataset.GetDataset(mdinfo.datasetindex)
                 # Create Machine Learning Instance
                 # Get TrainingTask id
-                mlmd = ModelRunTask(TrainingTask.objects.all()[len(TrainingTask.objects.all())-1].id, md, dbds)
-                mlmd.Start()
+                mdruntask = ModelRunTask(TrainingTask.objects.all()[len(TrainingTask.objects.all())-1].id, mdinfo, dsinfo)
+                mdruntask.Start()
 
                 # now Training is over
-                md.modelstatus = 'TRAINED'
+                mdinfo.modelstatus = 'TRAINED'
                 # save training result
-                md.model_path = 'cache/models/'+random_file_name(None,'trd')
-                mlmd.Save(md.model_path)
-                md.save()
-                tt.delete()
+                mdinfo.model_path = 'cache/models/'+random_file_name(None,'trd')
+                mdruntask.Save(mdinfo.model_path)
+                mdinfo.save()
+                traintask.delete()
                 
                 return 'true'
             return 'false'
@@ -440,13 +451,13 @@ class ApplyTask(models.Model):
         , unicoderemove = ''):
         if unicodemodelindex != None:
             modelindex = int(unicodemodelindex)
-            md = MLModel.objects.get(id = modelindex)
+            mdinfo = MLModel.objects.get(id = modelindex)
         if str(unicodeselectwhichdatasettype) == 'ds':
-            dbds = Dataset.GetDataset(int(unicodedatasetindex))
+            dsinfo = Dataset.GetDataset(int(unicodedatasetindex))
         else:
-            dbds = OnlineDataset.GetDataset(int(unicodeoldatasetindex))
+            dsinfo = OnlineDataset.GetDataset(int(unicodeoldatasetindex))
         mlmd = ModelApplyTask(0, 
-            md, dbds)
+            mdinfo, dsinfo)
             #, None if str(unicoderemove)=='' else int(unicoderemove))
         return mlmd
 
@@ -463,11 +474,11 @@ class AssessTask(models.Model):
         , unicodeclassfeatureindex = -1, unicodeassessmethod = 'sfold'):
         if unicodemodelindex != None:
             modelindex = int(unicodemodelindex)
-            md = MLModel.objects.get(id = modelindex)
+            mdinfo = MLModel.objects.get(id = modelindex)
         if str(unicodeselectwhichdatasettype) == 'ds':
-            dbds = Dataset.GetDataset(int(unicodedatasetindex))
+            dsinfo = Dataset.GetDataset(int(unicodedatasetindex))
         else:
-            dbds = OnlineDataset.GetDataset(int(unicodeoldatasetindex))
-        mlmd = ModelAssessTask(0, md, dbds, str(unicodeassessmethod), -1) # unicodeclassfeatureindex is deprecated
+            dsinfo = OnlineDataset.GetDataset(int(unicodeoldatasetindex))
+        mlmd = ModelAssessTask(0, mdinfo, dsinfo, str(unicodeassessmethod), -1) # unicodeclassfeatureindex is deprecated
         return mlmd
 

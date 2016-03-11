@@ -62,14 +62,18 @@
 		</div>
 	</div>
 	<hr/>
+	<!-- item for item in gethead() -->
 	<input type="text" name="oldatasetindex" ng-model='selectedoldataset' style="display:none"></input>
 	<input type="text" name="datasetindex" ng-model='selecteddataset' style="display:none"></input>
 	<input type="text" name="selectwhichdatasettype" ng-model='selectwhichdatasettype' style="display:none"></input>
 	<input type="text" name="modelindex" ng-model="selectedmodel" style="display:none"></input>
-	<select class="form-control" ng-model="modelForm.classfeatureindex" name="classfeatureindex"
-		ng-options="item for item in gethead()">
-		
-	</select> 
+	<div><p><label for="classfeatureindex">Class Feature</label>
+		<select class="form-control" ng-model="modelForm.classfeatureindex" name="classfeatureindex"
+			ng-options="idx as choice for (idx, choice) in currenthead">
+			
+		</select> 
+	</p></div>
+	<!-- <p>{% templatetag openvariable %} modelForm.classfeatureindex {% templatetag closevariable %}</p> -->
 	<hr/>
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >

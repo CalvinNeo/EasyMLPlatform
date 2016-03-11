@@ -188,6 +188,12 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
             }
         })
     }
+    $scope.ondatasetselected = function(datasetindex){
+
+    }
+    $scope.onoldatasetselected = function(datasetindex){
+        
+    }
 })
 
 angular.module('mlApp').controller('newModelController', function($scope, $http, $location, hashimageService){
@@ -199,6 +205,7 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
     $scope.selectedoldataset = -1
     $scope.selectedmodel = -1
     $scope.selectwhichdatasettype = 'ds'
+    $scope.currenthead = []
 
     $scope.setdatatype = function(x){
         if (x == 'file'){
@@ -285,15 +292,25 @@ angular.module('mlApp').controller('newModelController', function($scope, $http,
             }
         })
     }
-    $scope.gethead = function(taskindex){
+    $scope.ondatasetselected = function(datasetindex){
+        $scope.gethead();
+    }
+    $scope.onoldatasetselected = function(datasetindex){
+        $scope.gethead();
+    }
+    $scope.gethead = function(){
+        if (($scope.selecteddataset==-1 && $scope.selectwhichdatasettype=='ds') || ($scope.selectedoldataset==-1 && $scope.selectwhichdatasettype!='ds')){
+            return []
+        }
+        req_url = $scope.selectwhichdatasettype == 'ds'? '/api/dataset_view?datasetindex=' + $scope.selecteddataset : '/api/oldataset_view?datasetindex=' + $scope.selectedoldataset
         $.ajax({
-            url : '/api/dataset_view?datasetindex='+ datasetindex
+            url : req_url
             ,async : false
             ,success : function (data, textStatus) {
                 data = data.replace(/True/g, "true")
                 data = data.replace(/False/g, "false")
                 data = eval( "(" + data + ")" )
-                return data.view[0]
+                $scope.currenthead = data.view.head
             }
         })
     }
@@ -396,6 +413,12 @@ angular.module('mlApp').controller('applyModelController', function($scope, $htt
         })
     }
 
+    $scope.ondatasetselected = function(datasetindex){
+
+    }
+    $scope.onoldatasetselected = function(datasetindex){
+        
+    }
 })
 
 angular.module('mlApp').controller('assessModelController', function($scope, $http, $location, hashimageService){

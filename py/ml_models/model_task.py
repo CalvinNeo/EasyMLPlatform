@@ -10,40 +10,38 @@ import itertools
 from ml_models import *
 
 class ModelRunTask:
-    def __init__(self, taskid, db_model, dataset):
+    def __init__(self, taskid, mdinfo, ds):
         '''
             Instance and run Model according to given `model` and `dataset`
 
-            db_model is a MLModel object
-            dataset is {'info':dbds, 'view':lcdt} or {'info':oldbds, 'view':lcdt} while 
+            mdinfo is a MLModel object(Database record)
+            ds is {'info':dsinfo, 'view':dataset} or {'info':oldsinfo, 'view':dataset} while 
                 dbds and oldsds is Dataset or OnlineDataset object
                 lcdt is datasets.localdata.LocalData object
         '''
-        clsname = db_model.modeltype
+        clsname = mdinfo.modeltype
         # possibles = globals()
         # possibles.update(locals())
         if (clsname.upper() in ModelBase.AllModelInfo().keys()): # and (clsname in possibles.keys()):
-            # dataset
-            dataset['view'].classfeatureindex = db_model.classfeatureindex
+            # dataset.classfeatureindex is determined by mdinfo(and when training md.classfeatureindex is determined by dataset.classfeatureindex)
+            ds['view'].classfeatureindex = mdinfo.classfeatureindex
 
             # need to set args to __init__
-            # md = possibles.get(clsname)(dataset = dataset['view'])
+            # md = possibles.get(clsname)(dataset = ds['view'])
             # print ModelBase.AllModelInfo()[clsname.upper()]
-            md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = dataset['view'])
-            md.positive = db_model.positive
-            md.negative = db_model.negative
-            md.classfeatureindex = db_model.classfeatureindex
+            md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = ds['view'])
+            md.positive = mdinfo.positive
+            md.negative = mdinfo.negative
+            md.classfeatureindex = mdinfo.classfeatureindex
             md.loss = {
                 'QUAD': ModelBase.QuadLoss
                 ,'BIN': ModelBase.BinLoss
                 ,'ABS': ModelBase.AbsLoss
                 ,'LOG': ModelBase.LogLoss
-            }[db_model.loss]
+            }[mdinfo.loss]
 
-            self.dataset = dataset['view']
+            self.dataset = ds['view']
             self.model = md
-
-            print dataset,md
 
     def Start(self):
         '''
@@ -65,19 +63,17 @@ class ModelRunTask:
 
 
 class ModelApplyTask:
-    def __init__(self, taskid, db_model, dataset):
-        clsname = db_model.modeltype
+    def __init__(self, taskid, mdinfo, ds):
+        clsname = mdinfo.modeltype
         if (clsname.upper() in ModelBase.AllModelInfo().keys()): 
-            # dataset
-            dataset['view'].classfeatureindex = db_model.classfeatureindex
+            # dataset.classfeatureindex is determined by mdinfo(and when training md.classfeatureindex is determined by dataset.classfeatureindex)
+            ds['view'].classfeatureindex = mdinfo.classfeatureindex
 
-            md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = dataset['view'])
+            md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = ds['view'])
 
-            self.dataset = dataset['view']
+            self.dataset = ds['view']
             self.model = md
-            self.Load(db_model.model_path)
-
-            print dataset,md
+            self.Load(mdinfo.model_path)
 
     def Start(self):
         '''
@@ -98,22 +94,21 @@ class ModelApplyTask:
         self.model.Load(name)
 
 class ModelAssessTask:
-    def __init__(self, taskid, db_model, dataset, method, classfeatureindex = None):
+    def __init__(self, taskid, mdinfo, ds, method, classfeatureindex = None):
         '''
             classfeatureindex和训练得到的模型是紧密相关的，对classfeatureindex的改动会牵涉到对模型的改动，因此classfeatureindex一定要去db_model的classfeatureindex
         '''
-        clsname = db_model.modeltype
+        clsname = mdinfo.modeltype
         if (clsname.upper() in ModelBase.AllModelInfo().keys()): 
 
             # dataset is load from Dataset.GetDataset
-            # db_model is model in MySQL
-            dataset['view'].classfeatureindex = db_model.classfeatureindex
+            ds['view'].classfeatureindex = mdinfo.classfeatureindex
 
-            md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = dataset['view'])
+            md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](dataset = ds['view'])
 
-            self.dataset = dataset['view']
+            self.dataset = ds['view']
             self.model = md
-            self.Load(db_model.model_path)
+            self.Load(mdinfo.model_path)
 
             self.assessmodel = assessment.Assessment(self.model, self.dataset)
 
