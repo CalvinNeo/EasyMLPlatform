@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponsePermanentRedirect
    
 class SecureRequiredMiddleware(object):
     def __init__(self):

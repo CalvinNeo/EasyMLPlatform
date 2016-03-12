@@ -3,6 +3,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+
 import MySQLdb
 import json
 
@@ -10,7 +12,7 @@ import datasets.localdata
 from www.forms import *
 from www.models import *
 
-from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
    
 def secure_required(view_func):
     """Decorator makes sure URL is accessed over https."""
@@ -97,6 +99,24 @@ def api(request, operation = "", *args, **kwargs):
             pass
     else:
         return HttpResponse("")
+
+def users(request, operation = "", *args, **kwargs):
+    operation = str(operation)
+    if operation == 'create':
+        user = User.objects.create_user(str(request.GET.get('name')), str(request.GET.get('email')), str(request.GET.get('password')))
+    elif operation == 'chpass':
+        User.objects.get(username=str(request.GET.get('name')).set_password('password'))
+    elif operation == 'auth':
+        user = authenticate(username=str(request.GET.get('name')), password=str(request.GET.get('password')))
+        if user is not None:
+            if user.is_active:
+                return HttpResponse("false")
+            else:
+                # the account is disabled
+                return HttpResponse("false")
+        else:
+            return HttpResponse("false")
+    return HttpResponse("true")
 
 def index(request, operation = "", *args, **kwargs):
     #特别注意一点,{}[p]这种选择方式,dict里面是全部求值的

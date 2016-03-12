@@ -133,7 +133,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-HTTPS_SUPPORT = True
+HTTPS_SUPPORT = False
+# SECURE_SSL_REDIRECT = True
+# SECURE_PROXY_SSL_HEADER = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/

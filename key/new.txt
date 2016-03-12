@@ -1,0 +1,5 @@
+$ssh-keygen -f easy.calvinneo.com.key
+$openssl req -new -key easy.calvinneo.com.key -out easy.calvinneo.com.csr
+$openssl x509 -req -days 365 -in easy.calvinneo.com.csr -signkey easy.calvinneo.com.key -out easy.calvinneo.com.crt
+
+openssl rsa -in server.key -out server.key.unsecure

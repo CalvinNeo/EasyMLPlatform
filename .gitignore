@@ -56,8 +56,12 @@ docs/_build/
 # PyBuilder
 target/
 
-www/upload
-www/www/migrations
+py/www/upload
+py/www/www/migrations
 nouse/
 *.lnk
 *.trd
+nginx/docs
+nginx/logs
+nginx/temp
+nginx/html
