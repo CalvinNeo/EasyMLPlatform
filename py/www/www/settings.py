@@ -52,7 +52,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pagination.middleware.PaginationMiddleware',
-    'www.middlewares.SecureRequiredMiddleware'
+    # 'www.middlewares.SecureRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'www.urls'
@@ -133,11 +133,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-HTTPS_SUPPORT = False
-# SECURE_SSL_REDIRECT = True
-# SECURE_PROXY_SSL_HEADER = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
+# HTTPS_SUPPORT = False
+SERVER_TYPE = "DEV"
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True # currently only in Dev branch of Django.
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/

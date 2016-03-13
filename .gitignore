@@ -65,3 +65,6 @@ nginx/docs
 nginx/logs
 nginx/temp
 nginx/html
+*.key
+*.unsecure
+*.csr

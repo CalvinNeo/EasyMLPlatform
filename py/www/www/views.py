@@ -13,7 +13,8 @@ from www.forms import *
 from www.models import *
 
 from django.contrib.auth.models import User
-   
+import settings
+
 def secure_required(view_func):
     """Decorator makes sure URL is accessed over https."""
     def _wrapped_view_func(request, *args, **kwargs):
@@ -24,6 +25,17 @@ def secure_required(view_func):
                 return HttpResponseRedirect(secure_url)
         return view_func(request, *args, **kwargs)
     return _wrapped_view_func
+
+def HTTPS_Response(request, URL):
+    if settings.SERVER_TYPE == "DEV":
+        new_URL = URL
+    else:
+        absolute_URL = request.build_absolute_uri(URL)
+        new_URL = "https%s" % absolute_URL[4:]
+    return HttpResponseRedirect(new_URL)
+
+def httpstest(request):
+    return HttpResponse('AHHHHH')
 
 def api(request, operation = "", *args, **kwargs):
     print "api:",operation

@@ -8,17 +8,13 @@ an easy distributed machine learning platform
 4. mysql-python
 5. BeautifulSoup
 6. django-pagination
+7. Go
 
 ## Run
 
 #### Start Server
-> /www/start-sever
-
-#### Debug/Develop Models
-> Go to /models/*.py
 
 #### Deploy Distributed Machine Learning System
-##### Extra Dependencies
-1. Go
+
 
 
