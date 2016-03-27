@@ -293,18 +293,15 @@ class MLModel(models.Model):
     @staticmethod
     def AllDistributedModels():
         return [ k  for (k,v) in MLModel.AllModelInfo().items() if v['distributed']==True ]
-        return ["EM","SVM","NAIVE_BAYES","K_MEANS","KNN"]
 
     @staticmethod
     def AllNonTrainingModels():
         return [ k  for (k,v) in MLModel.AllModelInfo().items() if v['nontraining']==True]
-        return ["MATRIX"]
 
     @staticmethod
     def AllModels():
         return [ k for (k,v) in MLModel.AllModelInfo().items()]
-        return MLModel.AllDistributedModels() + ["DECISION_TREE","ADABOOST","PCA","LOGISTIC","CRF","FP_GROWTH"]            
-
+    
     @staticmethod
     def GetModels(pageindex = 0, max_item = 10):
         l = len(MLModel.objects.all())
