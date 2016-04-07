@@ -22,6 +22,7 @@ class DataGraph:
         self.datamapper = datamapper
         self.JudgeScale()
         self.fig = plt.figure()
+        
     def JudgeScale(self):
         '''
             determine lower/upper bound of X/Y coordinates
@@ -31,6 +32,7 @@ class DataGraph:
             for index in xrange(len(self.coorbound)):
                 columns = [x[index] for x in self.dataset.items]
                 self.coorbound[index] = (min(columns),max(columns))
+
     def DrawData(self, dimX, dimY = -1):
         ax = self.fig.add_subplot(111)
         xcord1 = []; ycord1 = []; xcord2 = []; ycord2 = []
@@ -44,6 +46,7 @@ class DataGraph:
         ax.scatter(xcord2, ycord2, s = 30, c = 'green')
         plt.xlabel('X'); plt.ylabel('Y')
         plt.show()
+
 if __name__ == '__main__':
     # dst_path = '../models'
     # ext_name = '*'
@@ -66,7 +69,7 @@ if __name__ == '__main__':
             else:
                 return 0
     ld = datasets.localdata.LocalData(datamapper=my_mapper)
-    ld.ReadString(open("../models/dat_cls.txt","r").read(),True)
+    ld.ReadString(open("../ml_models/dat_cls.txt","r").read(),True)
     dg = DataGraph(ld, -1)
     dg.DrawData(0,1)
     print "bound",dg.coorbound    

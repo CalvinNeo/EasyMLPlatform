@@ -11,10 +11,15 @@ an easy distributed machine learning platform
 7. Go
 
 ## Run
-
 #### Start Server
 
 #### Deploy Distributed Machine Learning System
 
+#### PortID
+HTTPS Server 443
+HTTP Server 80/8888
+ML Framework(on standalone server) 8090
+Distributed Nodes 8190
+Data Provider Server 8091
 
 
