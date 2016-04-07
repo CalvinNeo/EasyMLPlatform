@@ -69,8 +69,12 @@ def api(request, operation = "", *args, **kwargs):
             return HttpResponse("true")
         elif action == 'absolute':
             return HttpResponse("true")
-    elif operation == 'image':
-        return HttpResponse(MLModel.GetImage(unicodemodelindex=request.GET.get('modelindex'))) 
+    elif operation == 'mdimage':
+        return HttpResponse(MLModel.GetImage(unicodemodelindex=request.GET.get('modelindex')))
+    elif operation == 'dsimage':
+        return HttpResponse(Dataset.GetImage(unicodemodelindex=request.GET.get('datasetindex'))) 
+    elif operation == 'oldsimage':
+        return HttpResponse(OLDataset.GetImage(unicodemodelindex=request.GET.get('datasetindex'))) 
     elif operation == 'model_train':
         return HttpResponse(TrainingTask.CreateTrain(unicodemodelindex=request.GET.get('modelindex'))) 
     elif operation == 'model_apply':

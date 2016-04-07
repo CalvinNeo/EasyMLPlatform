@@ -115,6 +115,16 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
     $scope.showDataset = function(datasetindex){
         $scope.updateDataset(datasetindex)
         $("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
+        $.ajax({
+            url : '/api/dsimage'
+            ,data : {
+                datasetindex : datasetindex
+            }
+            ,async : true
+            ,success : function (data, textStatus) {
+                //$("#modelimage").attr("src", data)
+            }
+        })
     }
     $scope.downloadDataset = function(datasetindex){
 
@@ -402,7 +412,7 @@ angular.module('mlApp').controller('applyModelController', function($scope, $htt
         $("#datasetviewframe").hide()
         $("#modelimage").show()
         $.ajax({
-            url : '/api/image'
+            url : '/api/mdimage'
             ,data : {
                 modelindex : modelindex
             }

@@ -152,11 +152,24 @@ class LocalData:
         if self.mode == 'all':
             return [item[i] for item in self.items]
         elif self.mode == 'sfold':
-            return [self.items[index][i] for index in xrange(0, len(self.items), self.nsplit)] 
+            return [self.items[index][i] for index in xrange(0, len(self.items), self.nsplit)]
+
+    def Head(self, i):
+        '''
+            get head name(string) from head index(in col start from 0)
+        '''
+        if self.online:
+            self.OnlineRenew()
+
+        if self.mode == 'all':
+            return self.head[i]
+        elif self.mode == 'sfold':
+            return self.head[i]
 
     def HeadIndex(self, i, head_col):
         '''
-            get head index(in col start from 0) from head name(string)
+            get value where id == i and head == head_col
+            head_col is string
         '''
         if self.online:
             self.OnlineRenew()
@@ -259,7 +272,7 @@ class LocalData:
             self.head, self.items = crawl_fetch['head'], crawl_fetch['items']
         for rec_id in xrange(len(self.items)):
             # (value,column,head)
-            self.items[rec_id] = map(lambda x: self.datamapper(x[0],x[1],x[2]), zip(self.items[rec_id], range(len(self.items[rec_id])), self.head))
+            self.items[rec_id] = map(lambda x: self.datamapper(x[0], x[1], x[2]), zip(self.items[rec_id], range(len(self.items[rec_id])), self.head))
 
     def Encrypt(self, x):
         return x
@@ -267,6 +280,9 @@ class LocalData:
     def DeCrypt(self):
         return x
 
+    def Graph(self, op):
+        pass
+        
 class TestClass:
     def __init__(self):
         self.d = [1,2,3,4,5,6]

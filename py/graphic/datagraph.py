@@ -22,30 +22,56 @@ class DataGraph:
         self.datamapper = datamapper
         self.JudgeScale()
         self.fig = plt.figure()
-        
+
     def JudgeScale(self):
         '''
-            determine lower/upper bound of X/Y coordinates
+            determine lower/upper bound of every feature
         '''
         if len(self.dataset.items) > 0:
             self.coorbound = [(0,0)] * len(self.dataset.items[0])
             for index in xrange(len(self.coorbound)):
                 columns = [x[index] for x in self.dataset.items]
-                self.coorbound[index] = (min(columns),max(columns))
+                self.coorbound[index] = (min(columns), max(columns))
 
-    def DrawData(self, dimX, dimY = -1):
+    def DrawData2Class(self, coorX, coorY = -1):
         ax = self.fig.add_subplot(111)
         xcord1 = []; ycord1 = []; xcord2 = []; ycord2 = []
         for item in self.dataset.items:
-            print item,item[dimX],item[dimY]
-            if item[dimY] > 0.5:
-                xcord1.append(item[dimX]); ycord1.append(item[dimY])
+            print item,item[coorX],item[coorY]
+            if item[coorY] > 0.5:
+                xcord1.append(item[coorX]); ycord1.append(item[coorY])
             else:
-                xcord2.append(item[dimX]); ycord2.append(item[dimY])
+                xcord2.append(item[coorX]); ycord2.append(item[coorY])
         ax.scatter(xcord1, ycord1, s = 30, c = 'red', marker = 's')
         ax.scatter(xcord2, ycord2, s = 30, c = 'green')
-        plt.xlabel('X'); plt.ylabel('Y')
+        plt.xlabel(self.dataset.Head(coorX))
+        plt.ylabel(self.dataset.Head(coorY))
+
+    def DrawDataOri(self, coorX, coorY = -1):
+        ax = self.fig.add_subplot(111)
+        xcord1 = []; ycord1 = []; xcord2 = []; ycord2 = []
+        for item in self.dataset.items:
+            ax.scatter(xcord1, ycord1, s = 30, c = 'red', marker = 's')
+        plt.xlabel(self.dataset.Head(coorX))
+        plt.ylabel(self.dataset.Head(coorY))
+
+    '''
+        below are APIs
+    '''
+    def createPlot(self, show = True, save = ''):
+        import StringIO, urllib, base64
+        if show:
+            plt.show()
+        else:
+            imgdata = StringIO.StringIO()
+            fig.savefig(imgdata, format='png')
+            imgdata.seek(0)  # rewind the data
+            uri = 'data:image/png;base64,' + urllib.quote(base64.b64encode(imgdata.buf))
+            return uri
+
+    def showPlot(self):
         plt.show()
+
 
 if __name__ == '__main__':
     # dst_path = '../models'

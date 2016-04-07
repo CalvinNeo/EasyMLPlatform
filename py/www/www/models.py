@@ -61,7 +61,6 @@ class Dataset(models.Model):
         return  "{{ 'id':{}, 'name':'{}', 'path':'{}' , 'filetype':'{}', 'head':'{}', 'attr_delim':'{}', 'record_delim':'{}', 'hashead':'{}' }}"\
             .format( str(self.id), str(self.name), str(self.path), str(self.filetype), str(self.head), 
                 str(self.attr_delim), str(self.record_delim).replace('\n','\\\\n') , str(self.hashead))        
-        return "#{}: ({}) {} @ {} attr_delim: {} record_delim: {}".format(self.id,self.filetype,self.name,self.path,self.attr_delim,self.record_delim)
 
     def __repr__(self):
         return  "{{ 'id':{}, 'name':'{}', 'path':'{}' , 'filetype':'{}', 'head':'{}', 'attr_delim':'{}', 'record_delim':'{}', 'hashead':'{}' }}"\
@@ -75,7 +74,7 @@ class Dataset(models.Model):
             if max_item == -1:
                 return Dataset.objects.all()
             else:
-                return Dataset.objects.all()[min(pageindex*max_item,l-1):min((pageindex+1)*max_item,l)]
+                return Dataset.objects.all()[min(pageindex*max_item, l-1): min((pageindex+1)*max_item, l)]
         else:
             return []
     
@@ -105,7 +104,7 @@ class Dataset(models.Model):
                     datasetfile = Dataset.objects.get(id = datasetindex)
                     #open local dataset
                     dataset = datasets.localdata.LocalData(datamapper = None)
-                    dataset.ReadString(open(settings.MEDIA_ROOT+str(datasetfile.path),"r").read(), hasHead=True, getValue=True)
+                    dataset.ReadString(open(settings.MEDIA_ROOT+str(datasetfile.path), "r").read(), hasHead=True, getValue=True)
                     return dataset
                 except:
                     return None
@@ -115,14 +114,29 @@ class Dataset(models.Model):
     def DeleteDataset(unicodedatasetindex = None):
         if unicodedatasetindex != None:
             datasetindex = int(unicodedatasetindex)
-            item = Dataset.objects.get(id = datasetindex)
+            dsinfo = Dataset.objects.get(id = datasetindex)
             try:
-                os.remove(settings.MEDIA_ROOT+str(item.path))
+                os.remove(settings.MEDIA_ROOT+str(dsinfo.path))
             except:
                 pass
-            item.delete()
+            dsinfo.delete()
             return 'true'
         return 'false'
+
+    @staticmethod
+    def GetImage(unicodedatasetindex = None):
+        dsinfo = None
+        if unicodedatasetindex != None:
+            datasetindex = int(unicodedatasetindex)
+            dsinfo = Dataset.objects.get(id = datasetindex)
+        if dsinfo != None:
+            datasetfile = Dataset.objects.get(id = datasetindex)
+            #open local dataset
+            dataset = datasets.localdata.LocalData(datamapper = None)
+            dataset.ReadString(open(settings.MEDIA_ROOT + str(datasetfile.path), "r").read(), hasHead=True, getValue=True)
+            image = dataset.Graph('')
+            return image
+        return ''
 
 class OnlineDataset(models.Model):
     id = models.AutoField(primary_key = True)
