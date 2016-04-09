@@ -12,7 +12,10 @@ import datasets.localdata
 from www.forms import *
 from www.models import *
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User    
+from django.contrib import auth  
+from django.contrib import messages  
+from django.contrib.auth.decorators import login_required   
 import settings
 
 def secure_required(view_func):
@@ -134,6 +137,29 @@ def users(request, operation = "", *args, **kwargs):
             return HttpResponse("false")
     return HttpResponse("true")
 
+def login(request, *args, **kwargs):
+    if request.method == 'GET':  
+        form = LoginForm()  
+        return render(request, 'index.html', {'form': form,})  
+    else:  
+        form = LoginForm(request.POST)  
+        if form.is_valid():  
+            username = request.POST.get('username', '')  
+            password = request.POST.get('password', '')  
+            user = auth.authenticate(username=username, password=password)  
+            if user is not None and user.is_active:  
+                auth.login(request, user)  
+                return HttpResponseRedirect("/index/dataset/")  
+            else:  
+                return render(request, 'index.html', {'form': form,'password_is_wrong':True})  
+        else:  
+            return render(request, 'index.html', {'form': form})
+
+def logout(request, *args, **kwargs):
+    auth.logout(request)  
+    return HttpResponseRedirect("/login/")  
+
+@login_required
 def index(request, operation = "", *args, **kwargs):
     #特别注意一点,{}[p]这种选择方式,dict里面是全部求值的
     try:

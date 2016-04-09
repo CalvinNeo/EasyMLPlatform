@@ -88,7 +88,12 @@ class Dataset(models.Model):
                     dsinfo = Dataset.objects.get(id = datasetindex)
                     #open local dataset
                     dataset = datasets.localdata.LocalData(datamapper = None)
-                    dataset.ReadString(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+                    if dsinfo.filetype == 'TXT' or dsinfo.filetype == 'CSV':
+                        dataset.ReadString(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+                    elif dsinfo.filetype == 'XML':
+                        dataset.ReadXML(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+                    elif dsinfo.filetype == 'XLS':
+                        dataset.ReadXLS(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
                     return {'info':dsinfo, 'view':dataset}
                 except:
                     return None
@@ -104,7 +109,12 @@ class Dataset(models.Model):
                     datasetfile = Dataset.objects.get(id = datasetindex)
                     #open local dataset
                     dataset = datasets.localdata.LocalData(datamapper = None)
-                    dataset.ReadString(open(settings.MEDIA_ROOT+str(datasetfile.path), "r").read(), hasHead=True, getValue=True)
+                    if dsinfo.filetype == 'TXT' or dsinfo.filetype == 'CSV':
+                        dataset.ReadString(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+                    elif dsinfo.filetype == 'XML':
+                        dataset.ReadXML(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+                    elif dsinfo.filetype == 'XLS':
+                        dataset.ReadXLS(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
                     return dataset
                 except:
                     return None
@@ -133,7 +143,12 @@ class Dataset(models.Model):
             datasetfile = Dataset.objects.get(id = datasetindex)
             #open local dataset
             dataset = datasets.localdata.LocalData(datamapper = None)
-            dataset.ReadString(open(settings.MEDIA_ROOT + str(datasetfile.path), "r").read(), hasHead=True, getValue=True)
+            if dsinfo.filetype == 'TXT' or dsinfo.filetype == 'CSV':
+                dataset.ReadString(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+            elif dsinfo.filetype == 'XML':
+                dataset.ReadXML(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+            elif dsinfo.filetype == 'XLS':
+                dataset.ReadXLS(ope-pn(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
             image = dataset.Graph('')
             return image
         return ''
@@ -289,7 +304,7 @@ class MLModel(models.Model):
         Dataset里面的classfeature字段是在训练阶段取的MLModel的classfeatureindex值
     '''
     classfeatureindex = models.IntegerField() 
-    loss = models.CharField(max_length = 20,default = 'QUAD',choices = LossChoices)
+    loss = models.CharField(max_length = 20, default = 'QUAD', choices = LossChoices)
     # set default like this so that it can work with -1/1 and 0/1 
     positive = models.FloatField(default = 1.0)
     negative = models.FloatField(default = -0.5)
@@ -352,7 +367,6 @@ class MLModel(models.Model):
             mlmd = MLModel.objects.get(id = modelindex)
         if mlmd != None:
             clsname = mlmd.modeltype
-            print clsname
             if (clsname.upper() in ModelBase.AllModelInfo().keys()):
                 md = ModelBase.AllModelInfo()[clsname.upper()]['cls'](LocalData())
                 md.Load(mlmd.model_path)

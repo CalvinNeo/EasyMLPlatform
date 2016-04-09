@@ -34,7 +34,7 @@ class DecisionTree(ModelBase):
         if dataset == None:
             dataset = self.dataset
         feature_count = ReduceByKeyAsDict(dataset.Iter(), dataset.classfeatureindex, \
-            lambda (key,value):(key,len(value)), True, returnDataset = True)
+            lambda (key, value):(key, len(value)), True, returnDataset = True)
         shentr = reduce(lambda x,y:x-y*math.log(y,2), map(lambda (key,value): \
             float(value)/self.dataset.Length(),feature_count.iteritems()),0)
         return shentr
@@ -48,8 +48,8 @@ class DecisionTree(ModelBase):
             shentr:
         '''
         featurevalues = GroupByKey(dataset.Iter(), classfeatureindex, True)
-        shentr = reduce(operator.add, map(lambda (key,value): \
-            len(value)/float(self.dataset.Length())*self.ShannonEntropy(L2DS(value)),featurevalues.iteritems()),0)
+        shentr = reduce(operator.add, map(lambda (key, value): \
+            len(value)/float(self.dataset.Length())*self.ShannonEntropy(L2DS(value)), featurevalues.iteritems()), 0)
         return featurevalues, shentr
 
     def BestFeature(self, dataset):

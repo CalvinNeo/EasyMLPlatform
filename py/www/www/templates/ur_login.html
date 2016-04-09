@@ -1,0 +1,20 @@
+<div style="width:50; height:50">
+	<form method='post' enctype="multipart/form-data" autocomplete=off action="{% url 'login' %}" style="width:100%;" name="loginForm" id="loginFrom" >
+		{% csrf_token %}
+		<p><label for="name">username</label>
+			<input type="text" name="username" class="form-control" ng-model="loginFrom.username"required></input>
+			<div class="error" ng-show="loginFrom.username.$dirty && loginFrom.username.$invalid">
+				<small class="error text-danger" ng-show="loginFrom.username.$error.required"> Name Required </small>
+			</div>
+		</p>
+		<p><label for="name">password</label>
+			<input type="password" name="password" class="form-control" ng-model="loginFrom.pass" required></input>
+			<div class="error" ng-show="loginFrom.pass.$dirty && loginFrom.pass.$invalid">
+				<small class="error text-danger" ng-show="loginFrom.pass.$error.required"> Name Required </small>
+			</div>
+		</p>
+
+		<input type="submit" class="btn btn-success btn-block" value="Login">
+
+	</form>
+</div>

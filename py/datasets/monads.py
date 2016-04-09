@@ -53,7 +53,7 @@ def ReduceByKeyAsDict(items, keyindex, lmdakeyvalue, removekey=False, returnData
     g = GroupByKey(items, keyindex, removekey)
     '''
         recieve a list
-        lmdakeyvalue get a (key, value) tuple, return a tuple (f(key),g(value)), f,g are some given functions
+        lmdakeyvalue get a (key, value) tuple, return a tuple (f(key), g(value)), f,g are some given functions
         return a dict
     '''
     r = dict(map(lmdakeyvalue, g.iteritems()))
@@ -63,8 +63,23 @@ def GroupByKey(items, keyindex, removekey=False, returnDataset=False):
     '''
         recieve a list
         return a dict
-        split dataset into a dictionary classified by keys
-        if keyindex = None EQUALS Group
+
+        split dataset into a dictionary classified by keys, if keyindex = None EQUALS Group
+
+
+        In:
+        a,1,3
+        a,2,3
+        b,1,1
+        c,3,3
+        d,3,4
+        keyindex == 0(the colomn of [a,a,b,c,d])
+
+        Out:
+        (if removekey)
+        {a:[1,2,3,3], b:[1,1],c:[3,3,3,4]}
+        (if not removekey)
+        {a:[a,1,2,3,3], b:[b,1,1],c:[c,3,3,3,4]}
     '''
     groups = {}
     for item in items:
@@ -84,6 +99,8 @@ def GroupByKey(items, keyindex, removekey=False, returnDataset=False):
 def SortByKey(items, keyindex, comparelmda, removekey=False, returnDataset=False):
     '''
         recieve a list
+        Group the list by Key(call GroupByKey)
+        Sort According to Key
     '''
     g = GroupByKey(items, keyindex, removekey)
     r = sorted(g, cmp=comparelmda)
