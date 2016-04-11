@@ -1,0 +1,40 @@
+<html>
+<head>
+	<link href="/static/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+	<![endif]-->
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+	<script src="/static/js/jquery.js"></script>
+	<script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/static/js/bootstrap/js/bootstrap-typeahead.js"></script>
+	<script src="/static/js/angular.min.js"></script>
+	<link href="/static/css/main.css" rel="stylesheet">
+</head>
+<body>
+<h2>Sample Dataset At localhost:8091</h2>
+<h4>Iris</h4>
+<table class="table table-strip table-hover table-bordered">
+<thead>
+<tr>
+	{% for col in head %}
+		<td> 
+			{{col}}
+		</td>
+	{% endfor %}
+</tr>
+</thead>
+<tbody>
+{% for row in data %}
+	<tr>
+		{% for col in row %}
+			<td>{{col}}</td>
+		{% endfor %}
+	</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</body>
+</html>

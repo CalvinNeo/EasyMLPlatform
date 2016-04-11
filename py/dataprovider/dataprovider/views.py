@@ -7,9 +7,10 @@ import MySQLdb
 def index(request, operation = "", *args, **kwargs):
     try:
         return {
+        'guass;in': render(request, "inteval", {'dimen': 2})
         }[operation.decode('utf8')]
     except KeyError:
-        return render(request,"data.html",{
+        return render(request, "data.html",{
             'head':['feature1','feature2','feature3','feature4','class']
             ,'data':[[5.1,3.5,1.4,0.2,1],
                     [4.9,3.0,1.4,0.2,1],
