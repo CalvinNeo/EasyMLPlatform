@@ -14,8 +14,15 @@
 </head>
 <body>
 <h2>Sample Dataset At localhost:8091</h2>
-<h4>Iris</h4>
-<table class="table table-strip table-hover table-bordered">
+<h4>{{ name }}</h4>
+<script>
+	var dimen = {{ dimen }}
+	,interval = {{ interval }}
+	$(document).ready(function(){
+		setInterval(function(){$('#datatable > tbody:last').append('<tr><td>1</td><td>2</td></tr>')}, interval)
+	})
+</script>
+<table id="datatable" class="table table-strip table-hover table-bordered">
 <thead>
 <tr>
 	{% for col in head %}
@@ -26,13 +33,6 @@
 </tr>
 </thead>
 <tbody>
-{% for row in data %}
-	<tr>
-		{% for col in row %}
-			<td>{{col}}</td>
-		{% endfor %}
-	</tr>
-{% endfor %}
 
 </tbody>
 </table>
