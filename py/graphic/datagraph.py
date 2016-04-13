@@ -97,5 +97,5 @@ if __name__ == '__main__':
     ld = datasets.localdata.LocalData(datamapper=my_mapper)
     ld.ReadString(open("../ml_models/dat_cls.txt","r").read(),True)
     dg = DataGraph(ld, -1)
-    dg.DrawData(0,1)
+    dg.DrawData(0, 1)
     print "bound",dg.coorbound    
