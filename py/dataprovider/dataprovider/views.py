@@ -11,6 +11,8 @@ def index(request, operation = "", *args, **kwargs):
             , 'name': ''
             , 'head': range(2)
             , 'interval': 1000
+            , 'mathfunc': 'function(x){return Math.sin(x)}'
+            , 'start': 0
             })
         }[operation.decode('utf8')]
     except KeyError:
