@@ -75,9 +75,9 @@ def api(request, operation = "", *args, **kwargs):
     elif operation == 'mdimage':
         return HttpResponse(MLModel.GetImage(unicodemodelindex=request.GET.get('modelindex')))
     elif operation == 'dsimage':
-        return HttpResponse(Dataset.GetImage(unicodemodelindex=request.GET.get('datasetindex'))) 
+        return HttpResponse(Dataset.GetImage(unicodedatasetindex=request.GET.get('datasetindex'))) 
     elif operation == 'oldsimage':
-        return HttpResponse(OLDataset.GetImage(unicodemodelindex=request.GET.get('datasetindex'))) 
+        return HttpResponse(OLDataset.GetImage(unicodedatasetindex=request.GET.get('datasetindex'))) 
     elif operation == 'model_train':
         return HttpResponse(TrainingTask.CreateTrain(unicodemodelindex=request.GET.get('modelindex'))) 
     elif operation == 'model_apply':

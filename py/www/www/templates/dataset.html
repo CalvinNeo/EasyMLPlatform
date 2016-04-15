@@ -32,11 +32,17 @@
 	<div class="col-md-6">		
 		<p class="lead" ng-show="uploadFormShow()"> Dataset View</p>
 		<p class="lead" ng-show="onlineShow()"> Online Dataset View</p>
-		<div>
+		<ul id="mytab2" class="nav nav-tabs">
+			<li ng-class="{true:'active',false:''}[datasetviewtype=='table']">
+				<a href="javascript:void(0)" data-toggle="tab" ng-click="datasetviewtype = 'table'">TABLE</a></li>
+			<li ng-class="{true:'active',false:''}[datasetviewtype=='graphic']">
+				<a href="javascript:void(0)" data-toggle="tab" ng-click="datasetviewtype = 'graphic'">GRAPHIC</a></li>
+		</ul>
+		<div ng-show="datasetviewtype == 'table'">
 			<iframe frameborder=0 width="100%" height="300%"  scrolling="auto" id="datasetviewframe" ></iframe>
 		</div>
-		<div>
-			
+		<div ng-show="datasetviewtype == 'graphic'">
+			NOT DONE
 		</div>
 	</div>
 </div>

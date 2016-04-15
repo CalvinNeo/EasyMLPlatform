@@ -30,8 +30,8 @@ def intervalmain():
         if stop_flag == 1:
             # every 2 sec
             time.sleep(3)
-            print [len(intervaldata), math.sin(len(intervaldata)) + gaussdist(0, 0.1)]
-            intervaldata.append(','.join([str(len(intervaldata)), str(math.sin(len(intervaldata)) + gaussdist(0, 0.1))]) )
+            # print [len(intervaldata), math.sin(len(intervaldata)) + gaussdist(0, 0.1)]
+            intervaldata.append( [str(len(intervaldata)), str(math.sin(len(intervaldata)) + gaussdist(0, 0.1))] )
         else:
             print "--stop"
             stop_flag = 0
@@ -41,6 +41,7 @@ def intervalmain():
 def index(request, operation = "", *args, **kwargs):
     global stop_flag, intervaldata
     try:
+        print intervaldata
         return {
             'guasslin': render(request, "interval.html", {'dimen': 2
             , 'name': ''
@@ -49,8 +50,11 @@ def index(request, operation = "", *args, **kwargs):
             , 'mathfunc': 'function(x){return Math.sin(x)}'
             , 'start': 0
             , 'noisesigma': 0.1
+            , 'data': intervaldata
             })
-            ,'guasslin_update':HttpResponse(';'.join(intervaldata))
+            ,'guasslin_update':HttpResponse( 
+                ';'.join( map(lambda x: ','.join(x), intervaldata ) )
+            )
         }[operation.decode('utf8')]
     except KeyError:
         if operation.decode('utf8') == 'guasslin_start':

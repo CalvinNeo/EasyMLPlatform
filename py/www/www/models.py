@@ -106,7 +106,7 @@ class Dataset(models.Model):
             datasetindex = int(unicodedatasetindex)
             if datasetindex >= 0:
                 try:
-                    datasetfile = Dataset.objects.get(id = datasetindex)
+                    dsinfo = Dataset.objects.get(id = datasetindex)
                     #open local dataset
                     dataset = datasets.localdata.LocalData(datamapper = None)
                     if dsinfo.filetype == 'TXT' or dsinfo.filetype == 'CSV':
@@ -140,7 +140,6 @@ class Dataset(models.Model):
             datasetindex = int(unicodedatasetindex)
             dsinfo = Dataset.objects.get(id = datasetindex)
         if dsinfo != None:
-            datasetfile = Dataset.objects.get(id = datasetindex)
             #open local dataset
             dataset = datasets.localdata.LocalData(datamapper = None)
             if dsinfo.filetype == 'TXT' or dsinfo.filetype == 'CSV':
@@ -148,7 +147,7 @@ class Dataset(models.Model):
             elif dsinfo.filetype == 'XML':
                 dataset.ReadXML(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
             elif dsinfo.filetype == 'XLS':
-                dataset.ReadXLS(ope-pn(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
+                dataset.ReadXLS(open(settings.MEDIA_ROOT+str(dsinfo.path),"r").read(), hasHead=True, getValue=True)
             image = dataset.Graph('')
             return image
         return ''
@@ -242,11 +241,11 @@ class OnlineDataset(models.Model):
             # DB
             oldsinfo = OnlineDataset.objects.get(id = datasetindex)
             dsinfo = Dataset()
-            dsinfo.name = olds.name
+            dsinfo.name = oldsinfo.name
             dsinfo.path = filepath
             dsinfo.filetype = 'TXT'
-            dsinfo.head = olds.head
-            dsinfo.hashead = olds.hashead
+            dsinfo.head = oldsinfo.head
+            dsinfo.hashead = oldsinfo.hashead
             dsinfo.attr_delim = ',' 
             dsinfo.record_delim = '\n' 
             dsinfo.save()

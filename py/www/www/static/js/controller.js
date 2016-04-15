@@ -71,6 +71,7 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
     $scope.uploadForm = {}
     $scope.uploadactiontype = 'new'
     $scope.onlineactiontype = 'new'
+    $scope.datasetviewtype = 'table'
     // $scope.selecteddataset = -1
     // $scope.selectedoldataset = -1
     // $scope.selectedmodel = -1
