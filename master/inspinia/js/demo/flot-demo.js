@@ -176,9 +176,35 @@ function startMointor(cpuId, memoryId, ip, index) {
 var timerId = 0;
 
 $(function() {
-    timerId = startMointor("flot-line-chart-cpu", "flot-line-chart-memory", "localhost", 1);
+    // timerId = startMointor("flot-line-chart-cpu", "flot-line-chart-memory", "localhost:8190", 4);
     //console.log(timerId);
     //setTimeout(function() {
     //    clearInterval(timerId);
     //}, 5000)
 });
+var ad = new Array();
+$.ajax({
+    type: 'POST',
+    url: "http://localhost:8190" + "/v1/node/query/list",
+    success: function(d) {
+        for (var i=0; i<d.Objects.length; i++)
+        {
+            ad.push(d.Objects[i].Id)
+            cloned = $("#prototype > .container").clone()
+            cloned.find("#flot-line-chart-cpu").attr("id", "flot-line-chart-cpu-" + d.Objects[i].Id)
+            cloned.find("#flot-line-chart-memory").attr("id", "flot-line-chart-memory-" + d.Objects[i].Id)
+            cloned.find(".cpuname").text("Node " + d.Objects[i].Id + " CPU")
+            cloned.find(".memname").text("Node " + d.Objects[i].Id + " Memory")
+            $("#conlist").append(cloned)
+            // startMointor("flot-line-chart-cpu-" + d.Objects[i].Id, "flot-line-chart-memory-" + d.Objects[i].Id, "localhost:8190", d.Objects[i].Id);
+        }
+    },
+    dataType: "json",
+    async: false
+});
+$(document).ready(function(){
+    for (var i=0; i<ad.length; i++)
+    {
+        startMointor("flot-line-chart-cpu-" + ad[i], "flot-line-chart-memory-" + ad[i], "localhost:8190", ad[i]);
+    }
+})
