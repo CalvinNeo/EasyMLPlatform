@@ -308,6 +308,8 @@ def index(request, operation = "", *args, **kwargs):
                     })
         elif operation == "md_view":
             md = MLModel.GetModels(unicodedatasetindex=request.GET.get('modelindex'))
+        elif operation == "node_manager":
+            return render(request,"node_manager.html",{})
         else:
             return render(request,"404.html",{'title':'Page Not Found'})
 

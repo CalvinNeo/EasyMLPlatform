@@ -15,7 +15,7 @@
 	<link href="/static/css/main.css" rel="stylesheet">
 </head>
 <body ng-app="mlApp" ng-controller="bodyController" ng-style="bodystyle">
-	<title>An Easy Machine Learning Platform</title>
+	<title>Easy Machine Learning Platform</title>
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navbar" style="padding-right:5px;">
 		<div class="navbar-header header text-danger">
 			<a class="navbar-brand" href="#">EasyML</a>
@@ -25,7 +25,7 @@
 			<li class=""><a href="{% url 'index' 'models' %}">TRAIN</a></li>
 			<li class=""><a href="{% url 'index' 'apply' %}">APPLY</a></li>
 			<li class=""><a href="{% url 'index' 'assessment' %}">ASSESSMENT</a></li>
-			<li class=""><a href="http://localhost:8190/inspinia/">CLUSTER MGR</a></li>
+			<li class=""><a href="{% url 'index' 'node_manager' %}">CLUSTER MGR</a></li>
 		</ul>
 		<div>
 			<form class="navbar-form navbar-left" role="search">
