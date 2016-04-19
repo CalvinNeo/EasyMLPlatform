@@ -8,6 +8,7 @@ import operator
 from monads import *
 import crawl
 import parse
+from graphic.datagraph import DataGraph
 
 class LocalData:
     def __init__(self, datamapper = None, *args, **kwargs):
@@ -281,7 +282,9 @@ class LocalData:
         return x
 
     def Graph(self, op):
-        pass
+        dg = DataGraph(self, self.classfeatureindex, self.datamapper)
+        # JSON can't have non-string key
+        return dg.createPlot(show = False)
         
 class TestClass:
     def __init__(self):

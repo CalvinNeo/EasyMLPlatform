@@ -115,7 +115,11 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
     }
     $scope.showDataset = function(datasetindex){
         $scope.updateDataset(datasetindex)
-        $("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex)
+        $("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex) 
+        // if($scope.datatype == 'file')
+        //     reurl = '/api/dsimage'
+        // else
+        //     reurl = '/api/oldsimage'
         $.ajax({
             url : '/api/dsimage'
             ,data : {
@@ -123,7 +127,7 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
             }
             ,async : true
             ,success : function (data, textStatus) {
-                //$("#modelimage").attr("src", data)
+                $("#datasetimage").attr("src", data)
             }
         })
     }
@@ -196,6 +200,16 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
                 $scope.onlineForm['olrenew'] = data.info.renewstrategy
                 $scope.onlineForm['olhashead'] = data.info.hashead
                 $scope.onlineForm['olhead'] = data.info.head
+            }
+        })
+        $.ajax({
+            url : '/api/oldsimage'
+            ,data : {
+                datasetindex : datasetindex
+            }
+            ,async : true
+            ,success : function (data, textStatus) {
+                $("#datasetimage").attr("src", data)
             }
         })
     }

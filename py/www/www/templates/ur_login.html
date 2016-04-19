@@ -1,5 +1,5 @@
 <div style="width:50; height:50">
-	<form method='post' enctype="multipart/form-data" autocomplete=off action="{% url 'login' %}" style="width:100%;" name="loginForm" id="loginFrom" >
+	<form method='post' enctype="multipart/form-data" autocomplete=off action="{% url 'login' %}" style="width:60%;" name="loginForm" id="loginFrom" >
 		{% csrf_token %}
 		<p><label for="name">username</label>
 			<input type="text" name="username" class="form-control" ng-model="loginFrom.username"required></input>

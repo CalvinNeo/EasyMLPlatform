@@ -37,21 +37,19 @@ class DataGraph:
         ax = self.fig.add_subplot(111)
         xcord1 = []; ycord1 = []; xcord2 = []; ycord2 = []
         for item in self.dataset.items:
-            print item,item[coorX],item[coorY]
             if item[coorY] > 0.5:
                 xcord1.append(item[coorX]); ycord1.append(item[coorY])
             else:
                 xcord2.append(item[coorX]); ycord2.append(item[coorY])
-        ax.scatter(xcord1, ycord1, s = 30, c = 'red', marker = 's')
-        ax.scatter(xcord2, ycord2, s = 30, c = 'green')
+        ax.scatter(xcord1, ycord1, s = 10, c = 'red', marker = 's')
+        ax.scatter(xcord2, ycord2, s = 10, c = 'green')
         plt.xlabel(self.dataset.Head(coorX))
         plt.ylabel(self.dataset.Head(coorY))
 
     def DrawDataOri(self, coorX, coorY = -1):
         ax = self.fig.add_subplot(111)
-        xcord1 = []; ycord1 = []; xcord2 = []; ycord2 = []
-        for item in self.dataset.items:
-            ax.scatter(xcord1, ycord1, s = 30, c = 'red', marker = 's')
+        for (item, i) in zip(self.dataset.items, range(len(self.dataset.items))):
+            ax.scatter(item[coorX], item[coorY], s = 30, c = 'red', marker = 's')
         plt.xlabel(self.dataset.Head(coorX))
         plt.ylabel(self.dataset.Head(coorY))
 
@@ -60,11 +58,14 @@ class DataGraph:
     '''
     def createPlot(self, show = True, save = ''):
         import StringIO, urllib, base64
+        self.fig = plt.figure(1, facecolor = 'white')
+        self.fig.clf()
+        self.DrawDataOri(0, self.classfeatureindex)
         if show:
             plt.show()
         else:
             imgdata = StringIO.StringIO()
-            fig.savefig(imgdata, format='png')
+            self.fig.savefig(imgdata, format='png')
             imgdata.seek(0)  # rewind the data
             uri = 'data:image/png;base64,' + urllib.quote(base64.b64encode(imgdata.buf))
             return uri
