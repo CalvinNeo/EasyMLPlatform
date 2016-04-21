@@ -171,7 +171,6 @@ class OnlineDataset(models.Model):
         return  "{{ 'id':{}, 'name':'{}', 'head':'{}' , 'url':'{}', 'location':'{}', 'search':'{}', 'renewstrategy':'{}', 'hashead':'{}' }}" \
             .format( str(self.id), str(self.name), str(self.head), str(self.url), str(self.location), 
                 str(self.search), str(self.renewstrategy) , str(self.hashead))
-        return "#{}: {} @ {} location: {} search: {}".format(self.id,self.name,self.url,self.location,self.search)
 
     def __repr__(self):
         return  "{{ 'id':{}, 'name':'{}', 'head':'{}' , 'url':'{}', 'location':'{}', 'search':'{}', 'renewstrategy':'{}', 'hashead':'{}' }}" \

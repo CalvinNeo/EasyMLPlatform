@@ -78,7 +78,7 @@ class LogisticRegression(ModelBase):
         fr = open(filename)
         self.weights = pickle.load(fr)
 
-    def ShowImage(self):
+    def ShowImage(self, op):
         pass
 
     def RealValue(self):

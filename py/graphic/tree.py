@@ -81,6 +81,7 @@ class GraphTree:
             fig.savefig(imgdata, format='png')
             imgdata.seek(0)  # rewind the data
             uri = 'data:image/png;base64,' + urllib.quote(base64.b64encode(imgdata.buf))
+            imgdata.close()
             return uri
 
     def showPlot(self):
@@ -99,3 +100,4 @@ if __name__ == '__main__':
     tr.load(aa)
     print tr.leafcount,tr.depth
     tr.createPlot(show=False)
+
