@@ -5,7 +5,7 @@
 	{% if ds_select %}
 		<td> </td>
 	{% endif %}
-	<td>Name</td><td>Type</td><td>Head</td>
+	<td>Name</td><td>Type</td><td>User</td>
 </tr>
 </thead>
 <tbody>
@@ -17,7 +17,7 @@
 		<td><a href="javascript:void(0)" ng-click="{% if ds_show %} showDataset({{dataset.id}}) {% endif %} 
 			{% if ds_choose %} ;selecteddataset = {true:-1,false:{{dataset.id}}}[selecteddataset=={{dataset.id}}];selectwhichdatasettype = 'ds' {% endif %}
 			;ondatasetselected({{dataset.id}})"
-			>{{dataset.name}}</a></td><td>{{dataset.filetype}}</td><td>{{dataset.head}}</td>
+			>{{dataset.name}}</a></td><td>{{dataset.filetype}}</td><td>{{dataset.user}}</td>
 		{% if ds_operation %}
 			{% if ds_delete %}
 			<td><a href="javascript:void(0)" ng-click="deleteDataset({{dataset.id}})" class="label label-important">DELETE</a></td>

@@ -10,17 +10,17 @@ from datasets.monads import *
 import operator
 import json
 import pickle
-import itertoolsfrom sklearn import metrics
-from sklearn.naive_bayes import GaussianNB
 
+from sklearn import metrics
+from sklearn.svm import SVC
 
-class NaiveBayes(ModelBase):
+class SVM(ModelBase):
     def __init__(self, dataset, *args, **kwargs):
         '''
             dataset: (datasets.localdata) 
             classfeatureindex: index of the column which defines the feature in dataset 
         '''
-        ModelBase.__init__(self, dataset, 'NAIVE_BAYES', *args, **kwargs)
+        ModelBase.__init__(self, dataset, 'SVM', *args, **kwargs)
         self.Test = self.Classify
         self.Apply = self.ClassifyDataset
         self.Train = self.NaiveBayes
@@ -61,24 +61,3 @@ class NaiveBayes(ModelBase):
 
     def RealValue(self, op):
         pass
-
-if __name__ == '__main__':
-    def my_mapper(data, colindex, head):
-        # return {
-        #   'water': int(data),
-        #   'foot': int(data),
-        #   'fish': str(data)
-        # }[head]
-        if head == 'water':
-            return int(data)
-        elif head == 'foot':
-            return int(data)
-        else:
-            return str(data)
-    ld = datasets.localdata.LocalData(datamapper=my_mapper)
-    ld.ReadString(open("dat_cls.txt","r").read(),True)
-    dt = DecisionTree(ld)
-    
-    print dt.Classify([1,1])
-    print dt.Classify([0,0])
-    dt.ShowImage('')

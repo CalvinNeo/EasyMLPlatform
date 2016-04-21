@@ -225,6 +225,8 @@ def index(request, operation = "", *args, **kwargs):
                 print "ERRORS:", form.errors
                 print "FILES", request.FILES
                 print "form.is_valid()",form.is_valid()
+                print request
+                print request.user
                 if form.is_valid():
                     ds = Dataset()
                     ds.name = str(form.cleaned_data['name'])
@@ -239,6 +241,7 @@ def index(request, operation = "", *args, **kwargs):
                     ds.hashead = bool(form.cleaned_data['hashead'])
                     ds.attr_delim = ',' if str(form.cleaned_data['attr_delim']) == '' else str(form.cleaned_data['attr_delim']).replace('\\n','\n').replace('\\t','\t')
                     ds.record_delim = '\n' if str(form.cleaned_data['record_delim']) == '' else str(form.cleaned_data['record_delim']).replace('\\n','\n').replace('\\t','\t')
+                    ds.user = str(request.user)
                     ds.save()
                     return render(request,"success.html",{'title':'upload dataset succeed!','description':str(form.cleaned_data['name']).decode('utf8')})
                 else:

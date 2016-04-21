@@ -224,6 +224,7 @@ class ModelBase:
                 ,'distributed': True
                 ,'nontraining': False
                 ,'modeltype': 'CLASSIFY'
+                ,'cls': svm.SVM
             },
             'NAIVE_BAYES':{
                 'ndataset': 1

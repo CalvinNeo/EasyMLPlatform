@@ -53,6 +53,8 @@ class Dataset(models.Model):
     record_delim = models.CharField(max_length=3)
     hashead = models.BooleanField(default=True)
     createtime = models.DateTimeField('create time', auto_now_add=True)
+    user = models.CharField(max_length=20)
+    group = models.CharField(max_length=20)
 
     class Meta:
         db_table = 'dataset'
@@ -163,6 +165,8 @@ class OnlineDataset(models.Model):
     renewstrategy = models.CharField(max_length=32)
     hashead = models.BooleanField(default=True)
     createtime = models.DateTimeField('create time', auto_now_add=True)
+    user = models.CharField(max_length=20)
+    group = models.CharField(max_length=20)
 
     class Meta:
         db_table = 'onlinefield'
