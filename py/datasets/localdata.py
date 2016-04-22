@@ -30,10 +30,6 @@ class LocalData:
             self.items = kwargs['items']
         else:
             self.items = []
-        if 'online' in kwargs.keys() and kwargs['online'] != None:
-            self.online = kwargs['online']
-        else:
-            self.online = False
         '''
             classfeatureindex is the index of the column which defines the feature in dataset 
             (if the dataset is used to classify or regress)
@@ -46,7 +42,6 @@ class LocalData:
             mode:
             all -all items in dataset will be used to train
             sfold -sfold cross validation
-
         '''        
         self.mode = 'all'
         '''
@@ -78,6 +73,18 @@ class LocalData:
             self.datamapper = self.default_datamapper
         else:
             self.datamapper = datamapper
+
+        '''
+            ONLINE DATASETS
+        '''
+        if 'online' in kwargs.keys() and kwargs['online'] != None:
+            self.online = kwargs['online']
+        else:
+            self.online = False
+        if 'renewstrategy' in kwargs.keys() and kwargs['renewstrategy'] != None:
+            self.renewstrategy = kwargs['renewstrategy']
+        else:
+            self.renewstrategy = False
 
         self.crawl = None
 
@@ -188,12 +195,14 @@ class LocalData:
         return self.ColumnLength() + index if index < 0 else index
 
     def Spawn(self, colindexs, *args, **kwargs):
+        '''
+            Part of the old dataset
+        '''
         newhead = [self.head[i] for i in colindexs]
         if 'items' in kwargs.keys() and kwargs['items'] != None:
             newitems = list(kwargs['items'])
         else:
             newitems = [[self.items[i][j] for j in colindexs] for i in kwargs['linindexs']]
-        # print "classfeatureindex", self.classfeatureindex, colindexs
         positiveindex = self.RealIndex(self.classfeatureindex)
         newclassfeatureindex = colindexs.index(positiveindex) if positiveindex in colindexs else -1
         return LocalData(self.datamapper, head = newhead, items = newitems, classfeatureindex = newclassfeatureindex)
@@ -302,7 +311,7 @@ class TestClass:
 if __name__ == '__main__':
     ld = LocalData()
     ld.ReadString(open("1.txt","r").read(),True)
-    ld.SaveCSV("k.csv")
+    ld.SaveCSV("saved.csv")
     print ld.head
     for items in ld.Iter():
         print items

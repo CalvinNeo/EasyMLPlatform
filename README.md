@@ -9,11 +9,14 @@ an easy distributed machine learning platform
 5. BeautifulSoup
 6. django-pagination
 7. Go
+8. sklearn
 
 ## Run
 #### Start Server
-
-#### Deploy Distributed Machine Learning System
+master.exe start masternode
+node.exe start slavenode
+start-server.cmd start django frontend and stading machine learning framework
+start-online-server.cmd online dataset demo
 
 #### PortID
 HTTPS Server 4433

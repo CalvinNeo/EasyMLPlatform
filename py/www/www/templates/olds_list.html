@@ -1,4 +1,4 @@
-<table class="table table-striped">
+<table class="table table-striped table-condensed" style="width:100%">
 <thead>
 <tr>
 	{% if ds_select %}
@@ -20,10 +20,10 @@
 				{% if ds_choose %} ;selectedoldataset = {true:-1,false:{{dataset.id}}}[selectedoldataset=={{dataset.id}}];selectwhichdatasettype = 'ol' {% endif %}
 				;onoldatasetselected({{dataset.id}})
 				">{{dataset.name}}</a></td>
-			<td><a href="{{dataset.url}}">{{dataset.url}}</a></td>			
-			<td>{{dataset.location}}</td>
-			<td>{{dataset.user}}</td>
-			{% if operation != 'apply' and operation != 'models' %}<td>{{dataset.renewstrategy}}</td>{% endif %}
+			<td><a href="{{dataset.url}}"><small>{{dataset.url}}</small></a></td>			
+			<td><small>{{dataset.location}}</small></td>
+			<td><small>{{dataset.user}}</small></td>
+			{% if operation != 'apply' and operation != 'models' %}<td><small>{{dataset.renewstrategy}}</small></td>{% endif %}
 		{% if ds_operation %}
 			{% if ds_delete %}
 			<td><a href="javascript:void(0)" ng-click="deleteOLDataset({{dataset.id}})" class="label label-important">DELETE</a></td>

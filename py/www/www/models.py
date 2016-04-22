@@ -163,6 +163,7 @@ class OnlineDataset(models.Model):
     location = models.CharField(max_length=1023)
     search = models.CharField(max_length=1023)
     renewstrategy = models.CharField(max_length=32)
+    metatype = models.CharField(max_length=32)
     hashead = models.BooleanField(default=True)
     createtime = models.DateTimeField('create time', auto_now_add=True)
     user = models.CharField(max_length=20)
@@ -200,7 +201,7 @@ class OnlineDataset(models.Model):
             if datasetindex >= 0:
                 try:
                     oldsinfo = OnlineDataset.objects.get(id = datasetindex)
-                    oldataset = datasets.localdata.LocalData(datamapper = None, online = True)
+                    oldataset = datasets.localdata.LocalData(datamapper = None, online = True, renewstrategy = oldsinfo.renewstrategy)
                 except:
                     return None
                 try:

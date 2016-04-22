@@ -20,7 +20,7 @@ class LogisticRegression(ModelBase):
     def __init__(self, dataset, classfeatureindex = -1, alpha = 0.2, maxiter = 50, *args, **kwargs):
         ModelBase.__init__(self, dataset, 'LOGISTIC', *args, **kwargs)
         self.classfeatureindex = classfeatureindex #index of the column which defines the feature in dataset
-        self.Test = self.Classify
+        self.Test = self.Classify2
         self.Apply = self.ClassifyDataset
         self.Train = self.Regress
         self.Save = self.DumpLogistic
@@ -39,8 +39,8 @@ class LogisticRegression(ModelBase):
         self.classfeatureindex = self.dataset.classfeatureindex
 
     def Regress(self):
-        data = np.matrix([item[:self.classfeatureindex] + [0] + item[self.classfeatureindex+1:]  if self.classfeatureindex > -1 else item[:len(item)-1] + [0] for item in self.dataset.items])
-        t = np.matrix([item[self.classfeatureindex] for item in self.dataset.items]).T
+        data = np.matrix([item[:self.classfeatureindex] + [0] + item[self.classfeatureindex+1:]  if self.classfeatureindex > -1 else item[:len(item)-1] + [0] for item in self.dataset.Iter()])
+        t = np.matrix([item[self.classfeatureindex] for item in self.dataset.Iter()]).T
         itemcount, featurecount = data.shape
         self.weights = np.ones((featurecount,1)) * 1 # featurecount 个 feature + 1 个常量
         print self.weights
@@ -56,7 +56,10 @@ class LogisticRegression(ModelBase):
         # print self.sigmoid(np.dot(p , self.weights))
         return self.Positive if self.sigmoid(np.dot(p, self.weights)) > (self.Positive + self.Negative) / 2.0 else self.Negative
 
-    def Classfy2(self, test):
+    def Classify2(self, test):
+        '''
+            predict a single new sample input with trained logistic
+        '''
         p = np.matrix(test[:self.classfeatureindex] + [1] + test[self.classfeatureindex + 1:]  if self.classfeatureindex > -1 else test + [1] )
         return self.Positive if self.sigmoid(np.dot(p, self.weights)) > (self.Positive + self.Negative) / 2.0 else self.Negative
 
@@ -66,7 +69,8 @@ class LogisticRegression(ModelBase):
         '''
         resultdataset = LocalData(None, head = self.dataset.head + ['result'], classfeatureindex = -1)
         for item in dataset.Iter():
-            resultdataset.items.append(item + [self.Classify(item + [1])])
+            # resultdataset.items.append(item + [self.Classify(item + [1])])
+            resultdataset.items.append(item + [self.Classify2(item)])
         return resultdataset
 
     def DumpLogistic(self, filename):
@@ -91,8 +95,8 @@ if __name__ == '__main__':
     dt = LogisticRegression(ld, -1, maxiter = 50, alpha = 0.01)
     dt.Regress()
     print "weight",dt.weights
-    print "1", dt.Classfy2([5.1,3.7,1.5,0.4])
-    print "-1", dt.Classfy2([6.3,2.5,4.9,1.5])
+    print "1", dt.Classify2([5.1,3.7,1.5,0.4])
+    print "-1", dt.Classify2([6.3,2.5,4.9,1.5])
 
     # print "[1,1]", dt.Classify([1.0,1.0])
     # print "[0,1]", dt.Classify([0.0,1.0])

@@ -1,4 +1,4 @@
-<table class="table table-striped table-hover">
+<table class="table table-striped table-hover table-condensed">
 <thead>
 <tr>
 	{% if md_select %}
@@ -19,7 +19,7 @@
 		{% endif %}
 			<td><a href="javascript:void(0)" ng-click="{% if md_show %} showModel({{model.id}}) {% endif %} {% if md_choose %} ;selectedmodel = {true:-1,false:{{model.id}}}[selectedmodel=={{model.id}}]  {% endif %}" >{{model.name}}</a></td>
 			<td>{{model.modeltype}}</td>
-			<td>{{model.createtime}}</td>
+			<td><small>{{model.createtime}}</small></td>
 			{% if operation != 'apply'%}<td>{{model.datasetprototype}}:{{model.datasetindex}}</td>{% endif %}
 			<td>{{model.modelstatus}}</td>
 		{% if md_operation %}

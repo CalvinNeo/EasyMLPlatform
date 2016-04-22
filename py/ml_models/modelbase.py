@@ -186,6 +186,7 @@ class ModelBase:
         import naive_bayes
         import decision_tree
         import logistic
+        import svm
         return {
             'MATRIX_ADD':{
                 'ndataset': 2

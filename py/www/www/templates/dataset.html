@@ -2,31 +2,29 @@
 
 <div class="container-fluid" ng-controller="switchDatasetController">
 	<div class="col-md-6">
-		<div >
-			<ul id="mytab" class="nav nav-tabs">
-				<li ng-class="{true:'active',false:''}[datatype=='file']">
-					<a href="javascript:void(0)" data-toggle="tab" ng-click="setdatatype('file')">LOCAL</a></li>
-				<li ng-class="{true:'active',false:''}[datatype=='online']">
-					<a href="javascript:void(0)" data-toggle="tab" ng-click="setdatatype('online')">ONLINE</a></li>
-			</ul>
-		
-			<div ng-show="uploadFormShow()">
-				<p class="lead"> Dataset List</p>
-				{% include 'ds_list.html' %}
-			</div>
-			<div ng-show="onlineShow()">
-				<p class="lead"> Online Dataset List</p>
-				{% include 'olds_list.html' %}
-			</div>
-		
-			<div ng-show="uploadFormShow()">
-				<p class="lead"> New Local Dataset</p>
-				{% include 'ds_upload.html' %}
-			</div>
-			<div ng-show="onlineShow()">
-				<p class="lead"> New Online Dataset</p>
-				{% include 'olds_upload.html' %}
-			</div>
+		<ul id="mytab" class="nav nav-tabs">
+			<li ng-class="{true:'active',false:''}[datatype=='file']">
+				<a href="javascript:void(0)" data-toggle="tab" ng-click="setdatatype('file')">LOCAL</a></li>
+			<li ng-class="{true:'active',false:''}[datatype=='online']">
+				<a href="javascript:void(0)" data-toggle="tab" ng-click="setdatatype('online')">ONLINE</a></li>
+		</ul>
+	
+		<div ng-show="uploadFormShow()" style="width:100%">
+			<p class="lead"> Dataset List</p>
+			{% include 'ds_list.html' %}
+		</div>
+		<div ng-show="onlineShow()" style="width:100%">
+			<p class="lead"> Online Dataset List</p>
+			{% include 'olds_list.html' %}
+		</div>
+	
+		<div ng-show="uploadFormShow()">
+			<p class="lead"> New Local Dataset</p>
+			{% include 'ds_upload.html' %}
+		</div>
+		<div ng-show="onlineShow()">
+			<p class="lead"> New Online Dataset</p>
+			{% include 'olds_upload.html' %}
 		</div>
 	</div>
 	<div class="col-md-6">		

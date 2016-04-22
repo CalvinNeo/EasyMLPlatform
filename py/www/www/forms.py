@@ -23,6 +23,7 @@ class OnlineDatasetForm(forms.Form):
     location = forms.CharField(max_length=1023,required=False)
     search = forms.CharField(max_length=1023,required=False)
     renewstrategy = forms.CharField(max_length=32,required=False)
+    metatype = forms.CharField(max_length=32)
     head = forms.CharField(max_length=1023,required=False)
     hashead = forms.BooleanField(required=False)
 

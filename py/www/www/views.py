@@ -77,7 +77,7 @@ def api(request, operation = "", *args, **kwargs):
     elif operation == 'dsimage':
         return HttpResponse(Dataset.GetImage(unicodedatasetindex=request.GET.get('datasetindex'))) 
     elif operation == 'oldsimage':
-        return HttpResponse(OLDataset.GetImage(unicodedatasetindex=request.GET.get('datasetindex'))) 
+        return HttpResponse(OnlineDataset.GetImage(unicodedatasetindex=request.GET.get('datasetindex'))) 
     elif operation == 'model_train':
         return HttpResponse(TrainingTask.CreateTrain(unicodemodelindex=request.GET.get('modelindex'))) 
     elif operation == 'model_apply':
@@ -260,6 +260,7 @@ def index(request, operation = "", *args, **kwargs):
                     ds.name = str(form.cleaned_data['name'])
                     ds.url = form.cleaned_data['url']
                     ds.renewstrategy = str(form.cleaned_data['renewstrategy'])
+                    ds.metatype = str(form.cleaned_data['metatype'])
                     ds.head = str(form.cleaned_data['head'])
                     ds.hashead = bool(form.cleaned_data['hashead'])
                     ds.location = 'table' if str(form.cleaned_data['location']) == '' else str(form.cleaned_data['location']).replace('\\n','\n').replace('\\t','\t')

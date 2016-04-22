@@ -20,6 +20,23 @@
 	</div>
 	<div class="container-fluid npnm" >
 		<div class="col-md-6 npnm" >
+			<label for="renewstrategy">Renew Strategy</label>
+			<input name="renewstrategy" type="text" class="form-control" ng-model="onlineForm.olrenew" id="olrenew" placeholder="APPEND">
+		</div>
+		<div class="col-md-6 npnm" >
+			<label for="metatype">Meta Type</label>
+			<select name="metatype" type="text" class="form-control" ng-model="onlineForm.metatype" id="metatype"
+			ng-init="onlineForm.metatype = 'HTML'" 
+			>
+				<option value="HTML">HTML</option>
+				<option value="JSON">JSON</option>
+				<option value="XML">XML</option>
+				<option value="CSV">CSV</option>
+			</select>
+		</div>
+	</div>
+	<div class="container-fluid npnm" ng-show="onlineForm.metatype == 'HTML'">
+		<div class="col-md-6 npnm" >
 			<label for="location">Table Location (CSS Selector)</label>
 			<input name="location" type="text" class="form-control" ng-model="onlineForm.ollocation" placeholder='body > table'>
 		</div>
@@ -28,10 +45,14 @@
 			<input name="search" type="text" class="form-control" ng-model="onlineForm.olsearch" >
 		</div>
 	</div>
-	<div class="container-fluid npnm" >
+	<div class="container-fluid npnm" ng-show="onlineForm.metatype == 'CSV'">
 		<div class="col-md-6 npnm" >
-			<label for="renewstrategy">Renew Strategy</label>
-			<input name="renewstrategy" type="text" class="form-control" ng-model="onlineForm.olrenew" id="olrenew" placeholder="APPEND">
+			<label for="attr_delim" >Attribute Delimeter</label>
+			<input name="attr_delim" type="text" class="form-control" ng-model="onlineForm.dsattr_delim" placeholder=','>
+		</div>
+		<div class="col-md-6 npnm" >
+			<label for="record_delim">Record Delimeter</label>
+			<input name="record_delim" type="text" class="form-control" ng-model="onlineForm.dsrecord_delim" placeholder='\n'>
 		</div>
 	</div>
 	<div class="container-fluid npnm" >
@@ -72,4 +93,22 @@ $("#olrenew").typeahead({
     },
     delay: 500//延迟时间
 });
+// $scope.options = [
+// 	{
+// 		name: 'HTML',
+// 		value: 'HTML'
+// 	}
+// 	, {
+// 		name: 'JSON',
+// 		value: 'JSON'
+// 	}
+// 	, {
+// 		name: 'XML',
+// 		value: 'XML'
+// 	}
+// 	, {
+// 		name: 'CSV',
+// 		value: 'CSV'
+// 	}
+// ];
 </script>
