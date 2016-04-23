@@ -58,12 +58,12 @@ class NaiveBayes(ModelBase):
 
     def Dump(self, filename):
         fw = open(filename, 'w')
-        pickle.dump(self.model)
+        pickle.dump(self.model, fw)
         fw.close()
 
     def LoadFromFile(self, filename):
         fr = open(filename)
-        self.tree = pickle.load(self.model)
+        self.model = pickle.load(fr)
 
     def ShowImage(self, op):
         pass

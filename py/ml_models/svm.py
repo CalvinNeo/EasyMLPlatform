@@ -28,8 +28,7 @@ class SVM(ModelBase):
         self.Save = self.Dump
         self.Load = self.LoadFromFile
         self.Graph = self.ShowImage
-        # use default
-        # self.T = self.RealValue
+        self.T = self.RealValue
         self.model = SVC()
 
     def SVM(self):
@@ -57,12 +56,12 @@ class SVM(ModelBase):
 
     def Dump(self, filename):
         fw = open(filename, 'w')
-        pickle.dump(self.model)
+        pickle.dump(self.model, fw)
         fw.close()
 
     def LoadFromFile(self, filename):
         fr = open(filename)
-        self.tree = pickle.load(self.model)
+        self.model = pickle.load(fr)
 
     def ShowImage(self, op):
         pass
@@ -71,8 +70,8 @@ class SVM(ModelBase):
         # tr.load(self.tree)
         # return tr.createPlot(show = False)
 
-    def RealValue(self, op):
-        pass
+    def RealValue(self, inp):
+        return inp[self.classfeatureindex]
 
 if __name__ == '__main__':
     ld = datasets.localdata.LocalData(classfeatureindex = -1)

@@ -71,11 +71,12 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
     $scope.uploadForm = {}
     $scope.uploadactiontype = 'new'
     $scope.onlineactiontype = 'new'
-    $scope.datasetviewtype = 'table'
+    $scope.datasetviewtype = 'table' // or graphic
     // $scope.selecteddataset = -1
     // $scope.selectedoldataset = -1
     // $scope.selectedmodel = -1
     // $scope.selectwhichdatasettype = 'ds'
+    $scope.dataindex = -1
 
     $scope.setdatatype = function(x){
         if (x == 'file'){
@@ -84,6 +85,34 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
         }else{
             $scope.datatype = 'online'
             $location.path('/online')
+        }
+    }
+    $scope.setdatasetviewtype = function(x){
+        $scope.datasetviewtype = x;
+        if(x == 'graphic'){
+            if($scope.datatype=='file'){
+                $.ajax({
+                    url : '/api/dsimage'
+                    ,data : {
+                        datasetindex : $scope.dataindex 
+                    }
+                    ,async : true
+                    ,success : function (data, textStatus) {
+                        $("#datasetimage").attr("src", data)
+                    }
+                })
+            }else{
+                $.ajax({
+                    url : '/api/oldsimage'
+                    ,data : {
+                        datasetindex : $scope.dataindex 
+                    }
+                    ,async : true
+                    ,success : function (data, textStatus) {
+                        $("#datasetimage").attr("src", data)
+                    }
+                })
+            }
         }
     }
     $scope.uploadFormShow = function(){
@@ -116,20 +145,11 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
     $scope.showDataset = function(datasetindex){
         $scope.updateDataset(datasetindex)
         $("#datasetviewframe").attr("src","/index/ds_view?datasetindex="+datasetindex) 
+        $scope.dataindex = datasetindex
         // if($scope.datatype == 'file')
         //     reurl = '/api/dsimage'
         // else
         //     reurl = '/api/oldsimage'
-        $.ajax({
-            url : '/api/dsimage'
-            ,data : {
-                datasetindex : datasetindex
-            }
-            ,async : true
-            ,success : function (data, textStatus) {
-                $("#datasetimage").attr("src", data)
-            }
-        })
     }
     $scope.downloadDataset = function(datasetindex){
 
@@ -163,6 +183,7 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
     $scope.showOLDataset = function(datasetindex){
         $scope.updateOLDataset(datasetindex)
         $("#datasetviewframe").attr("src","/index/olds_view?datasetindex="+datasetindex)
+        $scope.dataindex = datasetindex
     }
     $scope.deleteOLDataset = function(datasetindex){
         $.ajax({
@@ -200,16 +221,6 @@ angular.module('mlApp').controller('switchDatasetController', function($scope, $
                 $scope.onlineForm['olrenew'] = data.info.renewstrategy
                 $scope.onlineForm['olhashead'] = data.info.hashead
                 $scope.onlineForm['olhead'] = data.info.head
-            }
-        })
-        $.ajax({
-            url : '/api/oldsimage'
-            ,data : {
-                datasetindex : datasetindex
-            }
-            ,async : true
-            ,success : function (data, textStatus) {
-                $("#datasetimage").attr("src", data)
             }
         })
     }

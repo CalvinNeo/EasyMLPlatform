@@ -204,12 +204,20 @@ class OnlineDataset(models.Model):
                     oldataset = datasets.localdata.LocalData(datamapper = None, online = True, renewstrategy = oldsinfo.renewstrategy)
                 except:
                     return None
-                try:
+                # try:
+                if oldsinfo.metatype == 'HTML':
                     oldataset.SetURL(oldsinfo.url, oldsinfo.location, None)
-                    oldataset.OnlineRenew()
-                    return {'info':oldsinfo, 'view':oldataset}
-                except:
-                    return {'info':oldsinfo, 'view':{}}
+                elif oldsinfo.metatype == 'JSON':
+                    oldataset.SetJSON(oldsinfo.url)
+                elif oldsinfo.metatype == 'CSV':
+                    oldataset.SetCSV(oldsinfo.url)
+                elif oldsinfo.metatype == 'XML':
+                    pass
+                # renew when set
+                # oldataset.OnlineRenew()
+                return {'info':oldsinfo, 'view':oldataset}
+                # except:
+                #     return {'info':oldsinfo, 'view':{}}
         return None
 
     @staticmethod
@@ -217,14 +225,21 @@ class OnlineDataset(models.Model):
         if unicodedatasetindex != None:
             #index不是从1严格递增的,可能是1,3,9这样的,因为数据集会被删除
             datasetindex = int(unicodedatasetindex)
-            try:
-                oldsinfo = OnlineDataset.objects.get(id = datasetindex)
-                oldataset = datasets.localdata.LocalData(datamapper = None, online = True)
+            # try:
+            oldsinfo = OnlineDataset.objects.get(id = datasetindex)
+            oldataset = datasets.localdata.LocalData(datamapper = None, online = True)
+            if oldsinfo.metatype == 'HTML':
                 oldataset.SetURL(oldsinfo.url, oldsinfo.location, None)
-                oldataset.OnlineRenew()
-                return oldataset
-            except:
-                return None
+            elif oldsinfo.metatype == 'JSON':
+                oldataset.SetJSON(oldsinfo.url)
+            elif oldsinfo.metatype == 'CSV':
+                oldataset.SetCSV(oldsinfo.url)
+            elif oldsinfo.metatype == 'XML':
+                pass
+            oldataset.OnlineRenew()
+            return oldataset
+            # except:
+            #     return None
         return None
 
     @staticmethod
@@ -266,6 +281,27 @@ class OnlineDataset(models.Model):
             # except:
             #     return 'false'
         return 'false'
+
+    @staticmethod
+    def GetImage(unicodedatasetindex = None):
+        oldsinfo = None
+        if unicodedatasetindex != None:
+            datasetindex = int(unicodedatasetindex)
+            oldsinfo = OnlineDataset.objects.get(id = datasetindex)
+        if oldsinfo != None:
+            # set online dataset
+            oldataset = datasets.localdata.LocalData(datamapper = None, online = True)
+            if oldsinfo.metatype == 'HTML':
+                oldataset.SetURL(oldsinfo.url, oldsinfo.location, None)
+            elif oldsinfo.metatype == 'JSON':
+                oldataset.SetJSON(oldsinfo.url)
+            elif oldsinfo.metatype == 'CSV':
+                oldataset.SetCSV(oldsinfo.url)
+            elif oldsinfo.metatype == 'XML':
+                pass
+            image = oldataset.Graph('')
+            return image
+        return ''
 
     @staticmethod
     def AllRenewStrategies():

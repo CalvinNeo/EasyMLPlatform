@@ -18,6 +18,58 @@ def getHtml(url):
     html = page.read()
     return html
 
+def getJSON(url):
+    req = urllib2.Request(url)
+    req.add_header('User-Agent','Mozilla/5.0 (Windows NT 6.2; rv:16.0) Gecko/20100101 Firefox/16.0')
+    jsondata = urllib2.urlopen(req)
+    return json.loads(str(jsondata.read()))
+
+class CSVCrawl:
+    def __init__(self, url, hasHead = False, attr_delim = ",", record_delim = "\n", *args, **kwargs):
+        self.url = url
+        self.hasHead = hasHead
+        self.attr_delim = attr_delim
+        self.record_delim = record_delim
+        if 'code' in kwargs.keys() and kwargs['code'] != None:
+            self.code = kwargs['code']
+        else:
+            self.code = 'utf8'
+
+    def start(self):
+        data = getHtml(self.url)
+        records = data.split(self.record_delim)
+        if self.hasHead:
+            self.head = records[0].split(self.attr_delim)
+            del records[0]
+        else:
+            self.head = []
+        self.items = []
+        for record in records:
+            if record == "":
+                break
+            data_col = record.split(self.attr_delim)
+            # (value,column,head)
+            if not self.hasHead: # if no head set head as 0,1,2,3,4,5,6...
+                self.head = range(len(data_col))
+                self.hasHead = True
+            # no data mapper here
+            self.items.append(data_col)
+        return {'head':self.head , 'items':self.items} 
+
+class JSONCrawl:
+    def __init__(self, url, head_tag = 'head', data_tag = 'items', *args, **kwargs):
+        self.url = url
+        self.head_tag = head_tag
+        self.data_tag = data_tag
+        if 'code' in kwargs.keys() and kwargs['code'] != None:
+            self.code = kwargs['code']
+        else:
+            self.code = 'utf8'
+
+    def start(self):
+        j = getJSON(self.url)
+        return {'head':[str(x) for x in j[self.head_tag]] , 'items':j[self.data_tag]} 
+
 class Crawl:
     def __init__(self, url, location, search_lmda = None, *args, **kwargs):
         self.url = url

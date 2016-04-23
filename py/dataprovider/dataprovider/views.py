@@ -40,40 +40,7 @@ def intervalmain():
 
 def index(request, operation = "", *args, **kwargs):
     global stop_flag, intervaldata
-    try:
-        print intervaldata
-        return {
-            'guasslin': render(request, "interval.html", {'dimen': 2
-            , 'name': ''
-            , 'head': ['x', 'sin(x)+noise']
-            , 'interval': 2000
-            , 'mathfunc': 'function(x){return Math.sin(x)}'
-            , 'start': 0
-            , 'noisesigma': 0.1
-            , 'data': intervaldata
-            })
-            ,'guasslin_update':HttpResponse( 
-                ';'.join( map(lambda x: ','.join(x), intervaldata ) )
-            )
-        }[operation.decode('utf8')]
-    except KeyError:
-        if operation.decode('utf8') == 'guasslin_start':
-            if stop_flag == 0:
-                stop_flag = 1
-                intervalthread = threading.Thread(target=intervalmain, args=())
-                # args are args given to target
-                print '--start'
-                intervalthread.start()
-            return HttpResponse("")
-        elif operation.decode('utf8') == 'guasslin_stop':
-            if stop_flag == 1:
-                stop_flag = 2
-            return HttpResponse("")
-        else:
-            return render(request, "data.html",{
-            'name': 'Iris'
-            ,'head':['feature1','feature2','feature3','feature4','class']
-            ,'data':[[5.1,3.5,1.4,0.2,1],
+    iris_data = [[5.1,3.5,1.4,0.2,1],
                     [4.9,3.0,1.4,0.2,1],
                     [4.7,3.2,1.3,0.2,1],
                     [4.6,3.1,1.5,0.2,1],
@@ -173,4 +140,40 @@ def index(request, operation = "", *args, **kwargs):
                     [6.2,2.9,4.3,1.3,-1],
                     [5.1,2.5,3.0,1.1,-1],
                     [5.7,2.8,4.1,1.3,-1]]
+    try:
+        print intervaldata
+        return {
+            'guasslin': render(request, "interval.html", {'dimen': 2
+            , 'name': ''
+            , 'head': ['x', 'sin(x)+noise']
+            , 'interval': 2000
+            , 'mathfunc': 'function(x){return Math.sin(x)}'
+            , 'start': 0
+            , 'noisesigma': 0.1
+            , 'data': intervaldata
+            })
+            ,'guasslin_update':HttpResponse( 
+                ';'.join( map(lambda x: ','.join(x), intervaldata ) )
+            )
+            ,'json': HttpResponse('{"head":["a", "b"], "items":[[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]}')
+            ,'csv': HttpResponse('\n'.join([','.join([str(y) for y in x]) for x in iris_data[0: 10]]))
+        }[operation.decode('utf8')]
+    except KeyError:
+        if operation.decode('utf8') == 'guasslin_start':
+            if stop_flag == 0:
+                stop_flag = 1
+                intervalthread = threading.Thread(target=intervalmain, args=())
+                # args are args given to target
+                print '--start'
+                intervalthread.start()
+            return HttpResponse("")
+        elif operation.decode('utf8') == 'guasslin_stop':
+            if stop_flag == 1:
+                stop_flag = 2
+            return HttpResponse("")
+        else:
+            return render(request, "data.html",{
+            'name': 'Iris'
+            ,'head':['feature1','feature2','feature3','feature4','class']
+            ,'data': iris_data
             })

@@ -6,7 +6,7 @@
 
 		</td>
 	{% endif %}
-	<td>Name</td><td>URL</td><td>Location</td><td>User</td>
+	<td>Name</td><td>URL</td><td>Location</td><td>User</td><td>Meta</td>
 	{% if operation != 'apply' and operation != 'models' %} <td>Renew</td> {% endif %}
 </tr>
 </thead>
@@ -23,6 +23,7 @@
 			<td><a href="{{dataset.url}}"><small>{{dataset.url}}</small></a></td>			
 			<td><small>{{dataset.location}}</small></td>
 			<td><small>{{dataset.user}}</small></td>
+			<td><small>{{dataset.metatype}}</small></td>
 			{% if operation != 'apply' and operation != 'models' %}<td><small>{{dataset.renewstrategy}}</small></td>{% endif %}
 		{% if ds_operation %}
 			{% if ds_delete %}
