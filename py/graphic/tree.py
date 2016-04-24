@@ -99,5 +99,5 @@ if __name__ == '__main__':
     # print dict(aa)
     tr.load(aa)
     print tr.leafcount,tr.depth
-    tr.createPlot(show=False)
+    tr.createPlot(show=True)
 

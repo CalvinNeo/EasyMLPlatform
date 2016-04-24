@@ -288,7 +288,7 @@ class LocalData:
         if len(urls) > 0:
             self.crawl = crawl.Crawl(urls[0], locate, search_lmda, code='utf8')
         # update head
-        self.OnlineRenew()
+        # self.OnlineRenew()
 
     def SetJSON(self, urls):
         self.online = True
@@ -300,7 +300,7 @@ class LocalData:
             # use default hear_tag
             # use default data_tag
         # update head
-        self.OnlineRenew()
+        # self.OnlineRenew()
 
     def SetCSV(self, urls):
         self.online = True
@@ -313,7 +313,7 @@ class LocalData:
             # use default record_delim
             # default hasHead = False
         # update head
-        self.OnlineRenew()
+        # self.OnlineRenew()
 
     def OnlineRenew(self):
         if self.crawl != None:
